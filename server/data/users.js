@@ -7,46 +7,23 @@ const saltRounds = 16;
 const uuid = require('uuid');
 
 /**
- * Type and Format Checking Function
- */
-// function isString(str, varName) {
-//     if (!str) throw `${varName} must be provided`;
-//     if (typeof str != 'string') throw `${varName} must be a string`;
-//     if (str.trim().length == 0) throw `${varName} cannot just be empty spaces`;
-// }
-// function checkUsername(str) {
-//     if (str.toLowerCase().trim() != str.toLowerCase().trim().replace(/\s+/g, '')) throw 'Username cannot have spaces';
-//     if (str.length < 4) throw 'Username at least 4 characters';
-// }
-// function checkEmail(str) {
-//     //check space
-//     if (!str) throw 'Email must be provided';
-//     if (str.toLowerCase().trim() != str.toLowerCase().trim().replace(/\s+/g, '')) throw 'Email cannot have spaces';
-//     //check format XX@XX.com
-//     if (/([a-zA-Z0-9]+)([\_\.\-{1}])?([a-zA-Z0-9]+)\@([a-zA-Z0-9]+)([\.])com/.test(email.trim()) == false)
-//         throw 'You must provide a valid email address \n - Start and end with an alphanumeric character \n - Can contain an underscores (_), dashes (-), or periods (.) \n - Domain name follows after at symbol (@) \n - Domain name is any alphanermic character(s) followed by .com';
-//     email = email.trim().split('@');
-//     if (email[0].length < 6 || email[1].length < 7)
-//         throw 'You must provide email prefix with at least 6 digits and domain at least 3 digits';
-// }
-// function checkPassword(str) {
-//     if (!str) throw 'Password must be provided!';
-//     if (str.toLowerCase().trim() != str.toLowerCase().trim().replace(/\s+/g, '')) throw 'Password cannot have spaces';
-//     if (str.length < 6) throw 'Password must be at least 6 characters';
-// }
-
-/**
  * Export Function
  */
 module.exports = {
     // create new user
-    async createUser(username, email, password) {
+    async createUser(username, email, password, avatar) {
         verify.isString(username, 'userName');
         verify.isString(email, 'email');
         verify.isString(password, 'password');
         verify.checkUsername(username);
         verify.checkEmail(email);
         verify.checkPassword(password);
+        if (!avatar) {
+            avatar = 'defaultAvatar.jpg';
+        } else {
+            verify.isString(avatar, 'avatar');
+            verify.checkSpace(avatar, 'avatar');
+        }
 
         const userCollection = await users();
         // Find other user with the same username
@@ -113,5 +90,87 @@ module.exports = {
     // get user by ID
     async getUserById(userId) {
         verify.isString(userId, 'User ID');
+        verify.isString(userId, 'User ID');
+        verify.checkSpace(userId, 'User Id');
+        // get user
+        const userCollection = await users();
+        const user = await userCollection.findOne({ _id: userId });
+
+        if (!user) throw `No user with the id of ${userId}`;
+
+        return userId;
+    },
+    // delete user by Id
+    async removeUserById(userId) {
+        verify.isString(userId, 'User ID');
+        verify.checkSpace(userId, 'User ID');
+        // remove user
+        const userCollection = await users();
+        let user = await this.getUserById(userId.trim());
+        if (!user) throw `No user with the ID of ${userId}`;
+        const deleteUser = await userCollection.deleteOne({ _id: userId });
+        if (deleteUser.deletedCount === 0) throw `Could not delete user with the ID of ${userId}`;
+        return { deleteResult: true };
+        //
+    },
+    // update user Info
+    async updateUser(userId, username, email, avatar) {
+        verify.isString(userId);
+        verify.isString(username);
+        verify.isString(avatar);
+        verify.isString(email);
+        verify.checkEmail(email);
+        verify.checkSpace(userId);
+        verify.checkSpace(username);
+        verify.checkSpace(avatar);
+        verify.checkUser(username);
+        // find user by ID
+        let oldUser = await this.getUserById(userId.trim());
+        if (!oldUser) throw `No user with the ID of ${userId}`;
+        // check new email is unique to the users collection
+        const userCollection = await users();
+        const otherUser = await userCollection.findOne({ email: email });
+        if (otherUser != null) throw `There is already a user with the email of ${email}`;
+        // update the users
+        let userUpdateInfo = {
+            username: username.trim(),
+            email: email.trim(),
+            avatar: avatar.trim(),
+        };
+        // check at least one input is different
+        if (
+            userUpdateInfo.username === oldUser.username &&
+            userUpdateInfo.email === oldUser.email &&
+            userUpdateInfo.avatar === oldUser.avatar
+        )
+            throw `At least one user data input must be different from the original data`;
+
+        // update user
+        const updateInfo = await userCollection.updateOne({ _id: userId }, { $set: userUpdateInfo });
+        if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw `Failed to update user`;
+
+        return await this.getUserById(userId.trim());
+    },
+    // update password
+    async updatePassword(userId, password) {
+        verify.isString(userId);
+        verify.isString(password);
+        verify.checkSpace(userId);
+        verify.checkPassword(password);
+        // find user by ID
+        let oldUser = await this.getUserById(userId.trim());
+        if (!oldUser) throw `There is no user it the id of ${userId}`;
+        // encrypt the password
+        const hash = await bcrypt.hash(password, saltRounds);
+        // check the password is different
+        if (oldUser.password === hash) throw `Please input the different password`;
+        //update password
+        let userUpdatePassword = {
+            password: hash,
+        };
+        const updateInfo = await this.userCollection.updateOne({ _id: userId }, { $set: userUpdatePassword });
+        if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw `Failed to update password`;
+
+        return { updatePasswordResult: true };
     },
 };
