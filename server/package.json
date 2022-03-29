@@ -19,7 +19,9 @@
   "homepage": "https://github.com/linyue1233/554-final-project#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "express": "^4.17.3",
+    "express-session": "^1.17.2",
     "mongodb": "^4.4.1",
     "uuid": "^8.3.2",
     "xss": "^1.0.11"
