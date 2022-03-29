@@ -3,6 +3,7 @@ const users = mongoCollections.users;
 let { ObjectId } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const saltRounds = 16;
+const uuid = require('uuid');
 
 /**
  * Type and Format Checking Function
@@ -12,7 +13,7 @@ function isString(str, varName) {
     if (typeof str != 'string') throw `${varName} must be a string`;
     if (str.trim().length == 0) throw `${varName} cannot just be empty spaces`;
 }
-function checkUserName(str) {
+function checkUsername(str) {
     if (str.toLowerCase().trim() != str.toLowerCase().trim().replace(/\s+/g, '')) throw 'Username cannot have spaces';
     if (str.length < 4) throw 'Username at least 4 characters';
 }
@@ -37,20 +38,44 @@ function checkPassword(str) {
  * Export Function
  */
 module.exports = {
-    async createUser(userName, email, password) {
-        isString(userName, 'userName');
+    // create new user
+    async createUser(username, email, password) {
+        isString(username, 'userName');
         isString(email, 'email');
         isString(password, 'password');
-        checkUserName(userName);
+        checkUsername(username);
         checkEmail(email);
         checkPassword(password);
 
-        const userCollection = await user();
-        // Find other user with the same userName
+        const userCollection = await users();
+        // Find other user with the same username
         const otherUser = await userCollection.findOne({ email: email });
         if (otherUser != null) throw `There is already a user with that email ${email} ${otherUser}`;
         // encrypt the password
         const hash = await bcrypt.hash(password, saltRounds);
         // create user
+        let newUser = {
+            username: username,
+            email: email,
+            password: hash,
+            commentId: [],
+            likeId: [],
+            isAdmin: false,
+            _id: uuid.v4(),
+        };
+
+        // insert
+        const insertInfo = await userCollection.insertOne(newUser);
+        if (insertInfo.insertedCount === 0) throw 'Could not create user';
+        // get new user information
+        const newId = insertInfo.insertedId;
+        const user = await this.getUserById(newId);
+
+        return user;
+    },
+    // login cheak user
+    async checkUser(email, password) {
+        isString(username, 'Username');
+        isString(password, 'Password');
     },
 };
