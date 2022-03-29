@@ -1,5 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const videos = mongoCollections.videos;
+const verify = require('./verify');
 
 
 function uuid() {
@@ -21,7 +22,7 @@ async function createVideo(name,path,tags){
     let myDate = new Date();
     const videoCollection = await videos();
     let newvideo = {
-        videoId: uuid(),
+        _id: uuid(),
         videoName: name,
         videoPath: path,
         isDeleted: false,
@@ -39,26 +40,62 @@ async function createVideo(name,path,tags){
     }
 
     const insertInfo = await videoCollection.insertOne(newvideo);
-    if(insertInfo.insertedCount === 0) throw 'Could not creat video';
-    console.log(insertInfo);
+    if(!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not creat video';
 
-    const insertedVideo = await getById(newvideo.videoId);
+    const insertedVideo = await getById(insertInfo.insertedId);
     console.log(insertedVideo);
     return insertedVideo;
 }
 
-async function getById(id){
+async function getVideoById(id){
     const videoCollection = await videos();
 
-    const resultVideo = await videoCollection.findOne({videoId:id});
+    const resultVideo = await videoCollection.findOne({_id: id});
     if(resultVideo == null) throw 'No video with that id';
 
     return resultVideo;
 }
 
-createVideo(111,111,111);
+async function getAllVideos () {
+    const videoCollection = await videos();
+
+    const allVideos = await videoCollection.find({}).toArray();
+
+    console.log(allVideos);
+
+    return allVideos;
+}
+
+async function removeVideo (id) {
+
+    const videoCollection = await videos();
+
+    let video = await getVideoById(id);
+
+    const deletionInfo = await videoCollection.deleteOne({ _id: id });
+
+    if (deletionInfo.deletedCount === 0) {
+        throw `Could not delete video with id of ${id}`;
+    }
+
+    let resultstr = `${video.videoName} has been successfully deleted!`;
+
+    return resultstr;
+}
+
+async function updateVideo (name,path,tags) {
+
+    const videoCollection = await videos();
+
+}
+
+//createVideo(111,111,111);
+removeVideo('37b3872f-a11a-4265-9e04-73410e2a1b6b');
 
 module.exports = {
     createVideo,
-    getById
+    getVideoById,
+    getAllVideos,
+    removeVideo,
+    updateVideo
 };
