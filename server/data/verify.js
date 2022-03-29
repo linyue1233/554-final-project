@@ -26,10 +26,14 @@ function checkPassword(str) {
     if (str.toLowerCase().trim() != str.toLowerCase().trim().replace(/\s+/g, '')) throw 'Password cannot have spaces';
     if (str.length < 6) throw 'Password must be at least 6 characters';
 }
+function checkSpace(str, varName) {
+    if (str.trim() != str.trim().replace(/\s+/g, '')) throw `${varName} cannot have spaces`;
+}
 
 module.exports = {
     isString,
     checkPassword,
     checkEmail,
     checkUsername,
+    checkSpace,
 };
