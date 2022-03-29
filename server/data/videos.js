@@ -1,32 +1,23 @@
 const mongoCollections = require('../config/mongoCollections');
 const videos = mongoCollections.videos;
 const verify = require('./verify');
+const uuid = require('uuid');
 
 
-function uuid() {
-    var s = [];
-    var hexDigits = "0123456789abcdef";
-    for (var i = 0; i < 36; i++) {
-        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-    }
-    s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
-    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
-    s[8] = s[13] = s[18] = s[23] = "-";
-
-    var uuid = s.join("");
-    return uuid;
-}
 
 
-async function createVideo(name,path,tags){
+async function createVideo(name,path,tags,cover){
+    verify.isString(name,'name');
+    verify.checkSpace(name,'Video Name');
     let myDate = new Date();
     const videoCollection = await videos();
     let newvideo = {
-        _id: uuid(),
+        _id: uuid.v4(),
         videoName: name,
         videoPath: path,
         isDeleted: false,
         Tags: tags,
+        cover:cover,
         likeCount: 0,
         viewCount: 0,
         uploadDate: {
@@ -48,6 +39,9 @@ async function createVideo(name,path,tags){
 }
 
 async function getVideoById(id){
+    
+    verify.checkSpace(id,'Video Id');
+    verify.isString(id,'Video Id');
     const videoCollection = await videos();
 
     const resultVideo = await videoCollection.findOne({_id: id});
@@ -67,7 +61,8 @@ async function getAllVideos () {
 }
 
 async function removeVideo (id) {
-
+    verify.checkSpace(id,'Video Id');
+    verify.isString(id,'Video Id');
     const videoCollection = await videos();
 
     let video = await getVideoById(id);
@@ -83,14 +78,29 @@ async function removeVideo (id) {
     return resultstr;
 }
 
-async function updateVideo (name,path,tags) {
-
+async function updateVideo (id,name) {
+    verify.checkSpace(id,'Video Id');
+    verify.isString(id,'Video Id');
+    verify.checkSpace(name,'Video Name');
+    verify.isString(name,'Video Name');
+    let preVideo = await getVideoById(id);
+    if(name == preVideo.name) throw 'Same Video Name Error!';
     const videoCollection = await videos();
-
+    const updateVideo = {
+        name: name
+    };
+    const updatedInfo = await videoCollection.updateOne(
+        {_id: id},
+        {$set: updateVideo}
+    );
+    if(updatedInfo.modifiedCount === 0){
+        throw 'Could not update video successfully';
+    }
+    return await getVideoById(id);
 }
 
-//createVideo(111,111,111);
-removeVideo('37b3872f-a11a-4265-9e04-73410e2a1b6b');
+createVideo(111,111,111);
+//removeVideo('37b3872f-a11a-4265-9e04-73410e2a1b6b');
 
 module.exports = {
     createVideo,
