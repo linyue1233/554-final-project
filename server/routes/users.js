@@ -76,7 +76,6 @@ router.get('/:userId', async (req, res) => {
         verify.isString(userId, 'User ID');
         verify.checkSpace(userId, 'User ID');
     } catch (error) {
-        console.log(error);
         res.status(400).json({ message: error });
         return;
     }
@@ -84,10 +83,60 @@ router.get('/:userId', async (req, res) => {
     try {
         const user = await userData.getUserById(userId);
         res.status(200).json(user);
-        return;
     } catch (error) {
         res.status(500).json({ message: error });
     }
 });
+// remove user by ID
+router.delete('/delete/:userId', async (req, res) =>{
+    let userId = req.params.userId.trim();
+    // check format
+    try {
+        verify.isString(userId, 'User ID')
+        verify.checkSpace(userId, 'User ID')
+    } catch (error) {
+        res.status(400).json({ message: error });
+        return;
+    }
+    // delete user
+    try {
+        const deleteUser = await userData.deleteUserById(userId)
+        res.status(200).json(deleteUser);
+    } catch (error) {
+        res.status(500).json({ message: error });
+    }
+})
+// change password
+router.post('/password/:userId', async (req, res) =>{
+    let userInfo = req.body;
+    // check format
+    try {
+        verify.isString(req.params.userId, "User ID")
+        verify.isString(userInfo.oldPassword, "Old Password")
+        verify.isString(userInfo.newPassword, "new Password")
+        verify.checkSpace(req.params.userId, "User ID")
+        verify.checkPassword(userInfo.oldPassword)
+        verify.checkPassword(userInfo.newPassword)
+        if(userInfo.oldPassword === userInfo.newPassword) throw `Please input a different password`
+    } catch (error) {
+        res.status(400).json({ message: error });
+        return;
+    }
+    // update
+    try {
+        const updatePW = await userData.updatePassword(
+            req.params.userId.trim(),
+            xss(req.body.oldPassword).trim(),
+            xss(req.body.newPassword).trim()
+        )
+        if(updatePW){
+            res.status(200).json({ changePassword: true})
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message: error});
+    }
+})
+// TODO:update user Info
 
 module.exports = router;

@@ -100,7 +100,7 @@ module.exports = {
         return user;
     },
     // delete user by Id
-    async removeUserById(userId) {
+    async deleteUserById(userId) {
         verify.isString(userId, 'User ID');
         verify.checkSpace(userId, 'User ID');
         // remove user
@@ -114,14 +114,13 @@ module.exports = {
     },
     // update user Info
     async updateUser(userId, username, email, avatar) {
-        verify.isString(userId);
-        verify.isString(username);
-        verify.isString(avatar);
-        verify.isString(email);
+        verify.isString(userId, 'User ID');
+        verify.isString(username, 'username');
+        verify.isString(avatar, 'avatar');
+        verify.isString(email, 'email');
         verify.checkEmail(email);
-        verify.checkSpace(userId);
-        verify.checkSpace(username);
-        verify.checkSpace(avatar);
+        verify.checkSpace(userId, 'User ID');
+        verify.checkSpace(avatar, 'avatar');
         verify.checkUsername(username);
         // find user by ID
         let oldUser = await this.getUserById(userId.trim());
@@ -148,31 +147,46 @@ module.exports = {
             throw `At least one user data input must be different from the original data`;
 
         // update user
-        const updateInfo = await userCollection.updateOne({ _id: userId }, { $set: userUpdateInfo });
+        const updateInfo = await userCollection.updateOne(
+            { _id: userId }, 
+            { $set: userUpdateInfo }
+        );
         if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw `Failed to update user`;
 
         return await this.getUserById(userId.trim());
     },
     // update password
-    async updatePassword(userId, password) {
-        verify.isString(userId);
-        verify.isString(password);
-        verify.checkSpace(userId);
-        verify.checkPassword(password);
+    async updatePassword(userId, oldPassword, newPassword) {
+        if(oldPassword.trim() === newPassword.trim()) throw `Please input different password`
+        verify.isString(userId, 'User ID');
+        verify.isString(oldPassword, 'oldPassword');
+        verify.isString(newPassword, 'newPassword');
+        verify.checkSpace(userId, 'User ID');
+        verify.checkPassword(oldPassword);
+        verify.checkPassword(newPassword)
         // find user by ID
         let oldUser = await this.getUserById(userId.trim());
         if (!oldUser) throw `There is no user it the id of ${userId}`;
-        // encrypt the password
-        const hash = await bcrypt.hash(password.trim(), saltRounds);
-        // check the password is different
-        if (oldUser.password === hash) throw `Please input the different password`;
+        // check old password
+        let compare = false;
+        try {
+            compare = await bcrypt.compare(oldPassword.trim(), oldUser.password);
+        } catch (error) {
+            // no operation
+        }
+        if(compare !== true) throw `Please input correct old password`
         //update password
+        const newHash = await bcrypt.hash(newPassword.trim(), saltRounds);
         let userUpdatePassword = {
-            password: hash,
+            password: newHash,
         };
-        const updateInfo = await this.userCollection.updateOne({ _id: userId }, { $set: userUpdatePassword });
+        const userCollection = await users();
+        const updateInfo = await userCollection.updateOne(
+            { _id: userId }, 
+            { $set: userUpdatePassword }
+        );
         if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw `Failed to update password`;
 
-        return { updatePasswordResult: true };
+        return true;
     },
 };
