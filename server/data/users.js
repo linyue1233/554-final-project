@@ -26,16 +26,17 @@ module.exports = {
         }
 
         const userCollection = await users();
-        // Find other user with the same username
+        // Find other user with the same email
         const otherUser = await userCollection.findOne({ email: email });
         if (otherUser != null) throw `There is already a user with that email ${email} ${otherUser}`;
         // encrypt the password
         const hash = await bcrypt.hash(password, saltRounds);
         // create user
         let newUser = {
-            username: username,
-            email: email,
+            username: username.trim(),
+            email: email.toLowerCase().trim(),
             password: hash,
+            avatar: avatar.trim(),
             commentId: [],
             likeId: [],
             isAdmin: false,
@@ -51,7 +52,7 @@ module.exports = {
 
         return user;
     },
-    // login cheak user
+    // login check user
     async checkUser(email, password) {
         verify.isString(email, 'Email');
         verify.isString(password, 'Password');
@@ -61,18 +62,17 @@ module.exports = {
 
         // find user in DB
         const userCollection = await users();
-        const user = await userCollection.findOne({ email: email });
+        const user = await userCollection.findOne({ email: email.toLowerCase().trim() });
         if (user === null) throw `Either the username or password is invalid`;
 
         // check provided password is correct
         let compare = false;
         try {
-            compare = await bcrypt.compare(password, user.password);
+            compare = await bcrypt.compare(password.trim(), user.password);
         } catch (error) {
             // no operation
         }
         if (compare) {
-            //TODO: 完成cookies后改成{ authenticated: true } 直接跳转个人主页
             return true;
         } else {
             throw `Either the username or password is invalid`;
@@ -90,15 +90,14 @@ module.exports = {
     // get user by ID
     async getUserById(userId) {
         verify.isString(userId, 'User ID');
-        verify.isString(userId, 'User ID');
-        verify.checkSpace(userId, 'User Id');
+        verify.checkSpace(userId, 'User ID');
         // get user
         const userCollection = await users();
-        const user = await userCollection.findOne({ _id: userId });
+        const user = await userCollection.findOne({ _id: userId.trim() });
 
         if (!user) throw `No user with the id of ${userId}`;
 
-        return userId;
+        return user;
     },
     // delete user by Id
     async removeUserById(userId) {
@@ -108,7 +107,7 @@ module.exports = {
         const userCollection = await users();
         let user = await this.getUserById(userId.trim());
         if (!user) throw `No user with the ID of ${userId}`;
-        const deleteUser = await userCollection.deleteOne({ _id: userId });
+        const deleteUser = await userCollection.deleteOne({ _id: userId.trim() });
         if (deleteUser.deletedCount === 0) throw `Could not delete user with the ID of ${userId}`;
         return { deleteResult: true };
         //
@@ -123,18 +122,21 @@ module.exports = {
         verify.checkSpace(userId);
         verify.checkSpace(username);
         verify.checkSpace(avatar);
-        verify.checkUser(username);
+        verify.checkUsername(username);
         // find user by ID
         let oldUser = await this.getUserById(userId.trim());
         if (!oldUser) throw `No user with the ID of ${userId}`;
-        // check new email is unique to the users collection
+
         const userCollection = await users();
-        const otherUser = await userCollection.findOne({ email: email });
-        if (otherUser != null) throw `There is already a user with the email of ${email}`;
+        // check new email is unique to the users collection
+        if (email !== oldUser.email) {
+            const otherUser = await userCollection.findOne({ email: email });
+            if (otherUser != null) throw `There is already a user with the email of ${email}`;
+        }
         // update the users
         let userUpdateInfo = {
             username: username.trim(),
-            email: email.trim(),
+            email: email.toLowerCase().trim(),
             avatar: avatar.trim(),
         };
         // check at least one input is different
@@ -161,7 +163,7 @@ module.exports = {
         let oldUser = await this.getUserById(userId.trim());
         if (!oldUser) throw `There is no user it the id of ${userId}`;
         // encrypt the password
-        const hash = await bcrypt.hash(password, saltRounds);
+        const hash = await bcrypt.hash(password.trim(), saltRounds);
         // check the password is different
         if (oldUser.password === hash) throw `Please input the different password`;
         //update password
