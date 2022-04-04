@@ -123,6 +123,7 @@ module.exports = {
         verify.checkEmail(email);
         verify.checkSpace(userId, 'User ID');
         verify.checkSpace(avatar, 'avatar');
+        verify.checkAvatarSuffix(avatar);
         verify.checkUsername(username);
         // find user by ID
         let oldUser = await this.getUserById(userId.trim());

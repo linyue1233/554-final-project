@@ -4,7 +4,20 @@ const data = require('../data');
 const userData = data.users;
 const verify = require('../data/verify');
 const xss = require('xss');
+
+
+const path = require('path');
+const multer = require('multer');
+const upload = multer({dest:'uploads/'});
+const {uploadFile} = require('../config/awsS3');
+
 //get all users
+
+router.post('/avatarImage', upload.single('avatar'),async (req,res) => {
+    const file = req.file;
+    const result = await uploadFile(file);
+});
+
 router.get('/all', async (req, res) => {
     try {
         let userList = await userData.getAllUsers();
