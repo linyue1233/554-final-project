@@ -4,8 +4,9 @@
   "description": "22F CS554A Group3",
   "main": "app.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "seed": "node ./tasks/seed.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -19,8 +20,10 @@
   "homepage": "https://github.com/linyue1233/554-final-project#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.2",
     "express": "^4.17.3",
     "mongodb": "^4.4.1",
+    "nodemon": "^2.0.15",
     "uuid": "^8.3.2",
     "xss": "^1.0.11"
   }
