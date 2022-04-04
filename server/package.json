@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/linyue1233/554-final-project#readme",
   "dependencies": {
-    "aws-sdk": "^2.1106.0",
+    "aws-sdk": "^2.853.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.2",
     "dotenv": "^16.0.0",

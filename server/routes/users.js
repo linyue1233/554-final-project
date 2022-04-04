@@ -8,8 +8,6 @@ const userData = data.users;
 const verify = require('../data/verify');
 const xss = require('xss');
 
-
-const path = require('path');
 const multer = require('multer');
 const upload = multer({dest:'uploads/'});
 const {uploadFile,getFileStream} = require('../config/awsS3');
@@ -27,6 +25,9 @@ router.get('/avatarImage/:keyId', async (req, res) => {
 
 router.post('/avatarImage', upload.single('avatar'),async (req,res) => {
     const file = req.file;
+    // reset filename
+    file.filename = `${Date.now()}-${req.file.originalname}`;
+    console.log(file)
     try{
         const result = await uploadFile(file);
         console.log(result);

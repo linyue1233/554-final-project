@@ -1,12 +1,22 @@
 require('dotenv').config();
-const S3 = require('aws-sdk/clients/s3');
+const AWS = require('aws-sdk');
 const fs = require('fs');
 
-const bucketName = process.env.AWS_BUCKET_NAME;
-const region = process.env.AWS_REGION || 'us-east-1';
-const accessKeyId = process.env.AWS_ACCESS_KEY;
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-const s3 = new S3(
+const bucketName = "benchmoon-554";
+const region = 'us-east-1';
+const accessKeyId = "AKIA3KXHEOTYPLOQZLNZ";
+const secretAccessKey = "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";
+
+AWS.config.update({
+    region: region,
+    apiVersion: 'latest',
+    credentials: {
+      accessKeyId: accessKeyId,
+      secretAccessKey: secretAccessKey
+    }
+  })
+
+const s3 = new AWS.S3(
     region,
     accessKeyId,
     secretAccessKey
@@ -15,12 +25,13 @@ const s3 = new S3(
 // upload a file to S3
 function uploadFile(file){
     const fileStream = fs.createReadStream(file.path);
+    console.log(file.filename);
     const uploadParams = {
         Bucket: bucketName,
         Body: fileStream,
-        key: file.filename
+        Key: file.filename
     }
-
+    console.log(file.filename);
     return s3.upload(uploadParams).promise();
 }
 exports.uploadFile = uploadFile;
@@ -31,8 +42,8 @@ function getFileStream(fileKey){
         Key: fileKey,
         Bucket: bucketName
     }
-
-    return s3.getObject(downloadParams).promise();
+    console.log(fileKey);
+    return s3.getObject(downloadParams).createReadStream();
 }
 
 exports.getFileStream = getFileStream;
