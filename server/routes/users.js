@@ -30,9 +30,8 @@ router.post('/avatarImage', upload.single('avatar'),async (req,res) => {
     console.log(file)
     try{
         const result = await uploadFile(file);
-        console.log(result);
         // delete local record
-        await unlinkFile(file.path);
+        fs.unlinkSync(file.path);
         res.send({imagePath: `/avatarImage/${result.key}`});
     }catch (error) {
         res.status(500).json({message: error});
