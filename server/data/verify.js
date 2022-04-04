@@ -34,11 +34,19 @@ function checkAvatarSuffix(avatar){
     if (!/\.(jpg|jpeg|png|GIF|JPG|PNG)$/.test(avatar)) throw `Avatar must be the form of image`;
 }
 
+let checkTags = (arr) => {
+    const validTags = ['action', 'fiction']; //tbd
+    for (let tag of arr){
+        if (validTags.indexOf(tag) === -1) throw `${tag} is not a valid tag`;
+    }
+}
+
 module.exports = {
     isString,
     checkPassword,
     checkEmail,
     checkUsername,
     checkSpace,
+    checkTags,
     checkAvatarSuffix,
 };
