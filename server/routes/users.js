@@ -1,4 +1,7 @@
 const express = require('express');
+const fs =require('fs');
+const util = require('util');
+const unlinkFile = util.promisify(fs.unlink);
 const router = express.Router();
 const data = require('../data');
 const userData = data.users;
@@ -9,15 +12,33 @@ const xss = require('xss');
 const path = require('path');
 const multer = require('multer');
 const upload = multer({dest:'uploads/'});
-const {uploadFile} = require('../config/awsS3');
+const {uploadFile,getFileStream} = require('../config/awsS3');
 
-//get all users
+router.get('/avatarImage/:keyId', async (req, res) => {
+    const keyId = req.params.keyId;
+    try{
+        const readStream = await getFileStream(keyId);
+        readStream.pipe(res);
+    }catch(e){
+        res.status(500).json({message: e});
+    }
+
+})
 
 router.post('/avatarImage', upload.single('avatar'),async (req,res) => {
     const file = req.file;
-    const result = await uploadFile(file);
+    try{
+        const result = await uploadFile(file);
+        console.log(result);
+        // delete local record
+        await unlinkFile(file.path);
+        res.send({imagePath: `/avatarImage/${result.key}`});
+    }catch (error) {
+        res.status(500).json({message: error});
+    }
 });
 
+//get all users
 router.get('/all', async (req, res) => {
     try {
         let userList = await userData.getAllUsers();
