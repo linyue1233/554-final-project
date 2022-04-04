@@ -30,10 +30,15 @@ function checkSpace(str, varName) {
     if (str.trim() != str.trim().replace(/\s+/g, '')) throw `${varName} cannot have spaces`;
 }
 
+function checkAvatarSuffix(avatar){
+    if (!/\.(jpg|jpeg|png|GIF|JPG|PNG)$/.test(avatar)) throw `Avatar must be the form of image`;
+}
+
 module.exports = {
     isString,
     checkPassword,
     checkEmail,
     checkUsername,
     checkSpace,
+    checkAvatarSuffix,
 };

@@ -3,7 +3,7 @@ const users = mongoCollections.users;
 const verify = require('./verify');
 let { ObjectId } = require('mongodb');
 const bcrypt = require('bcryptjs');
-const saltRounds = 16;
+const saltRounds = 8;
 const uuid = require('uuid');
 
 /**
@@ -11,6 +11,7 @@ const uuid = require('uuid');
  */
 module.exports = {
     // create new user
+    // all user created by this way is not admin
     async createUser(username, email, password, avatar) {
         verify.isString(username, 'userName');
         verify.isString(email, 'email');
@@ -19,12 +20,13 @@ module.exports = {
         verify.checkEmail(email);
         verify.checkPassword(password);
         if (!avatar) {
-            avatar = 'defaultAvatar.jpg';
+            avatar = '/image/defaultAvatar.jpg';
         } else {
             verify.isString(avatar, 'avatar');
             verify.checkSpace(avatar, 'avatar');
+            verify.checkAvatarSuffix(avatar);
         }
-
+        avatar = avatar.split(" ").join("");
         const userCollection = await users();
         // Find other user with the same email
         const otherUser = await userCollection.findOne({ email: email });
