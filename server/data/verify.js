@@ -30,10 +30,18 @@ function checkSpace(str, varName) {
     if (str.trim() != str.trim().replace(/\s+/g, '')) throw `${varName} cannot have spaces`;
 }
 
+let checkTags = (arr) => {
+    const validTags = ['action', 'fiction']; //tbd
+    for (let tag of arr){
+        if (validTags.indexOf(tag) === -1) throw `${tag} is not a valid tag`;
+    }
+}
+
 module.exports = {
     isString,
     checkPassword,
     checkEmail,
     checkUsername,
     checkSpace,
+    checkTags
 };
