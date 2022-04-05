@@ -33,10 +33,10 @@ module.exports = {
         const insertInfo = await commentsCollections.insertOne(newComment);
         if (insertInfo.insertedCount === 0) throw 'Could not add comment';
         const newId = insertInfo.insertedId;
-        const thisComment = await this.getCommentBycommentId(newId);
+        const thisComment = await this.getCommentByCommentId(newId);
         return thisComment;
     },
-    async getCommentBycommentId(commentId) {
+    async getCommentByCommentId(commentId) {
         if (!commentId) throw 'please input a comment id';
         verifyFunction.isString(commentId, 'commentId');
         const commentsCollections = await comments();
@@ -57,7 +57,7 @@ module.exports = {
         if (commentsListById == null) return "don't have this user";
         let result = [];
         for (let commentId of commentsListById) {
-            let temp = await this.getCommentBycommentId(commentId);
+            let temp = await this.getCommentByCommentId(commentId);
             if (!temp.isDeleted) {
                 result.push(temp);
             }
@@ -76,7 +76,7 @@ module.exports = {
         if (commentsListById == null) return "don't have this video";
         let result = [];
         for (let commentId of commentsListById) {
-            let temp = await this.getCommentBycommentId(commentId);
+            let temp = await this.getCommentByCommentId(commentId);
             if (!temp.isDeleted) {
                 result.push(temp);
             }
@@ -84,7 +84,7 @@ module.exports = {
         if (result.length == 0) return "don't have any comments";
         return result;
     },
-    async deleteOneCommentBycommentId(commentId) {
+    async deleteOneCommentByCommentId(commentId) {
         if (!commentId) throw 'please input a comment id';
         verifyFunction.isString(commentId, 'commentId');
         const deleteComment = {
@@ -98,4 +98,35 @@ module.exports = {
         }
         return 'successfully delete this comment';
     },
+    
+    // async deleteAllCommentsByUserId(userId) {
+    //     if (!userId) throw 'please input an userId id';
+    //     verifyFunction.isString(userId, 'userId');
+    //     let usersList = await userFunctions.getAllUsers();
+    //     let commentsListById = null;
+    //     for (let userInfo of usersList) {
+    //         if (userInfo._id === userId) {
+    //             commentsListById = userInfo.commentId;
+    //         }
+    //     }
+    //     if (commentsListById == null) return "don't have this user";
+    //     for (let commentId of commentsListById) {
+    //         await this.deleteOneCommentBycommentId(commentId);
+    //     }
+    //     return 'successfully delete all comments';
+    // },
+    // async deleteAllCommentsByVideoId(videoId) {
+    //     if (!videoId) throw 'please input an userId id';
+    //     verifyFunction.isString(videoId, 'userId');
+    //     let videosList = await userFunctions.getAllVideos();
+    //     let commentsListById = null;
+    //     for (let videoInfo of videosList) {
+    //         if (videoInfo._id === videoId) commentsListById = videoInfo.commentId;
+    //     }
+    //     if (commentsListById == null) return "don't have this video";
+    //     for (let commentId of commentsListById) {
+    //         await this.deleteOneCommentBycommentId(commentId);
+    //     }
+    //     return 'successfully delete all comments';
+    // },
 };
