@@ -9,7 +9,8 @@ const uuid = require('uuid');
 async function createVideo(name,path,tags,cover){
     verify.isString(name,'name');
     verify.checkSpace(name,'Video Name');
-    verify.checkTags(tags);
+    //verify.checkTags(tags);
+    verify.checkAvatarSuffix(cover);
     let myDate = new Date();
     const videoCollection = await videos();
     let newvideo = {
@@ -35,8 +36,8 @@ async function createVideo(name,path,tags,cover){
     const insertInfo = await videoCollection.insertOne(newvideo);
     if(!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not creat video';
 
-    const insertedVideo = await getById(insertInfo.insertedId);
-    console.log(insertedVideo);
+    const insertedVideo = await getVideoById(insertInfo.insertedId);
+    //console.log(insertedVideo);
     return insertedVideo;
 }
 
