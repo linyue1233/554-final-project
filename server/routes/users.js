@@ -24,6 +24,14 @@ router.get('/avatarImage/:keyId', async (req, res) => {
 
 router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
     const file = req.file;
+    //  check form
+    let originalName = file.originalname;
+    try{
+        verify.checkAvatarSuffix(originalName);
+    }catch(e){
+        res.status(400).json({ message: e });
+        return;
+    }
     // reset filename
     file.filename = `${Date.now()}-${req.file.originalname}`;
     console.log(file);
@@ -31,9 +39,12 @@ router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
         const result = await uploadFile(file);
         // delete local record
         fs.unlinkSync(file.path);
-        res.send({ imagePath: `/avatarImage/${result.key}` });
+        console.log(result);
+        res.send({ imagePath: `${result.key}` });
+        return;
     } catch (error) {
         res.status(500).json({ message: error });
+        return;
     }
 });
 
