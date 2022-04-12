@@ -1,37 +1,40 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
-import {useState} from 'react';
+import { useState } from 'react';
+import axios from 'axios';
+import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 
+import Home from './components/homePage/Home';
 
-async function postAvatar({image, description}){
-  const formData = new FormData();
-  formData.append("image",image);
-  formData.append("description",description);
+async function postAvatar({ image, description }) {
+    const formData = new FormData();
+    formData.append('image', image);
+    formData.append('description', description);
 
-  const result = await axios.post('/users/avatarImage',formData);
-  return result.data;
+    const result = await axios.post('/users/avatarImage', formData);
+    return result.data;
 }
 
-
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <BrowserRouter>
+            <div className="App">
+                <header className="App-header">
+                    <nav>
+                        <NavLink className="navlink" to="/">
+                            Home
+                        </NavLink>
+                    </nav>
+                </header>
+                <br />
+                <div className="App-body">
+                    <Routes>
+                        <Route index path="/" element={<Home />} />
+                    </Routes>
+                </div>
+            </div>
+        </BrowserRouter>
+    );
 }
 
 export default App;

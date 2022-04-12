@@ -14,14 +14,35 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background-color: rgb(0, 30, 60);
+  height: 20px;
+  padding: 15px;
   color: white;
+  text-align: left;
+  position: relative;
+}
+
+nav {
+  list-style: none;
+  text-align: left;
+  /* position: absolute; */
+  bottom: 20px;
+  right: 40%;
+}
+
+.navlink {
+  padding: 0.4rem 0.8rem;
+  background-color: white;
+  border-radius: 3px;
+  color: #28547a;
+  text-decoration: none !important;
+  margin-right: 20px;
+}
+
+.navlink:hover {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
 }
 
 .App-link {
