@@ -7,6 +7,7 @@ const data = require('../data');
 const userData = data.users;
 const verify = require('../data/verify');
 const xss = require('xss');
+const sharp = require('sharp');
 
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
@@ -15,7 +16,8 @@ const { uploadFile, getFileStream } = require('../config/awsS3');
 router.get('/avatarImage/:keyId', async (req, res) => {
     const keyId = req.params.keyId;
     try {
-        const readStream = await getFileStream(keyId);
+        const readStream = getFileStream(keyId);
+        // console.log(readStream);
         readStream.pipe(res);
     } catch (e) {
         res.status(500).json({ message: e });
@@ -33,13 +35,13 @@ router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
         return;
     }
     // reset filename
-    file.filename = `${Date.now()}-${req.file.originalname}`;
-    console.log(file);
+    file.filename = `avatar/${Date.now()}-${req.file.originalname}`;
+    // resize avatarImage
+    await sharp();
     try {
         const result = await uploadFile(file);
         // delete local record
         fs.unlinkSync(file.path);
-        console.log(result);
         res.send({ imagePath: `${result.key}` });
         return;
     } catch (error) {

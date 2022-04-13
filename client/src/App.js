@@ -15,9 +15,12 @@ async function postAvatar({ image, description }) {
     return result.data;
 }
 
+
+
 function App() {
     return (
         <BrowserRouter>
+        <img src='https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'/>
             <div className="App">
                 <header className="App-header">
                     <nav>
