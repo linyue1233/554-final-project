@@ -3,11 +3,8 @@ const videos = mongoCollections.videos;
 const verify = require('./verify');
 const uuid = require('uuid');
 
-
-
-
-async function createVideo(name,path,tags,description, cover){
-    verify.isString(name,'name');
+async function createVideo(name, path, tags, description, cover) {
+    verify.isString(name, 'name');
     verify.isString(description, 'Video Description');
     //verify.checkTags(tags);
     verify.checkAvatarSuffix(cover);
@@ -20,42 +17,44 @@ async function createVideo(name,path,tags,description, cover){
         description: description,
         isDeleted: false,
         Tags: tags,
-        cover:cover,
+        cover: cover,
         likeCount: 0,
         viewCount: 0,
         comments: [],
         uploadDate: {
             year: myDate.getFullYear(),
-            month: myDate.getMonth()+1,//(1-12)
+            month: myDate.getMonth() + 1, //(1-12)
             day: myDate.getDate(),
             hour: myDate.getHours(),
             minute: myDate.getMinutes(),
-            second: myDate.getSeconds()
-        }
-    }
+            second: myDate.getSeconds(),
+        },
+    };
 
     const insertInfo = await videoCollection.insertOne(newvideo);
-    if(!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not creat video';
+    if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not creat video';
 
     const insertedVideo = await getVideoById(insertInfo.insertedId);
     //console.log(insertedVideo);
     return insertedVideo;
 }
 
-async function getVideoById(id){
+async function getVideoById(id) {
     id = id.trim();
-    
-    verify.checkSpace(id,'Video Id');
-    verify.isString(id,'Video Id');
+
+    verify.checkSpace(id, 'Video Id');
+    verify.isString(id, 'Video Id');
     const videoCollection = await videos();
 
-    const resultVideo = await videoCollection.findOne({_id: id});
-    if(resultVideo == null) throw 'No video with that id';
+    const resultVideo = await videoCollection.findOne({
+        _id: id,
+    });
+    if (resultVideo == null) throw 'No video with that id';
 
     return resultVideo;
 }
 
-async function getAllVideos () {
+async function getAllVideos() {
     const videoCollection = await videos();
 
     const allVideos = await videoCollection.find({}).toArray();
@@ -65,15 +64,17 @@ async function getAllVideos () {
     return allVideos;
 }
 
-async function removeVideo (id) {
+async function removeVideo(id) {
     id = id.trim();
-    verify.checkSpace(id,'Video Id');
-    verify.isString(id,'Video Id');
+    verify.checkSpace(id, 'Video Id');
+    verify.isString(id, 'Video Id');
     const videoCollection = await videos();
 
     let video = await getVideoById(id);
 
-    const deletionInfo = await videoCollection.deleteOne({ _id: id });
+    const deletionInfo = await videoCollection.deleteOne({
+        _id: id,
+    });
 
     if (deletionInfo.deletedCount === 0) {
         throw `Could not delete video with id of ${id}`;
@@ -84,32 +85,28 @@ async function removeVideo (id) {
     return resultstr;
 }
 
-async function updateVideo (id,name, description) {
+async function updateVideo(id, name, description) {
     id = id.trim();
-    verify.checkSpace(id,'Video Id');
-    verify.isString(id,'Video Id');
-    verify.checkSpace(name,'Video Name');
-    verify.isString(name,'Video Name');
+    verify.checkSpace(id, 'Video Id');
+    verify.isString(id, 'Video Id');
+    verify.checkSpace(name, 'Video Name');
+    verify.isString(name, 'Video Name');
     verify.isString(description, 'Videio Description');
     let preVideo = await getVideoById(id);
-    if(name == preVideo.name) throw 'Same Video Name Error!';
+    if (name == preVideo.name) throw 'Same Video Name Error!';
     const videoCollection = await videos();
     const updateVideo = {
         name: name,
-        description: description
+        description: description,
     };
-    const updatedInfo = await videoCollection.updateOne(
-        {_id: id},
-        {$set: updateVideo}
-    );
-    if(updatedInfo.modifiedCount === 0){
+    const updatedInfo = await videoCollection.updateOne({ _id: id }, { $set: updateVideo });
+    if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update video successfully';
     }
     return await getVideoById(id);
 }
 
 async function searchVideosByName(searchTerm) {
-
     searchTerm = searchTerm.trim();
 
     verify.isString(searchTerm, 'searchTerm');
@@ -117,55 +114,55 @@ async function searchVideosByName(searchTerm) {
     const videoCollection = await videos();
 
     searchTerm = searchTerm.toLowerCase();
-  
-    let videoList = await videoCollection.find({
-        videoName: { $regex: ".*" + searchTerm + ".*", $options: "i" },
-      })
-      .toArray();
-  
+
+    let videoList = await videoCollection
+        .find({
+            videoName: {
+                $regex: '.*' + searchTerm + '.*',
+                $options: 'i',
+            },
+        })
+        .toArray();
+
     return videoList;
-    
 }
 
-async function getVideosByTags (tags) {
-
+async function getVideosByTags(tags) {
     verify.checkTags(tags);
 
     const videoCollection = await videos();
-  
-    let videoList = await videoCollection.find({
-        tags: { $all: tags },
-      })
-      .toArray();
-  
+
+    let videoList = await videoCollection
+        .find({
+            tags: { $all: tags },
+        })
+        .toArray();
+
     return videoList;
-    
 }
 
-async function getVideosByYear (year) {
-
+async function getVideosByYear(year) {
     year = year.trim();
 
     verify.isString(year);
 
     const videoCollection = await videos();
-  
-    let videoList = await videoCollection.find({
-        uploadDate: {year: year},
-      })
-      .toArray();
-  
+
+    let videoList = await videoCollection
+        .find({
+            uploadDate: { year: year },
+        })
+        .toArray();
+
     return videoList;
-    
 }
 
-async function getRecommendVideos () {
-    //sort algorithm tbd
-    return true;
-}
+async function get3VideosSortByLikeCount() {
+    const videoCollection = await videos();
+    let videoList = await videoCollection.find({}).sort({ likeCount: -1 }).limit(3).toArray();
 
-//createVideo(111,111,111);
-//removeVideo('37b3872f-a11a-4265-9e04-73410e2a1b6b');
+    return videoList;
+}
 
 module.exports = {
     createVideo,
@@ -176,5 +173,5 @@ module.exports = {
     searchVideosByName,
     getVideosByTags,
     getVideosByYear,
-    getRecommendVideos
+    get3VideosSortByLikeCount,
 };
