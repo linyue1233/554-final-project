@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const util = require('util');
+const uuid = require("uuid");
 const unlinkFile = util.promisify(fs.unlink);
 const router = express.Router();
 const data = require('../data');
@@ -13,34 +14,42 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const { uploadFile, getFileStream } = require('../config/awsS3');
 
-router.get('/avatarImage/:keyId', async (req, res) => {
-    const keyId = req.params.keyId;
-    try {
-        const readStream = getFileStream(keyId);
-        // console.log(readStream);
-        readStream.pipe(res);
-    } catch (e) {
-        res.status(500).json({ message: e });
-    }
-});
+// router.get('/avatarImage/:keyId', async (req, res) => {
+//     const keyId = req.params.keyId;
+//     try {
+//         const readStream = getFileStream(keyId);
+//         // console.log(readStream);
+//         readStream.pipe(res);
+//     } catch (e) {
+//         res.status(500).json({ message: e });
+//     }
+// });  
+
+async function changeAvatar(filePath) {
+    let newFilePath = "uploads/" + uuid.v4();
+    await sharp(filePath).resize(300, 300).toFile(newFilePath);
+    return newFilePath;
+}
 
 router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
     const file = req.file;
     //  check form
     let originalName = file.originalname;
-    try{
+    try {
         verify.checkAvatarSuffix(originalName);
-    }catch(e){
+    } catch (e) {
         res.status(400).json({ message: e });
         return;
     }
     // reset filename
-    file.filename = `avatar/${Date.now()}-${req.file.originalname}`;
+    let oldPath = file.path;
+    file.filename = `${Date.now()}-${req.file.originalname}`;
     // resize avatarImage
-    await sharp();
+    file.path = await changeAvatar(file.path);
     try {
         const result = await uploadFile(file);
         // delete local record
+        fs.unlinkSync(oldPath);
         fs.unlinkSync(file.path);
         res.send({ imagePath: `${result.key}` });
         return;
@@ -217,5 +226,7 @@ router.put('/:userId', async (req, res) => {
         res.status(500).json({ message: error });
     }
 });
+
+
 
 module.exports = router;

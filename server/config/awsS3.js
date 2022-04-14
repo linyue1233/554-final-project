@@ -11,10 +11,10 @@ AWS.config.update({
     region: region,
     apiVersion: 'latest',
     credentials: {
-      accessKeyId: accessKeyId,
-      secretAccessKey: secretAccessKey
+        accessKeyId: accessKeyId,
+        secretAccessKey: secretAccessKey
     }
-  })
+})
 
 const s3 = new AWS.S3(
     region,
@@ -22,22 +22,23 @@ const s3 = new AWS.S3(
     secretAccessKey
 )
 
+
+
+
 // upload a file to S3
-function uploadFile(file){
+async function uploadFile(file) {
     const fileStream = fs.createReadStream(file.path);
-    console.log(file.filename);
     const uploadParams = {
         Bucket: bucketName,
         Body: fileStream,
         Key: file.filename
     }
-    console.log(file.filename);
     return s3.upload(uploadParams).promise();
 }
 exports.uploadFile = uploadFile;
 
 // download from s3
-function getFileStream(fileKey){
+function getFileStream(fileKey) {
     const downloadParams = {
         Key: fileKey,
         Bucket: bucketName
