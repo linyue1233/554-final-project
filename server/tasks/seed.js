@@ -10,35 +10,117 @@ const main = async () => {
     await db.dropDatabase();
 
     // create users
-    const john = await users.createUser('john', 'johnwork@gmail.com', '123456', 'defaultAvatar.jpg');
+    const john = await users.createUser(
+        'john',
+        'johnwork@gmail.com',
+        '123456',
+        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+    );
 
-    const alice = await users.createUser('alice', 'alicework@gmail.com', '123456', 'defaultAvatar.jpg');
+    const alice = await users.createUser(
+        'alice',
+        'alicework@gmail.com',
+        '123456',
+        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+    );
 
-    const tony = await users.createUser('tony', 'tonywork@gmail.com', '123456', 'defaultAvatar.jpg');
+    const tony = await users.createUser(
+        'tony',
+        'tonywork@gmail.com',
+        '123456',
+        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+    );
 
-    const jony = await users.createUser('jony', 'jonyabcdef@gmail.com', '123456', 'defaultAvatar.jpg');
-
+    const jony = await users.createUser(
+        'jony',
+        'jonyabcdef@gmail.com',
+        '123456',
+        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+    );
 
     try {
         //create videos
-        const rushHour = await videos.createVideo('rushHour', 'default_path', {action: true, comedy:true, thriller: true, love:true, documentary: true},'defaultAvatar.jpg');
+        const rushHour = await videos.createVideo(
+            'rushHour',
+            'default_path',
+            {
+                action: true,
+                comedy: true,
+                thriller: true,
+                love: true,
+                documentary: true,
+            },
+            'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        );
 
-        const titanic = await videos.createVideo('titanic', 'default_path', {action: true, comedy:true, thriller: true, love:true, documentary: true},'defaultAvatar.jpg');
+        const titanic = await videos.createVideo(
+            'titanic',
+            'default_path',
+            {
+                action: true,
+                comedy: true,
+                thriller: true,
+                love: true,
+                documentary: true,
+            },
+            'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        );
 
-        const greenBook = await videos.createVideo('greenBook', 'default_path', {action: true, comedy:true, thriller: true, love:true, documentary: true},'defaultAvatar.jpg');
+        const greenBook = await videos.createVideo(
+            'greenBook',
+            'default_path',
+            {
+                action: true,
+                comedy: true,
+                thriller: true,
+                love: true,
+                documentary: true,
+            },
+            'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        );
 
-        const batman = await videos.createVideo('batman', 'default_path', {action: true, comedy:true, thriller: true, love:true, documentary: true},'defaultAvatar.jpg');
-
+        const batman = await videos.createVideo(
+            'batman',
+            'default_path',
+            {
+                action: true,
+                comedy: true,
+                thriller: true,
+                love: true,
+                documentary: true,
+            },
+            'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        );
     } catch (e) {
         console.log(e);
     }
-// async createComment(content, userId, userName, videoId)
+    // async createComment(content, userId, userName, videoId)
     try {
-        const johnComment1 = await comments.createComment('This is a great vedio',"e26946f2-9283-4301-a6c5-7b4e02049c3c","john","a70336f6-d2cc-4d1e-99ef-15022648b195");
-        const johnComment2 = await comments.createComment('This is a bad vedio',"e26946f2-9283-4301-a6c5-7b4e02049c3c","john","51fcc4eb-e050-45ac-929c-36581c3ab7d8");
-        const aliceComment1 = await comments.createComment('hahahhahaha',"bd17c6b9-c8fb-4cc5-98df-0dec9084b414","alice","a70336f6-d2cc-4d1e-99ef-15022648b195");
-        const aliceComment2 = await comments.createComment('This is a bad vedio',"bd17c6b9-c8fb-4cc5-98df-0dec9084b414","alice","51fcc4eb-e050-45ac-929c-36581c3ab7d8");
-    }catch (e) {
+        const johnComment1 = await comments.createComment(
+            'This is a great vedio',
+            'e26946f2-9283-4301-a6c5-7b4e02049c3c',
+            'john',
+            'a70336f6-d2cc-4d1e-99ef-15022648b195'
+        );
+        const johnComment2 = await comments.createComment(
+            'This is a bad vedio',
+            'e26946f2-9283-4301-a6c5-7b4e02049c3c',
+            'john',
+            '51fcc4eb-e050-45ac-929c-36581c3ab7d8'
+        );
+        const aliceComment1 = await comments.createComment(
+            'hahahhahaha',
+            'bd17c6b9-c8fb-4cc5-98df-0dec9084b414',
+            'alice',
+            'a70336f6-d2cc-4d1e-99ef-15022648b195'
+        );
+        const aliceComment2 = await comments.createComment(
+            'This is a bad vedio',
+            'bd17c6b9-c8fb-4cc5-98df-0dec9084b414',
+            'alice',
+            '51fcc4eb-e050-45ac-929c-36581c3ab7d8'
+        );
+    } catch (e) {
         console.log(e);
     }
 

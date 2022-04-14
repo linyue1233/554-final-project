@@ -1,33 +1,33 @@
 {
-  "name": "554-final-project",
-  "version": "1.0.0",
-  "description": "22F CS554A Group3",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js",
-    "seed": "node ./tasks/seed.js",
-    "dev": "nodemon app.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/linyue1233/554-final-project.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/linyue1233/554-final-project/issues"
-  },
-  "homepage": "https://github.com/linyue1233/554-final-project#readme",
-  "dependencies": {
-    "aws-sdk": "^2.853.0",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.2",
-    "dotenv": "^16.0.0",
-    "express": "^4.17.3",
-    "mongodb": "^4.4.1",
-    "multer": "^1.4.4",
-    "nodemon": "^2.0.15",
-    "uuid": "^8.3.2",
-    "xss": "^1.0.11"
-  }
+    "name": "554-final-project",
+    "version": "1.0.0",
+    "description": "22F CS554A Group3",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "seed": "node ./tasks/seed.js",
+        "dev": "nodemon app.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/linyue1233/554-final-project.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/linyue1233/554-final-project/issues"
+    },
+    "homepage": "https://github.com/linyue1233/554-final-project#readme",
+    "dependencies": {
+        "aws-sdk": "^2.853.0",
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.2",
+        "dotenv": "^16.0.0",
+        "express": "^4.17.3",
+        "mongodb": "^4.4.1",
+        "multer": "^1.4.4",
+        "nodemon": "^2.0.15",
+        "uuid": "^8.3.2",
+        "xss": "^1.0.11"
+    }
 }
