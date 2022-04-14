@@ -35,7 +35,8 @@ router.post('/create', async (req, res) => {
         verify.isString(videoInfo.path, 'Video Path');
         verify.checkTags(videoInfo.tags);
         verify.isString(videoInfo.cover, 'Video Cover');
-        let video = await videoData.createVideo(videoInfo.name, videoInfo.path, videoInfo.tags, videoInfo.cover);
+        verify.isString(videoInfo.description, 'Video Description');
+        let video = await videoData.createVideo(videoInfo.name, videoInfo.path, videoInfo.tags, videoInfo.description, videoInfo.cover);
         res.status(200).json(video);
     } catch (e) {
         res.status(500).json({ message: e });
@@ -45,19 +46,19 @@ router.post('/create', async (req, res) => {
 router.put('/update/:videoId', async (req, res) => {
     let updatedInfo = req.body;
 
-    //upload video and cover to cloud and get cloud path
     try{
         verify.isString(req.params.videoId, 'Video Id');
         verify.checkSpace(req.params.videoId, 'Video Id');
         let video = await videoData.getVideoById(req.params.id);
         verify.isString(updatedInfo.name, 'Video Name');
         if(video.name === updatedInfo.name) throw 'Provided name is the same as before';
+        verify.isString(updatedInfo.description, 'Video Description');
     } catch (e) {
         res.status(500).json({ message: e });
     }
 
     try {
-        let video = await videoData.updateVideo(req.params.id. updatedInfo.name);
+        let video = await videoData.updateVideo(req.params.id, updatedInfo.name, updatedInfo.description);
         res.status(200).json(video);
     } catch (e) {
         res.status(500).json({ message: e });

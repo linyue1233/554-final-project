@@ -6,9 +6,9 @@ const uuid = require('uuid');
 
 
 
-async function createVideo(name,path,tags,cover){
+async function createVideo(name,path,tags,description, cover){
     verify.isString(name,'name');
-    verify.checkSpace(name,'Video Name');
+    verify.isString(description, 'Video Description');
     //verify.checkTags(tags);
     verify.checkAvatarSuffix(cover);
     let myDate = new Date();
@@ -17,6 +17,7 @@ async function createVideo(name,path,tags,cover){
         _id: uuid.v4(),
         videoName: name,
         videoPath: path,
+        description: description,
         isDeleted: false,
         Tags: tags,
         cover:cover,
@@ -83,17 +84,19 @@ async function removeVideo (id) {
     return resultstr;
 }
 
-async function updateVideo (id,name) {
+async function updateVideo (id,name, description) {
     id = id.trim();
     verify.checkSpace(id,'Video Id');
     verify.isString(id,'Video Id');
     verify.checkSpace(name,'Video Name');
     verify.isString(name,'Video Name');
+    verify.isString(description, 'Videio Description');
     let preVideo = await getVideoById(id);
     if(name == preVideo.name) throw 'Same Video Name Error!';
     const videoCollection = await videos();
     const updateVideo = {
-        name: name
+        name: name,
+        description: description
     };
     const updatedInfo = await videoCollection.updateOne(
         {_id: id},
