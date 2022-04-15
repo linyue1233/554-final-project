@@ -99,7 +99,10 @@ async function updateVideo(id, name, description) {
         name: name,
         description: description,
     };
-    const updatedInfo = await videoCollection.updateOne({ _id: id }, { $set: updateVideo });
+    const updatedInfo = await videoCollection.updateOne(
+        { _id: id },
+        { $set: updateVideo }
+    );
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update video successfully';
     }
@@ -159,7 +162,11 @@ async function getVideosByYear(year) {
 
 async function get3VideosSortByLikeCount() {
     const videoCollection = await videos();
-    let videoList = await videoCollection.find({}).sort({ likeCount: -1 }).limit(3).toArray();
+    let videoList = await videoCollection
+        .find({})
+        .sort({ likeCount: -1 })
+        .limit(3)
+        .toArray();
 
     return videoList;
 }

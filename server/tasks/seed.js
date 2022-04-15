@@ -14,35 +14,35 @@ const main = async () => {
         'john',
         'johnwork@gmail.com',
         '123456',
-        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        'https://benchmoon-554.s3.amazonaws.com/1649987446046-WechatIMG915.jpeg'
     );
 
     const alice = await users.createUser(
         'alice',
         'alicework@gmail.com',
         '123456',
-        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        'https://benchmoon-554.s3.amazonaws.com/1649987446046-WechatIMG915.jpeg'
     );
 
     const tony = await users.createUser(
         'tony',
         'tonywork@gmail.com',
         '123456',
-        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        'https://benchmoon-554.s3.amazonaws.com/1649987446046-WechatIMG915.jpeg'
     );
 
     const jony = await users.createUser(
         'jony',
         'jonyabcdef@gmail.com',
         '123456',
-        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        'https://benchmoon-554.s3.amazonaws.com/1649987446046-WechatIMG915.jpeg'
     );
 
     try {
         //create videos
         const rushHour = await videos.createVideo(
             'rushHour',
-            'default_path',
+            'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
             {
                 action: true,
                 comedy: true,
@@ -50,12 +50,13 @@ const main = async () => {
                 love: true,
                 documentary: true,
             },
-            'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+            'rushHour description',
+            'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
 
         const titanic = await videos.createVideo(
             'titanic',
-            'default_path',
+            'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
             {
                 action: true,
                 comedy: true,
@@ -63,12 +64,13 @@ const main = async () => {
                 love: true,
                 documentary: true,
             },
-            'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+            'titanic description',
+            'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
 
         const greenBook = await videos.createVideo(
             'greenBook',
-            'default_path',
+            'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
             {
                 action: true,
                 comedy: true,
@@ -76,12 +78,13 @@ const main = async () => {
                 love: true,
                 documentary: true,
             },
-            'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+            'greenBook description',
+            'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
 
         const batman = await videos.createVideo(
             'batman',
-            'default_path',
+            'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
             {
                 action: true,
                 comedy: true,
@@ -89,7 +92,8 @@ const main = async () => {
                 love: true,
                 documentary: true,
             },
-            'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+            'batman description',
+            'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
     } catch (e) {
         console.log(e);
