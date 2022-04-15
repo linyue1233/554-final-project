@@ -1,9 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
+const fs = require('fs');
 const videoData = data.videos;
 const verify = require('../data/verify');
 const xss = require('xss');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const {uploadFile} = require('../config/awsS3');
 
 router.get('/', async (req, res) => {
     try {
@@ -22,6 +26,26 @@ router.get('/:id', async (req, res) => {
         res.status(200).json(video);
     } catch (e) {
         res.status(500).json({ message: e });
+    }
+});
+
+
+router.post('/uploadVideo', upload.single('video'),async(req,res)=>{
+    if( req.file===null || req.file === undefined ){
+        res.status(400).json({ message: 'Please choose a file to upload.' });
+        return;
+    }
+    let file = req.file;
+    let originalName = file.originalname;
+    // need to check form
+    file.filename = `${Date.now()}-${req.file.originalname}`;
+    try{
+        const result = await uploadFile(file);
+        fs.unlinkSync(file.path);
+        res.send({ videoPath: "https://benchmoon-554.s3.amazonaws.com/" + `${result.key}` });
+    }catch (error) {
+        res.status(500).json( error);
+        return;
     }
 });
 

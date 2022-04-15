@@ -41,6 +41,10 @@ let checkTags = (arr) => {
     }
 }
 
+function checkVideoSuffix(videoPath){
+    
+}
+
 module.exports = {
     isString,
     checkPassword,
@@ -49,4 +53,5 @@ module.exports = {
     checkSpace,
     checkTags,
     checkAvatarSuffix,
+    checkVideoSuffix,
 };

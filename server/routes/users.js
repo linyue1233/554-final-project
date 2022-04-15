@@ -32,6 +32,10 @@ async function changeAvatar(filePath) {
 }
 
 router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
+    if( req.file===null || req.file === undefined ){
+        res.status(400).json({ message: 'Please choose a file to upload.' });
+        return;
+    }
     const file = req.file;
     //  check form
     let originalName = file.originalname;
@@ -51,7 +55,7 @@ router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
         // delete local record
         fs.unlinkSync(oldPath);
         fs.unlinkSync(file.path);
-        res.send({ imagePath: `${result.key}` });
+        res.send({ imagePath: "https://benchmoon-554.s3.amazonaws.com/" + `${result.key}`  });
         return;
     } catch (error) {
         res.status(500).json({ message: error });

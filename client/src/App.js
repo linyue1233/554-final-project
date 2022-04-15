@@ -5,6 +5,7 @@ import axios from 'axios';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 
 import Home from './components/homePage/Home';
+import VideoPlay from './components/videoPlay/VideoPlay';
 
 async function postAvatar({ image, description }) {
     const formData = new FormData();
@@ -20,12 +21,14 @@ async function postAvatar({ image, description }) {
 function App() {
     return (
         <BrowserRouter>
-        <img src='https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'/>
             <div className="App">
                 <header className="App-header">
                     <nav>
                         <NavLink className="navlink" to="/">
                             Home
+                        </NavLink>
+                        <NavLink className="navlink" to="/videoPlay">
+                            VideoPlay
                         </NavLink>
                     </nav>
                 </header>
@@ -33,6 +36,7 @@ function App() {
                 <div className="App-body">
                     <Routes>
                         <Route index path="/" element={<Home />} />
+                        <Route index path="/videoPlay" element={<VideoPlay />}/>
                     </Routes>
                 </div>
             </div>
