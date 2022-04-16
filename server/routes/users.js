@@ -5,6 +5,7 @@ const unlinkFile = util.promisify(fs.unlink);
 const router = express.Router();
 const data = require('../data');
 const userData = data.users;
+const videoData = data.videos;
 const verify = require('../data/verify');
 const xss = require('xss');
 
@@ -239,6 +240,7 @@ router.put('/like/:userId', async (req, res) => {
     // add likeId to user
     try {
         const addLike = await userData.addLikeId(userId, likeId);
+        await videoData.increaseLikeCount(likeId);
         res.status(200).json(addLike);
     } catch (error) {
         res.status(500).json({ message: error });
@@ -261,6 +263,7 @@ router.put('/unlike/:userId', async (req, res) => {
     // remove likeId from user
     try {
         const removeLike = await userData.removeLikeId(userId, likeId);
+        await videoData.decreaseLikeCount(likeId);
         res.status(200).json(removeLike);
     } catch (error) {
         res.status(500).json({ message: error });

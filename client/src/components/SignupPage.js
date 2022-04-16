@@ -12,7 +12,7 @@ async function SignupPage(){
 
     body = (
         <form className='form' id='create_user' onSubmit={handleCreateUser}>
-
+            
         </form>
     );
 }
