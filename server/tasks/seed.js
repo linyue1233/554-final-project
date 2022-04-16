@@ -42,13 +42,7 @@ const main = async () => {
         const rushHour = await videos.createVideo(
             'rushHour',
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
-            {
-                action: true,
-                comedy: true,
-                thriller: true,
-                love: true,
-                documentary: true,
-            },
+            ['action', 'comedy', 'thriller'],
             'rushHour description',
             'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
@@ -56,13 +50,7 @@ const main = async () => {
         const titanic = await videos.createVideo(
             'titanic',
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
-            {
-                action: true,
-                comedy: true,
-                thriller: true,
-                love: true,
-                documentary: true,
-            },
+            ['thriller', 'love', 'documentary'],
             'titanic description',
             'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
@@ -70,13 +58,7 @@ const main = async () => {
         const greenBook = await videos.createVideo(
             'greenBook',
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
-            {
-                action: true,
-                comedy: true,
-                thriller: true,
-                love: true,
-                documentary: true,
-            },
+            ['comedy', 'love', 'documentary'],
             'greenBook description',
             'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
@@ -84,13 +66,7 @@ const main = async () => {
         const batman = await videos.createVideo(
             'batman',
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
-            {
-                action: true,
-                comedy: true,
-                thriller: true,
-                love: true,
-                documentary: true,
-            },
+            ['action', 'thriller', 'love'],
             'batman description',
             'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
