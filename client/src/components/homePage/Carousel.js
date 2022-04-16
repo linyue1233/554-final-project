@@ -16,7 +16,11 @@ function Carousel() {
 
     if (carouselData) {
         return (
-            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+            <div
+                id="carouselExampleCaptions"
+                class="carousel slide"
+                data-bs-ride="carousel"
+            >
                 <div class="carousel-indicators">
                     <button
                         type="button"
@@ -42,10 +46,24 @@ function Carousel() {
                 <div class="carousel-inner">
                     {carouselData.map((video, index) => {
                         return (
-                            <div class={index === 0 ? ' carousel-item active' : ' carousel-item'}>
-                                <img src={video.cover} alt={video.videoName} />
+                            <div
+                                class={
+                                    index === 0
+                                        ? ' carousel-item active'
+                                        : ' carousel-item'
+                                }
+                            >
+                                <img
+                                    src={video.cover}
+                                    alt={video.videoName}
+                                    type="button"
+                                    //跳转到视频详情页
+                                    onClick={() => {
+                                        window.location.href = `/video/${video._id}`;
+                                    }}
+                                />
                                 <div class="carousel-caption d-none d-md-block">
-                                    <h5>{video.videoName}</h5>
+                                    <h1>{video.videoName}</h1>
                                     <p>{video.description}</p>
                                 </div>
                             </div>
