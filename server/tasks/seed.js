@@ -5,7 +5,6 @@ const videos = data.videos;
 const comments = data.comments;
 const main = async () => {
     console.log('This may take a few moments');
-
     const db = await dbConnection.dbConnection();
     await db.dropDatabase();
 
@@ -34,10 +33,12 @@ const main = async () => {
     }
 // async createComment(content, userId, userName, videoId)
     try {
-        const johnComment1 = await comments.createComment('This is a great vedio',"e26946f2-9283-4301-a6c5-7b4e02049c3c","john","a70336f6-d2cc-4d1e-99ef-15022648b195");
-        const johnComment2 = await comments.createComment('This is a bad vedio',"e26946f2-9283-4301-a6c5-7b4e02049c3c","john","51fcc4eb-e050-45ac-929c-36581c3ab7d8");
-        const aliceComment1 = await comments.createComment('hahahhahaha',"bd17c6b9-c8fb-4cc5-98df-0dec9084b414","alice","a70336f6-d2cc-4d1e-99ef-15022648b195");
-        const aliceComment2 = await comments.createComment('This is a bad vedio',"bd17c6b9-c8fb-4cc5-98df-0dec9084b414","alice","51fcc4eb-e050-45ac-929c-36581c3ab7d8");
+        const userInfo = await users.getAllUsers()
+        const videoInfo = await videos.getAllVideos();
+        const johnComment1 = await comments.createComment('This is a great vedio',userInfo[0]._id,userInfo[0].username,videoInfo[0]._id);
+        const johnComment2 = await comments.createComment('This is a bad vedio',userInfo[0]._id,userInfo[0].username,videoInfo[1]._id);
+        const aliceComment1 = await comments.createComment('hahahhahaha',userInfo[1]._id,userInfo[1].username,videoInfo[1]._id);
+        const aliceComment2 = await comments.createComment('This is a bad vedio',userInfo[1]._id,userInfo[1].username,videoInfo[0]._id);
     }catch (e) {
         console.log(e);
     }
