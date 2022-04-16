@@ -171,8 +171,11 @@ async function get3VideosSortByLikeCount() {
     return videoList;
 }
 
-//喜欢数+1
+// likeCount + 1
 async function increaseLikeCount(id){
+    id = id.trim();
+    verify.checkSpace(id, 'Video Id');
+    verify.isString(id, 'Video Id');
     const videoCollection = await videos();
 
     let preVideo = await getVideoById(id);
@@ -192,8 +195,11 @@ async function increaseLikeCount(id){
     return await getVideoById(id);
 }
 
-//喜欢数-1
+//likeCount - 1
 async function decreaseLikeCount(id){
+    id = id.trim();
+    verify.checkSpace(id, 'Video Id');
+    verify.isString(id, 'Video Id');
     const videoCollection = await videos();
 
     let preVideo = await getVideoById(id);
@@ -213,8 +219,11 @@ async function decreaseLikeCount(id){
     return await getVideoById(id);
 }
 
-//浏览数+1
+//viewCount + 1
 async function increaseViewCount(id){
+    id = id.trim();
+    verify.checkSpace(id, 'Video Id');
+    verify.isString(id, 'Video Id');
     const videoCollection = await videos();
 
     let preVideo = await getVideoById(id);
