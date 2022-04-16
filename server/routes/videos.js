@@ -14,6 +14,15 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/get3VideosSortByLikeCount', async (req, res) => {
+    try {
+        const recommendList = await videoData.get3VideosSortByLikeCount();
+        res.status(200).json(recommendList);
+    } catch (e) {
+        res.status(500).json({ message: e });
+    }
+});
+
 router.get('/:id', async (req, res) => {
     try {
         verify.isString(req.params.id, 'Video Id');
@@ -35,7 +44,14 @@ router.post('/create', async (req, res) => {
         verify.isString(videoInfo.path, 'Video Path');
         verify.checkTags(videoInfo.tags);
         verify.isString(videoInfo.cover, 'Video Cover');
-        let video = await videoData.createVideo(videoInfo.name, videoInfo.path, videoInfo.tags, videoInfo.cover);
+        verify.isString(videoInfo.description, 'Video Description');
+        let video = await videoData.createVideo(
+            videoInfo.name,
+            videoInfo.path,
+            videoInfo.tags,
+            videoInfo.description,
+            videoInfo.cover
+        );
         res.status(200).json(video);
     } catch (e) {
         res.status(500).json({ message: e });
@@ -45,43 +61,41 @@ router.post('/create', async (req, res) => {
 router.put('/update/:videoId', async (req, res) => {
     let updatedInfo = req.body;
 
-    //upload video and cover to cloud and get cloud path
-    try{
+    try {
         verify.isString(req.params.videoId, 'Video Id');
         verify.checkSpace(req.params.videoId, 'Video Id');
         let video = await videoData.getVideoById(req.params.id);
         verify.isString(updatedInfo.name, 'Video Name');
-        if(video.name === updatedInfo.name) throw 'Provided name is the same as before';
+        if (video.name === updatedInfo.name) throw 'Provided name is the same as before';
+        verify.isString(updatedInfo.description, 'Video Description');
     } catch (e) {
         res.status(500).json({ message: e });
     }
 
     try {
-        let video = await videoData.updateVideo(req.params.id. updatedInfo.name);
+        let video = await videoData.updateVideo(req.params.id, updatedInfo.name, updatedInfo.description);
         res.status(200).json(video);
     } catch (e) {
         res.status(500).json({ message: e });
     }
 });
 
-router.delete('/delete/:videoId', async (req, res) =>{
-
+router.delete('/delete/:videoId', async (req, res) => {
     try {
         verify.isString(req.params.videoId, 'Video Id');
         verify.checkSpace(req.params.videoId, 'Video Id');
-        const deleteResult = await videoData.removeVideo(userId)
+        const deleteResult = await videoData.removeVideo(userId);
         res.status(200).json(deleteResult);
     } catch (error) {
         res.status(500).json({ message: error });
     }
 });
 
-router.post('/search', async (req, res) =>{
-
+router.post('/search', async (req, res) => {
     let searchBody = req.body;
 
-    if(searchBody.method = 'name') {
-        try{
+    if ((searchBody.method = 'name')) {
+        try {
             let searchTerm = searchBody.searchTerm;
             verify.isString(searchTerm.trim(), 'searchTerm');
             const searchResult = await videoData.searchVideosByName(searchTerm);
@@ -89,8 +103,8 @@ router.post('/search', async (req, res) =>{
         } catch (e) {
             res.status(500).json({ message: e });
         }
-    } else if (searchBody.method = 'tag') {
-        try{
+    } else if ((searchBody.method = 'tag')) {
+        try {
             let tags = searchBody.tags;
             verify.checkTags(tags);
             const searchResult = await videoData.getVideosByTags(tags);
@@ -98,8 +112,8 @@ router.post('/search', async (req, res) =>{
         } catch (e) {
             res.status(500).json({ message: e });
         }
-    } else if (searchBody.method = 'year') {
-        try{
+    } else if ((searchBody.method = 'year')) {
+        try {
             let year = searchBody.year;
             verify.isString(year.trim(), 'Year');
             const searchResult = await videoData.getVideosByYear(year);
@@ -107,16 +121,6 @@ router.post('/search', async (req, res) =>{
         } catch (e) {
             res.status(500).json({ message: e });
         }
-    }
-
-});
-
-router.get('/recommend', async (req, res) =>{
-    try{
-        const recommendList = await videoData.getRecommendVideos();
-        res.status(200).json(recommendList);
-    } catch (e) {
-        res.status(500).json({ message: e });
     }
 });
 
