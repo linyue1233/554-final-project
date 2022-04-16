@@ -6,7 +6,7 @@ const uuid = require('uuid');
 async function createVideo(name, path, tags, description, cover) {
     verify.isString(name, 'name');
     verify.isString(description, 'Video Description');
-    //verify.checkTags(tags);
+    verify.checkTags(tags);
     verify.checkAvatarSuffix(cover);
     let myDate = new Date();
     const videoCollection = await videos();
@@ -137,7 +137,7 @@ async function getVideosByTags(tags) {
 
     let videoList = await videoCollection
         .find({
-            tags: { $all: tags },
+            Tags: { $all: tags } ,
         })
         .toArray();
 
@@ -233,7 +233,6 @@ async function increaseViewCount(id){
     }
     return await getVideoById(id);
 }
-
 
 module.exports = {
     createVideo,

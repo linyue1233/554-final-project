@@ -35,7 +35,7 @@ function checkAvatarSuffix(avatar){
 }
 
 let checkTags = (arr) => {
-    const validTags = ['action', 'fiction']; //tbd
+    const validTags = ['action', 'love', 'thriller', 'comedy', 'documentary']; //tbd
     for (let tag of arr){
         if (validTags.indexOf(tag) === -1) throw `${tag} is not a valid tag`;
     }

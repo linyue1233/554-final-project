@@ -42,7 +42,7 @@ const main = async () => {
         const rushHour = await videos.createVideo(
             'rushHour',
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
-            ['action', 'comedy', 'thirller'],
+            ['action', 'comedy', 'thriller'],
             'rushHour description',
             'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
@@ -50,7 +50,7 @@ const main = async () => {
         const titanic = await videos.createVideo(
             'titanic',
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
-            ['thirller', 'love', 'documentary'],
+            ['thriller', 'love', 'documentary'],
             'titanic description',
             'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
@@ -66,7 +66,7 @@ const main = async () => {
         const batman = await videos.createVideo(
             'batman',
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
-            ['action', 'thirller', 'love'],
+            ['action', 'thriller', 'love'],
             'batman description',
             'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
