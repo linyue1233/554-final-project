@@ -131,13 +131,14 @@ async function searchVideosByName(searchTerm) {
 }
 
 async function getVideosByTags(tags) {
+    console.log(tags);
     verify.checkTags(tags);
 
     const videoCollection = await videos();
 
     let videoList = await videoCollection
         .find({
-            Tags: { $all: tags } ,
+            Tags: { $all: tags },
         })
         .toArray();
 
@@ -172,7 +173,7 @@ async function get3VideosSortByLikeCount() {
 }
 
 // likeCount + 1
-async function increaseLikeCount(id){
+async function increaseLikeCount(id) {
     id = id.trim();
     verify.checkSpace(id, 'Video Id');
     verify.isString(id, 'Video Id');
@@ -195,7 +196,7 @@ async function increaseLikeCount(id){
 }
 
 //likeCount - 1
-async function decreaseLikeCount(id){
+async function decreaseLikeCount(id) {
     id = id.trim();
     verify.checkSpace(id, 'Video Id');
     verify.isString(id, 'Video Id');
@@ -218,7 +219,7 @@ async function decreaseLikeCount(id){
 }
 
 //viewCount + 1
-async function increaseViewCount(id){
+async function increaseViewCount(id) {
     id = id.trim();
     verify.checkSpace(id, 'Video Id');
     verify.isString(id, 'Video Id');
@@ -240,11 +241,12 @@ async function increaseViewCount(id){
     return await getVideoById(id);
 }
 
-// get 5 videos by tag and year, ordering by time
+// get 5 videos by tag and year, ordering by likeCount
 async function get5VideosByTagAndYear(tag, year) {
     // check format
     verify.isString(tag);
     verify.isString(year);
+    verify.checkTag(tag);
     verify.checkSpace(tag, 'tag');
     verify.checkSpace(year, 'year');
 
@@ -253,9 +255,9 @@ async function get5VideosByTagAndYear(tag, year) {
     let videoList = await videoCollection
         .find({
             Tags: { $all: [tag] },
-            uploadDate: { year: year },
+            'uploadDate.year': parseInt(year),
         })
-        .sort({ uploadDate: -1 })
+        .sort({ likeCount: -1 })
         .limit(5)
         .toArray();
 

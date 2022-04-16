@@ -29,6 +29,7 @@ router.get('/get5VideosByTagAndYear/:tag/:year', async (req, res) => {
     try {
         verify.isString(tag);
         verify.isString(year);
+        verify.checkTag(tag);
         verify.checkSpace(tag);
         verify.checkSpace(year);
         const videoList = await videoData.get5VideosByTagAndYear(tag, year);

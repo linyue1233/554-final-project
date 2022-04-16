@@ -51,6 +51,16 @@ let checkTags = (arr) => {
     if (new Set(arr).size !== arr.length) throw `Tags cannot have duplicate`;
 };
 
+function checkTag(tag) {
+    if (!tag) throw `Tag must be provided`;
+    if (tag.toLowerCase().trim() != tag.toLowerCase().trim().replace(/\s+/g, ''))
+        throw `Tag cannot have spaces`;
+    // tag if in 'action', 'love', 'thriller', 'comedy', 'documentary' this 5 types
+    const validTags = ['action', 'love', 'thriller', 'comedy', 'documentary'];
+    if (validTags.indexOf(tag) === -1) throw `${tag} is not a valid tag`;
+    if (new Set(tag).size !== tag.length) throw `Tag cannot have duplicate`;
+}
+
 module.exports = {
     isString,
     checkPassword,
@@ -59,4 +69,5 @@ module.exports = {
     checkSpace,
     checkTags,
     checkAvatarSuffix,
+    checkTag,
 };
