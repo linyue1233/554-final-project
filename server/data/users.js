@@ -26,11 +26,12 @@ module.exports = {
             verify.checkSpace(avatar, 'avatar');
             verify.checkAvatarSuffix(avatar);
         }
-        avatar = avatar.split(" ").join("");
+        avatar = avatar.split(' ').join('');
         const userCollection = await users();
         // Find other user with the same email
         const otherUser = await userCollection.findOne({ email: email });
-        if (otherUser != null) throw `There is already a user with that email ${email} ${otherUser}`;
+        if (otherUser != null)
+            throw `There is already a user with that email ${email} ${otherUser}`;
         // encrypt the password
         const hash = await bcrypt.hash(password, saltRounds);
         // create user
@@ -109,7 +110,8 @@ module.exports = {
         let user = await this.getUserById(userId.trim());
         if (!user) throw `No user with the ID of ${userId}`;
         const deleteUser = await userCollection.deleteOne({ _id: userId.trim() });
-        if (deleteUser.deletedCount === 0) throw `Could not delete user with the ID of ${userId}`;
+        if (deleteUser.deletedCount === 0)
+            throw `Could not delete user with the ID of ${userId}`;
         return { deleteResult: true };
         //
     },
@@ -132,7 +134,8 @@ module.exports = {
         // check new email is unique to the users collection
         if (email !== oldUser.email) {
             const otherUser = await userCollection.findOne({ email: email });
-            if (otherUser != null) throw `There is already a user with the email of ${email}`;
+            if (otherUser != null)
+                throw `There is already a user with the email of ${email}`;
         }
         // update the users
         let userUpdateInfo = {
@@ -150,22 +153,24 @@ module.exports = {
 
         // update user
         const updateInfo = await userCollection.updateOne(
-            { _id: userId }, 
+            { _id: userId },
             { $set: userUpdateInfo }
         );
-        if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw `Failed to update user`;
+        if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+            throw `Failed to update user`;
 
         return await this.getUserById(userId.trim());
     },
     // update password
     async updatePassword(userId, oldPassword, newPassword) {
-        if(oldPassword.trim() === newPassword.trim()) throw `Please input different password`
+        if (oldPassword.trim() === newPassword.trim())
+            throw `Please input different password`;
         verify.isString(userId, 'User ID');
         verify.isString(oldPassword, 'oldPassword');
         verify.isString(newPassword, 'newPassword');
         verify.checkSpace(userId, 'User ID');
         verify.checkPassword(oldPassword);
-        verify.checkPassword(newPassword)
+        verify.checkPassword(newPassword);
         // find user by ID
         let oldUser = await this.getUserById(userId.trim());
         if (!oldUser) throw `There is no user it the id of ${userId}`;
@@ -176,7 +181,7 @@ module.exports = {
         } catch (error) {
             // no operation
         }
-        if(compare !== true) throw `Please input correct old password`
+        if (compare !== true) throw `Please input correct old password`;
         //update password
         const newHash = await bcrypt.hash(newPassword.trim(), saltRounds);
         let userUpdatePassword = {
@@ -184,11 +189,102 @@ module.exports = {
         };
         const userCollection = await users();
         const updateInfo = await userCollection.updateOne(
-            { _id: userId }, 
+            { _id: userId },
             { $set: userUpdatePassword }
         );
-        if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw `Failed to update password`;
+        if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+            throw `Failed to update password`;
 
         return true;
+    },
+
+    // add commentId to user
+    async addCommentId(userId, commentId) {
+        verify.isString(userId, 'User ID');
+        verify.isString(commentId, 'Comment ID');
+        verify.checkSpace(userId, 'User ID');
+        verify.checkSpace(commentId, 'Comment ID');
+        // find user by ID
+        let user = await this.getUserById(userId.trim());
+        if (!user) throw `There is no user it the id of ${userId}`;
+        // add commentId to user
+        const userCollection = await users();
+        const updateInfo = await userCollection.updateOne(
+            { _id: userId },
+            { $push: { commentId: commentId.trim() } }
+        );
+        if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+            throw `Failed to add commentId to user`;
+
+        return await this.getUserById(userId.trim());
+    },
+
+    // remove commentId from user
+    async removeCommentId(userId, commentId) {
+        verify.isString(userId, 'User ID');
+        verify.isString(commentId, 'Comment ID');
+        verify.checkSpace(userId, 'User ID');
+        verify.checkSpace(commentId, 'Comment ID');
+        // find user by ID
+        let user = await this.getUserById(userId.trim());
+        if (!user) throw `There is no user it the id of ${userId}`;
+        // remove commentId from user
+        const userCollection = await users();
+        const updateInfo = await userCollection.updateOne(
+            { _id: userId },
+            { $pull: { commentId: commentId.trim() } }
+        );
+        if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+            throw `Failed to remove commentId from user`;
+
+        return await this.getUserById(userId.trim());
+    },
+
+    // add likeId to user
+    async addLikeId(userId, likeId) {
+        verify.isString(userId, 'User ID');
+        verify.isString(likeId, 'Like ID');
+        verify.checkSpace(userId, 'User ID');
+        verify.checkSpace(likeId, 'Like ID');
+        // find user by ID
+        let oldUser = await this.getUserById(userId.trim());
+        if (!oldUser) throw `There is no user it the id of ${userId}`;
+        // check likeId is not in the list
+        if (oldUser.likeId.includes(likeId.trim()))
+            throw `The likeId is already in the list`;
+        // add likeId
+        const userCollection = await users();
+        const updateInfo = await userCollection.updateOne(
+            { _id: userId },
+            { $push: { likeId: likeId.trim() } }
+        );
+        if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+            throw `Failed to add likeId`;
+
+        return await this.getUserById(userId.trim());
+    },
+
+    // remove likeId from user
+    async removeLikeId(userId, likeId) {
+        verify.isString(userId, 'User ID');
+        verify.isString(likeId, 'Like ID');
+        verify.checkSpace(userId, 'User ID');
+        verify.checkSpace(likeId, 'Like ID');
+        // find user by ID
+        let oldUser = await this.getUserById(userId.trim());
+        if (!oldUser) throw `There is no user it the id of ${userId}`;
+        // check likeId is in the list
+        if (!oldUser.likeId.includes(likeId.trim()))
+            throw `The likeId is not in the list`;
+        // remove likeId
+        const userCollection = await users();
+        const updateInfo = await userCollection.updateOne(
+            { _id: userId },
+            { $pull: { likeId: likeId.trim() } }
+        );
+        if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+            throw `Failed to remove likeId`;
+
+        return await this.getUserById(userId.trim());
     },
 };
