@@ -22,6 +22,21 @@ router.get('/get3VideosSortByLikeCount', async (req, res) => {
         res.status(500).json({ message: e });
     }
 });
+// get 5 videos by tag and year, ordering by time
+router.get('/get5VideosByTagAndYear/:tag/:year', async (req, res) => {
+    const tag = req.params.tag;
+    const year = req.params.year;
+    try {
+        verify.isString(tag);
+        verify.isString(year);
+        verify.checkSpace(tag);
+        verify.checkSpace(year);
+        const videoList = await videoData.get5VideosByTagAndYear(tag, year);
+        res.status(200).json(videoList);
+    } catch (e) {
+        res.status(500).json({ message: e });
+    }
+});
 
 router.get('/:id', async (req, res) => {
     try {
@@ -73,7 +88,11 @@ router.put('/update/:videoId', async (req, res) => {
     }
 
     try {
-        let video = await videoData.updateVideo(req.params.id, updatedInfo.name, updatedInfo.description);
+        let video = await videoData.updateVideo(
+            req.params.id,
+            updatedInfo.name,
+            updatedInfo.description
+        );
         res.status(200).json(video);
     } catch (e) {
         res.status(500).json({ message: e });

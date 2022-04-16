@@ -171,19 +171,23 @@ async function get3VideosSortByLikeCount() {
     return videoList;
 }
 
+<<<<<<< Updated upstream
 // likeCount + 1
 async function increaseLikeCount(id){
     id = id.trim();
     verify.checkSpace(id, 'Video Id');
     verify.isString(id, 'Video Id');
+=======
+//喜欢数+1
+async function increaseLikeCount(id) {
+>>>>>>> Stashed changes
     const videoCollection = await videos();
 
     let preVideo = await getVideoById(id);
     let preLikeCount = preVideo.likeCount;
 
     const updateVideo = {
-        likeCount: preLikeCount+1
-    
+        likeCount: preLikeCount + 1,
     };
     const updatedInfo = await videoCollection.updateOne(
         { _id: id },
@@ -195,19 +199,23 @@ async function increaseLikeCount(id){
     return await getVideoById(id);
 }
 
+<<<<<<< Updated upstream
 //likeCount - 1
 async function decreaseLikeCount(id){
     id = id.trim();
     verify.checkSpace(id, 'Video Id');
     verify.isString(id, 'Video Id');
+=======
+//喜欢数-1
+async function decreaseLikeCount(id) {
+>>>>>>> Stashed changes
     const videoCollection = await videos();
 
     let preVideo = await getVideoById(id);
     let preLikeCount = preVideo.likeCount;
 
     const updateVideo = {
-        likeCount: preLikeCount-1
-    
+        likeCount: preLikeCount - 1,
     };
     const updatedInfo = await videoCollection.updateOne(
         { _id: id },
@@ -219,19 +227,23 @@ async function decreaseLikeCount(id){
     return await getVideoById(id);
 }
 
+<<<<<<< Updated upstream
 //viewCount + 1
 async function increaseViewCount(id){
     id = id.trim();
     verify.checkSpace(id, 'Video Id');
     verify.isString(id, 'Video Id');
+=======
+//浏览数+1
+async function increaseViewCount(id) {
+>>>>>>> Stashed changes
     const videoCollection = await videos();
 
     let preVideo = await getVideoById(id);
     let preViewCount = preVideo.viewCount;
 
     const updateVideo = {
-        viewCount: preViewCount+1
-    
+        viewCount: preViewCount + 1,
     };
     const updatedInfo = await videoCollection.updateOne(
         { _id: id },
@@ -243,6 +255,27 @@ async function increaseViewCount(id){
     return await getVideoById(id);
 }
 
+// get 5 videos by tag and year, ordering by time
+async function get5VideosByTagAndYear(tag, year) {
+    // check format
+    verify.isString(tag);
+    verify.isString(year);
+    verify.checkSpace(tag, 'tag');
+    verify.checkSpace(year, 'year');
+
+    const videoCollection = await videos();
+
+    let videoList = await videoCollection
+        .find({
+            Tags: { $all: [tag] },
+            uploadDate: { year: year },
+        })
+        .sort({ uploadDate: -1 })
+        .limit(5)
+        .toArray();
+
+    return videoList;
+}
 
 module.exports = {
     createVideo,
@@ -256,5 +289,6 @@ module.exports = {
     get3VideosSortByLikeCount,
     increaseLikeCount,
     decreaseLikeCount,
-    increaseViewCount
+    increaseViewCount,
+    get5VideosByTagAndYear,
 };
