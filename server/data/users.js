@@ -84,7 +84,6 @@ module.exports = {
     async getAllUsers() {
         const userCollection = await users();
         const userList = await userCollection.find({}).toArray();
-
         if (!userList) throw `No users in the system`;
 
         return userList;
