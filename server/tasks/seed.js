@@ -5,37 +5,36 @@ const videos = data.videos;
 const comments = data.comments;
 const main = async () => {
     console.log('This may take a few moments');
-
     const db = await dbConnection.dbConnection();
     await db.dropDatabase();
-
+    
     // create users
     const john = await users.createUser(
         'john',
         'johnwork@gmail.com',
         '123456',
-        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        'https://benchmoon-554.s3.amazonaws.com/1649987446046-WechatIMG915.jpeg'
     );
 
     const alice = await users.createUser(
         'alice',
         'alicework@gmail.com',
         '123456',
-        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        'https://benchmoon-554.s3.amazonaws.com/1649987446046-WechatIMG915.jpeg'
     );
 
     const tony = await users.createUser(
         'tony',
         'tonywork@gmail.com',
         '123456',
-        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        'https://benchmoon-554.s3.amazonaws.com/1649987446046-WechatIMG915.jpeg'
     );
 
     const jony = await users.createUser(
         'jony',
         'jonyabcdef@gmail.com',
         '123456',
-        'https://benchmoon-554.s3.amazonaws.com/avatar/1649814951716-668920BF-A190-436F-AF44-036663582A8A.png'
+        'https://benchmoon-554.s3.amazonaws.com/1649987446046-WechatIMG915.jpeg'
     );
 
     try {
@@ -43,52 +42,32 @@ const main = async () => {
         const rushHour = await videos.createVideo(
             'rushHour',
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
-            {
-                action: true,
-                comedy: true,
-                thriller: true,
-                love: true,
-                documentary: true,
-            },
+            ['action', 'comedy', 'thirller'],
+            'rushHour description',
             'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
 
         const titanic = await videos.createVideo(
             'titanic',
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
-            {
-                action: true,
-                comedy: true,
-                thriller: true,
-                love: true,
-                documentary: true,
-            },
+            ['thirller', 'love', 'documentary'],
+            'titanic description',
             'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
 
         const greenBook = await videos.createVideo(
             'greenBook',
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
-            {
-                action: true,
-                comedy: true,
-                thriller: true,
-                love: true,
-                documentary: true,
-            },
+            ['comedy', 'love', 'documentary'],
+            'greenBook description',
             'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
 
         const batman = await videos.createVideo(
             'batman',
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
-            {
-                action: true,
-                comedy: true,
-                thriller: true,
-                love: true,
-                documentary: true,
-            },
+            ['action', 'thirller', 'love'],
+            'batman description',
             'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
         );
     } catch (e) {
@@ -96,34 +75,36 @@ const main = async () => {
     }
     // async createComment(content, userId, userName, videoId)
     try {
+        const userInfo = await users.getAllUsers();
+        const videoInfo = await videos.getAllVideos();
         const johnComment1 = await comments.createComment(
             'This is a great vedio',
-            'e26946f2-9283-4301-a6c5-7b4e02049c3c',
-            'john',
-            'a70336f6-d2cc-4d1e-99ef-15022648b195'
+            userInfo[0]._id,
+            userInfo[0].username,
+            videoInfo[0]._id
         );
         const johnComment2 = await comments.createComment(
             'This is a bad vedio',
-            'e26946f2-9283-4301-a6c5-7b4e02049c3c',
-            'john',
-            '51fcc4eb-e050-45ac-929c-36581c3ab7d8'
+            userInfo[0]._id,
+            userInfo[0].username,
+            videoInfo[1]._id
         );
         const aliceComment1 = await comments.createComment(
             'hahahhahaha',
-            'bd17c6b9-c8fb-4cc5-98df-0dec9084b414',
-            'alice',
-            'a70336f6-d2cc-4d1e-99ef-15022648b195'
+            userInfo[1]._id,
+            userInfo[1].username,
+            videoInfo[1]._id
         );
         const aliceComment2 = await comments.createComment(
             'This is a bad vedio',
-            'bd17c6b9-c8fb-4cc5-98df-0dec9084b414',
-            'alice',
-            '51fcc4eb-e050-45ac-929c-36581c3ab7d8'
+            userInfo[1]._id,
+            userInfo[1].username,
+            videoInfo[0]._id
         );
     } catch (e) {
         console.log(e);
     }
-
+    
     console.log('Done seeding database');
     await dbConnection.closeConnection();
 };
