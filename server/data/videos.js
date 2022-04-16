@@ -89,7 +89,6 @@ async function updateVideo(id, name, description) {
     id = id.trim();
     verify.checkSpace(id, 'Video Id');
     verify.isString(id, 'Video Id');
-    verify.checkSpace(name, 'Video Name');
     verify.isString(name, 'Video Name');
     verify.isString(description, 'Videio Description');
     let preVideo = await getVideoById(id);
