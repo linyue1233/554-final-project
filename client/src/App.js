@@ -5,6 +5,7 @@ import axios from 'axios';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 
 import Home from './components/homePage/Home';
+import User from './components/User';
 
 async function postAvatar ({ image, description }) {
   const formData = new FormData();
@@ -28,6 +29,7 @@ function App () {
         <div className="App-body">
           <Routes>
             <Route index path="/" element={<Home />} />
+            <Route index path="/users/:id" element={<User />} />
           </Routes>
         </div>
       </div>
