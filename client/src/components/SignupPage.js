@@ -2,7 +2,7 @@ import React from 'react';
 
 
 //username, email, password, avatar
-async function Signup(){
+async function SignupPage(){
     let username;
     let password;
     let email;
@@ -17,4 +17,4 @@ async function Signup(){
     );
 }
 
-export default  Signup;
+export default  SignupPage;

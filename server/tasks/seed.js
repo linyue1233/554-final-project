@@ -7,7 +7,7 @@ const main = async () => {
     console.log('This may take a few moments');
     const db = await dbConnection.dbConnection();
     await db.dropDatabase();
-
+    
     // create users
     const john = await users.createUser(
         'john',
@@ -128,7 +128,7 @@ const main = async () => {
     } catch (e) {
         console.log(e);
     }
-
+    
     console.log('Done seeding database');
     await dbConnection.closeConnection();
 };

@@ -171,6 +171,70 @@ async function get3VideosSortByLikeCount() {
     return videoList;
 }
 
+//喜欢数+1
+async function increaseLikeCount(id){
+    const videoCollection = await videos();
+
+    let preVideo = await getVideoById(id);
+    let preLikeCount = preVideo.likeCount;
+
+    const updateVideo = {
+        likeCount: preLikeCount+1
+    
+    };
+    const updatedInfo = await videoCollection.updateOne(
+        { _id: id },
+        { $set: updateVideo }
+    );
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'Could not update video successfully';
+    }
+    return await getVideoById(id);
+}
+
+//喜欢数-1
+async function decreaseLikeCount(id){
+    const videoCollection = await videos();
+
+    let preVideo = await getVideoById(id);
+    let preLikeCount = preVideo.likeCount;
+
+    const updateVideo = {
+        likeCount: preLikeCount-1
+    
+    };
+    const updatedInfo = await videoCollection.updateOne(
+        { _id: id },
+        { $set: updateVideo }
+    );
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'Could not update video successfully';
+    }
+    return await getVideoById(id);
+}
+
+//浏览数+1
+async function increaseViewCount(id){
+    const videoCollection = await videos();
+
+    let preVideo = await getVideoById(id);
+    let preViewCount = preVideo.viewCount;
+
+    const updateVideo = {
+        viewCount: preViewCount+1
+    
+    };
+    const updatedInfo = await videoCollection.updateOne(
+        { _id: id },
+        { $set: updateVideo }
+    );
+    if (updatedInfo.modifiedCount === 0) {
+        throw 'Could not update video successfully';
+    }
+    return await getVideoById(id);
+}
+
+
 module.exports = {
     createVideo,
     getVideoById,
@@ -181,4 +245,7 @@ module.exports = {
     getVideosByTags,
     getVideosByYear,
     get3VideosSortByLikeCount,
+    increaseLikeCount,
+    decreaseLikeCount,
+    increaseViewCount
 };
