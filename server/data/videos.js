@@ -59,7 +59,7 @@ async function getAllVideos() {
 
     const allVideos = await videoCollection.find({}).toArray();
 
-    console.log(allVideos);
+    //console.log(allVideos);
 
     return allVideos;
 }
