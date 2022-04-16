@@ -10,7 +10,7 @@ async function createVideo(name, path, tags, description, cover) {
     verify.checkAvatarSuffix(cover);
     let myDate = new Date();
     const videoCollection = await videos();
-    let newvideo = {
+    let newVideo = {
         _id: uuid.v4(),
         videoName: name,
         videoPath: path,
@@ -20,7 +20,7 @@ async function createVideo(name, path, tags, description, cover) {
         cover: cover,
         likeCount: 0,
         viewCount: 0,
-        comments: [],
+        commentId: [],
         uploadDate: {
             year: myDate.getFullYear(),
             month: myDate.getMonth() + 1, //(1-12)
@@ -31,7 +31,7 @@ async function createVideo(name, path, tags, description, cover) {
         },
     };
 
-    const insertInfo = await videoCollection.insertOne(newvideo);
+    const insertInfo = await videoCollection.insertOne(newVideo);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not creat video';
 
     const insertedVideo = await getVideoById(insertInfo.insertedId);
