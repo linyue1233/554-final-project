@@ -263,6 +263,26 @@ async function get5VideosByTagAndYear(tag, year) {
     return videoList;
 }
 
+// get 5 videos by tag, ordering by likeCount
+async function get5VideosByTag(tag) {
+    // check format
+    verify.isString(tag);
+    verify.checkTag(tag);
+    verify.checkSpace(tag, 'tag');
+
+    const videoCollection = await videos();
+
+    let videoList = await videoCollection
+        .find({
+            Tags: { $all: [tag] },
+        })
+        .sort({ likeCount: -1 })
+        .limit(5)
+        .toArray();
+
+    return videoList;
+}
+
 module.exports = {
     createVideo,
     getVideoById,
@@ -277,4 +297,5 @@ module.exports = {
     decreaseLikeCount,
     increaseViewCount,
     get5VideosByTagAndYear,
+    get5VideosByTag,
 };

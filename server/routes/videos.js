@@ -22,7 +22,7 @@ router.get('/get3VideosSortByLikeCount', async (req, res) => {
         res.status(500).json({ message: e });
     }
 });
-// get 5 videos by tag and year, ordering by time
+// get 5 videos by tag and year, ordering by likeCount
 router.get('/get5VideosByTagAndYear/:tag/:year', async (req, res) => {
     const tag = req.params.tag;
     const year = req.params.year;
@@ -33,6 +33,19 @@ router.get('/get5VideosByTagAndYear/:tag/:year', async (req, res) => {
         verify.checkSpace(tag);
         verify.checkSpace(year);
         const videoList = await videoData.get5VideosByTagAndYear(tag, year);
+        res.status(200).json(videoList);
+    } catch (e) {
+        res.status(500).json({ message: e });
+    }
+});
+// get 5 videos by tag, ordering by likeCount
+router.get('/get5VideosByTag/:tag', async (req, res) => {
+    const tag = req.params.tag;
+    try {
+        verify.isString(tag);
+        verify.checkTag(tag);
+        verify.checkSpace(tag);
+        const videoList = await videoData.get5VideosByTag(tag);
         res.status(200).json(videoList);
     } catch (e) {
         res.status(500).json({ message: e });
