@@ -8,8 +8,9 @@ import {
     CardMedia,
     Grid,
     Typography,
-    makeStyles,
 } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
 const useStyles = makeStyles({
     card: {
         maxWidth: 250,
@@ -40,23 +41,20 @@ const useStyles = makeStyles({
 });
 function OneVideo(props) {
     const classes = useStyles();
-    const [videoPath, setVideoPath] = useState(props.video.videoPath);
-    const [videoCover, setVideoCover] = useState(props.video.videoCover);
-    const [videoTitle, setVideoTitle] = useState(props.video.videoTitle);
-    const [videoDescription, setVideoDescription] = useState(
-        props.video.videoDescription
-    );
-    const [videoId, setVideoId] = useState(props.video.videoId);
+    const [videoCover, setVideoCover] = useState(props.video.cover);
+    const [videoTitle, setVideoTitle] = useState(props.video.videoName);
+    const [videoDescription, setVideoDescription] = useState(props.video.description);
+    const [videoId, setVideoId] = useState(props.video._id);
     const buildCard = () => {
         return (
             <Card className={classes.card} variant="outlined">
                 <CardActionArea>
-                    <Link to={`/characters/${videoId}`}>
+                    <Link to={`/video/${videoId}`}>
                         <CardMedia
                             className={classes.media}
                             component="img"
                             image={videoCover}
-                            title="show image"
+                            title={videoTitle}
                         />
                         <CardContent>
                             <Typography

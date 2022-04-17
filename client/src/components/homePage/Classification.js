@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ButtonGroup, Button } from '@mui/material';
 import VideoCard from '../VideoCard';
+import OneVideo from '../OneVideo';
 
 function Classification(props) {
     let tag = props.tag;
@@ -36,7 +37,7 @@ function Classification(props) {
 
     if (videoData) {
         videoCard = videoData.map((video) => {
-            return <VideoCard video={video} />;
+            return <OneVideo video={video} />;
         });
     } else {
         videoCard = (
