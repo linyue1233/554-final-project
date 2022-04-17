@@ -3,11 +3,13 @@ import '../../App.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ButtonGroup, Button } from '@mui/material';
+import VideoCard from '../VideoCard';
 
 function Classification(props) {
     let tag = props.tag;
     const [videoData, setVideoData] = useState(undefined);
     const [year, setYear] = useState(undefined);
+    let videoCard = null;
 
     useEffect(() => {
         async function fetchData() {
@@ -15,15 +17,36 @@ function Classification(props) {
                 const { data } = await axios.get(
                     `/videos/get5VideosByTagAndYear/${tag}/${year}`
                 );
-                setVideoData(data);
+                if (data.length === 0) {
+                    setVideoData(undefined);
+                } else {
+                    setVideoData(data);
+                }
             } else {
                 const { data } = await axios.get(`/videos/get5VideosByTag/${tag}`);
-                setVideoData(data);
+                if (data.length === 0) {
+                    setVideoData(undefined);
+                } else {
+                    setVideoData(data);
+                }
             }
         }
         fetchData();
-        console.log(videoData);
     }, [tag, year]);
+
+    if (videoData) {
+        videoCard = videoData.map((video) => {
+            return <VideoCard video={video} />;
+        });
+    } else {
+        videoCard = (
+            <div className="card col">
+                <p className="card-text">
+                    <h5 className="card-title">No Videos Found</h5>
+                </p>
+            </div>
+        );
+    }
 
     return (
         <div className="container">
@@ -55,7 +78,9 @@ function Classification(props) {
                     </ButtonGroup>
                 </small>
             </h1>
-            <br />
+            <div className="container">
+                <div className="row">{videoCard}</div>
+            </div>
         </div>
     );
 }

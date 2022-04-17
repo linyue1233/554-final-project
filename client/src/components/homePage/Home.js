@@ -16,6 +16,22 @@ function Home() {
             <div>
                 <Classification tag={'action'} />
             </div>
+            <br />
+            <div>
+                <Classification tag={'love'} />
+            </div>
+            <br />
+            <div>
+                <Classification tag={'thriller'} />
+            </div>
+            <br />
+            <div>
+                <Classification tag={'comedy'} />
+            </div>
+            <br />
+            <div>
+                <Classification tag={'documentary'} />
+            </div>
         </div>
     );
 }
