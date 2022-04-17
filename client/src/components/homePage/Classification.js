@@ -50,7 +50,7 @@ function Classification(props) {
 
     return (
         <div className="container">
-            <h1 className="title">
+            <h1 className="title text-white">
                 {tag}
                 <small>
                     <ButtonGroup variant="text" aria-label="text button group">
