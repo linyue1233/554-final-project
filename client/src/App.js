@@ -33,9 +33,21 @@ function App() {
                     <Routes>
                         <Route index path="/" element={<Home />} />
                         <Route index path="/users/:id" element={<User />} />
-                        <Route index path="/videos/getAllVideosByTag/:tag" element={<AllVideo />} />
+                        <Route
+                            index
+                            path="/videos/getAllVideosByTag/:tag"
+                            element={<AllVideo />}
+                        />
                     </Routes>
                 </div>
+                <br />
+                <br />
+                <footer className="App-footer" id="footer">
+                    <div className="text-center text-white">
+                        <p>Designed by Group 3</p>
+                    </div>
+                </footer>
+                <br />
             </div>
         </BrowserRouter>
     );
