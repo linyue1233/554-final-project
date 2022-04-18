@@ -1,4 +1,12 @@
-.App {
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
     background-color: #011e3c;
 }
 
@@ -25,6 +33,7 @@
 
 .App-body {
     height: 100%;
+    width: 100%;
     background-color: #011e3c;
 }
 
@@ -62,4 +71,12 @@
 
 .text-white {
     color: white;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    background-color: #071a2f;
 }

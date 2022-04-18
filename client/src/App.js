@@ -32,9 +32,8 @@ function App() {
                 <div className="App-body">
                     <Routes>
                         <Route index path="/" element={<Home />} />
-                        <Route index path="/users/:id" element={<User />} />
+                        <Route path="/users/:id" element={<User />} />
                         <Route
-                            index
                             path="/videos/getAllVideosByTag/:tag"
                             element={<AllVideo />}
                         />
@@ -42,11 +41,11 @@ function App() {
                 </div>
                 <br />
                 <br />
-                <footer className="App-footer" id="footer">
-                    <div className="text-center text-white">
-                        <p>Designed by Group 3</p>
-                    </div>
-                </footer>
+                <div className="con">
+                    <footer>
+                        <p className="text-center text-white">Designed by Group 3</p>
+                    </footer>
+                </div>
                 <br />
             </div>
         </BrowserRouter>
