@@ -7,23 +7,23 @@ import { Grid } from '@mui/material';
 
 function AllVideo(props) {
     const { tag } = useParams();
-    const [videolData, setVideolData] = useState(undefined);
+    const [videoData, setVideoData] = useState(undefined);
     useEffect(() => {
         async function fetchData() {
             const data = await axios.get(`/videos/getAllVideosByTag/${tag}`);
-            setVideolData(data);
+            setVideoData(data);
         }
         fetchData();
     }, []);
     let card = null;
-    if (videolData) {
+    if (videoData) {
         card =
-            videolData.data &&
-            videolData.data.map((video) => {
+            videoData.data &&
+            videoData.data.map((video) => {
                 return <OneVideo video={video} />;
             });
         return (
-            <Grid container className="allvideo" spacing={2}>
+            <Grid container className="allVideo" spacing={2}>
                 {card}
             </Grid>
         );
