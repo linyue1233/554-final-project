@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import '../App.css';
 import OneVideo from './OneVideo';
 import axios from 'axios';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 
 function AllVideo(props) {
     const { tag } = useParams();

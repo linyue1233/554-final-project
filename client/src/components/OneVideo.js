@@ -8,8 +8,8 @@ const useStyles = makeStyles({
     card: {
         maxWidth: 250,
         height: 'auto',
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        marginLeft: '1%',
+        marginRight: '0%',
         borderRadius: 5,
         border: '1px solid #1e8678',
         boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);',
@@ -43,12 +43,26 @@ function OneVideo(props) {
             <Card className={classes.card} variant="outlined">
                 <CardActionArea>
                     <Link to={`/video/${videoId}`}>
-                        <CardMedia className={classes.media} component="img" image={videoCover} title={videoTitle} />
+                        <CardMedia
+                            className={classes.media}
+                            component="img"
+                            image={videoCover}
+                            title={videoTitle}
+                        />
                         <CardContent>
-                            <Typography className={classes.titleHead} gutterBottom variant="h6" component="h3">
+                            <Typography
+                                className={classes.titleHead}
+                                gutterBottom
+                                variant="h6"
+                                component="h3"
+                            >
                                 {videoTitle}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
+                            <Typography
+                                variant="body2"
+                                color="textSecondary"
+                                component="p"
+                            >
                                 {videoDescription}
                             </Typography>
                         </CardContent>

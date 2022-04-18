@@ -3,7 +3,7 @@ import '../../App.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ButtonGroup, Button } from '@mui/material';
-import VideoCard from '../VideoCard';
+import { Link } from 'react-router-dom';
 import OneVideo from '../OneVideo';
 
 function Classification(props) {
@@ -15,7 +15,9 @@ function Classification(props) {
     useEffect(() => {
         async function fetchData() {
             if (year) {
-                const { data } = await axios.get(`/videos/get5VideosByTagAndYear/${tag}/${year}`);
+                const { data } = await axios.get(
+                    `/videos/get5VideosByTagAndYear/${tag}/${year}`
+                );
                 if (data.length === 0) {
                     setVideoData(undefined);
                 } else {
@@ -73,6 +75,9 @@ function Classification(props) {
                             }}
                         >
                             2020
+                        </Button>
+                        <Button>
+                            <Link to={`/videos/getAllVideosByTag/${tag}`}>All</Link>
                         </Button>
                     </ButtonGroup>
                 </small>

@@ -1,7 +1,5 @@
 import React from 'react';
 import '../../App.css';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Carousel from './Carousel';
 import Classification from './Classification';
 
