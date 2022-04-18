@@ -4,8 +4,10 @@ import { useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 
+import AllVideo from './components/AllVideo';
 import Home from './components/homePage/Home';
 import VideoPlay from './components/videoPlay/VideoPlay';
+import User from './components/User';
 
 async function postAvatar({ image, description }) {
     const formData = new FormData();
@@ -37,8 +39,21 @@ function App() {
                     <Routes>
                         <Route index path="/" element={<Home />} />
                         <Route index path="/videoPlay" element={<VideoPlay />}/>
+                        <Route path="/users/:id" element={<User />} />
+                        <Route
+                            path="/videos/getAllVideosByTag/:tag"
+                            element={<AllVideo />}
+                        />
                     </Routes>
                 </div>
+                <br />
+                <br />
+                <div className="con">
+                    <footer>
+                        <p className="text-center text-white">Designed by Group 3</p>
+                    </footer>
+                </div>
+                <br />
             </div>
         </BrowserRouter>
     );
