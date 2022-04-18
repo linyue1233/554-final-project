@@ -15,9 +15,7 @@ function Classification(props) {
     useEffect(() => {
         async function fetchData() {
             if (year) {
-                const { data } = await axios.get(
-                    `/videos/get5VideosByTagAndYear/${tag}/${year}`
-                );
+                const { data } = await axios.get(`/videos/get5VideosByTagAndYear/${tag}/${year}`);
                 if (data.length === 0) {
                     setVideoData(undefined);
                 } else {

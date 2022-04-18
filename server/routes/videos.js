@@ -102,11 +102,7 @@ router.put('/update/:videoId', async (req, res) => {
     }
 
     try {
-        let video = await videoData.updateVideo(
-            req.params.id,
-            updatedInfo.name,
-            updatedInfo.description
-        );
+        let video = await videoData.updateVideo(req.params.id, updatedInfo.name, updatedInfo.description);
         res.status(200).json(video);
     } catch (e) {
         res.status(500).json({ message: e });
@@ -154,6 +150,21 @@ router.post('/search', async (req, res) => {
         } catch (e) {
             res.status(500).json({ message: e });
         }
+    }
+});
+
+router.get('/getAllVideosByTag/:tag', async (req, res) => {
+    try {
+        verify.isString(req.params.tag, 'Tag');
+
+        verify.checkTag(req.params.tag);
+
+        verify.checkSpace(req.params.tag);
+
+        const videos = await videoData.getAllVideosByOneTag(req.params.tag);
+        res.status(200).json(videos);
+    } catch (e) {
+        res.status(500).json({ message: e });
     }
 });
 

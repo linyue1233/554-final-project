@@ -98,10 +98,7 @@ async function updateVideo(id, name, description) {
         name: name,
         description: description,
     };
-    const updatedInfo = await videoCollection.updateOne(
-        { _id: id },
-        { $set: updateVideo }
-    );
+    const updatedInfo = await videoCollection.updateOne({ _id: id }, { $set: updateVideo });
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update video successfully';
     }
@@ -131,16 +128,16 @@ async function searchVideosByName(searchTerm) {
 
 async function getVideosByTags(tags) {
     console.log(tags);
-    verify.checkTags(tags);
-
+    // verify.checkTags(tags);
+    console.log(1111);
     const videoCollection = await videos();
-
+    console.log(1);
     let videoList = await videoCollection
         .find({
-            Tags: { $all: tags },
+            Tags: { $all: [tags] },
         })
         .toArray();
-
+    console.log(videoList);
     return videoList;
 }
 
@@ -162,11 +159,7 @@ async function getVideosByYear(year) {
 
 async function get3VideosSortByLikeCount() {
     const videoCollection = await videos();
-    let videoList = await videoCollection
-        .find({})
-        .sort({ likeCount: -1 })
-        .limit(3)
-        .toArray();
+    let videoList = await videoCollection.find({}).sort({ likeCount: -1 }).limit(3).toArray();
 
     return videoList;
 }
@@ -184,10 +177,7 @@ async function increaseLikeCount(id) {
     const updateVideo = {
         likeCount: preLikeCount + 1,
     };
-    const updatedInfo = await videoCollection.updateOne(
-        { _id: id },
-        { $set: updateVideo }
-    );
+    const updatedInfo = await videoCollection.updateOne({ _id: id }, { $set: updateVideo });
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update video successfully';
     }
@@ -207,10 +197,7 @@ async function decreaseLikeCount(id) {
     const updateVideo = {
         likeCount: preLikeCount - 1,
     };
-    const updatedInfo = await videoCollection.updateOne(
-        { _id: id },
-        { $set: updateVideo }
-    );
+    const updatedInfo = await videoCollection.updateOne({ _id: id }, { $set: updateVideo });
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update video successfully';
     }
@@ -230,10 +217,7 @@ async function increaseViewCount(id) {
     const updateVideo = {
         viewCount: preViewCount + 1,
     };
-    const updatedInfo = await videoCollection.updateOne(
-        { _id: id },
-        { $set: updateVideo }
-    );
+    const updatedInfo = await videoCollection.updateOne({ _id: id }, { $set: updateVideo });
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update video successfully';
     }
@@ -282,6 +266,15 @@ async function get5VideosByTag(tag) {
 
     return videoList;
 }
+async function getAllVideosByOneTag(tag) {
+    const videoCollection = await videos();
+    let videoList = await videoCollection
+        .find({
+            Tags: { $all: [tag] },
+        })
+        .toArray();
+    return videoList;
+}
 
 module.exports = {
     createVideo,
@@ -298,4 +291,5 @@ module.exports = {
     increaseViewCount,
     get5VideosByTagAndYear,
     get5VideosByTag,
+    getAllVideosByOneTag,
 };

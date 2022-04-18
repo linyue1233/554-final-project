@@ -9,6 +9,7 @@ function Carousel() {
     useEffect(() => {
         async function fetchData() {
             const { data } = await axios.get('/videos/get3VideosSortByLikeCount');
+            console.log(data);
             setCarouselData(data);
         }
         fetchData();
@@ -16,11 +17,7 @@ function Carousel() {
 
     if (carouselData) {
         return (
-            <div
-                id="carouselExampleCaptions"
-                className="carousel slide"
-                data-bs-ride="carousel"
-            >
+            <div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel">
                 <div className="carousel-indicators">
                     <button
                         type="button"
@@ -46,13 +43,7 @@ function Carousel() {
                 <div className="carousel-inner">
                     {carouselData.map((video, index) => {
                         return (
-                            <div
-                                className={
-                                    index === 0
-                                        ? ' carousel-item active'
-                                        : ' carousel-item'
-                                }
-                            >
+                            <div className={index === 0 ? ' carousel-item active' : ' carousel-item'}>
                                 <img
                                     src={video.cover}
                                     alt={video.videoName}
@@ -75,10 +66,7 @@ function Carousel() {
                     data-bs-target="#carouselExampleCaptions"
                     data-bs-slide="prev"
                 >
-                    <span
-                        className="carousel-control-prev-icon"
-                        aria-hidden="true"
-                    ></span>
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span className="visually-hidden">Previous</span>
                 </button>
                 <button
@@ -87,10 +75,7 @@ function Carousel() {
                     data-bs-target="#carouselExampleCaptions"
                     data-bs-slide="next"
                 >
-                    <span
-                        className="carousel-control-next-icon"
-                        aria-hidden="true"
-                    ></span>
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
                     <span className="visually-hidden">Next</span>
                 </button>
             </div>
