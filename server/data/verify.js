@@ -58,7 +58,6 @@ function checkTag(tag) {
     // tag if in 'action', 'love', 'thriller', 'comedy', 'documentary' this 5 types
     const validTags = ['action', 'love', 'thriller', 'comedy', 'documentary'];
     if (validTags.indexOf(tag) === -1) throw `${tag} is not a valid tag`;
-    if (new Set(tag).size !== tag.length) throw `Tag cannot have duplicate`;
 }
 
 function checkVideoSuffix(videoPath){

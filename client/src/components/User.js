@@ -98,12 +98,10 @@ function User () {
         return <div>{error}</div>
     } else if (userData) {
         return( 
-        <div>
-            <Avatar alt={userData.username} src={userData.avatar} />
-            <p>{userData.username}</p>
+        <div className='user-content'>
+            <Avatar alt={userData.username} src={userData.avatar} /> {userData.username}
             <br/>
-            <EmailIcon />
-            <p>{userData.email}</p>
+            <EmailIcon /> {userData.email}
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={tabValue} onChange={handleChange}>

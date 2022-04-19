@@ -80,3 +80,8 @@ footer {
     height: auto;
     background-color: #071a2f;
 }
+
+.user-content {
+    background-color: white;
+    color: black;
+}
