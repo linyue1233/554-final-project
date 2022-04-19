@@ -10,10 +10,11 @@ const videoData = data.videos;
 const verify = require('../data/verify');
 const xss = require('xss');
 const sharp = require('sharp');
-
+const path = require('path');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'uploads' + path.sep });
 const { uploadFile, getFileStream } = require('../config/awsS3');
+
 
 // router.get('/avatarImage/:keyId', async (req, res) => {
 //     const keyId = req.params.keyId;
@@ -27,7 +28,7 @@ const { uploadFile, getFileStream } = require('../config/awsS3');
 // });  
 
 async function changeAvatar(filePath) {
-    let newFilePath = "uploads/" + uuid.v4();
+    let newFilePath = "uploads" + path.sep+ uuid.v4();
     await sharp(filePath).resize(300, 300).toFile(newFilePath);
     return newFilePath;
 }
