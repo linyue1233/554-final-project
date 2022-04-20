@@ -7,6 +7,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import EmailIcon from '@mui/icons-material/Email';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
 
 function TabPanel(props) {
     const { children, value, index } = props;
@@ -26,11 +29,12 @@ function TabPanel(props) {
 function User () {
 
     const [userData, setUserData] = useState(null);
-    const [likedVideos, setLikedVideos] = useState(null);
+    const [likedVideos, setLikedVideos] = useState([]);
     const [comments, setComments] = useState(null);
     const [error, setError] = useState(null);
     const [tabValue, setTabValue] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [loadingContent, setLoadingContent] = useState(false);
     const { id } = useParams();
 
     const handleChange = (event, newValue) => {
@@ -59,7 +63,7 @@ function User () {
         
         async function getLikedVideosandComments() {
             try{
-                setLoading(true);
+                setLoadingContent(true);
                 let likeId = userData.likeId;
                 if(likeId.length !== 0){
                     let likedVideoList = [];
@@ -79,10 +83,10 @@ function User () {
                     }
                     setComments(commentList);
                 }
-                setLoading(false);
+                setLoadingContent(false);
             }catch (e){
                 setError(e);
-                setLoading(false);
+                setLoadingContent(false);
             }
             
         }
@@ -110,9 +114,42 @@ function User () {
                     </Tabs>
                 </Box>
                 <TabPanel value={tabValue} index={0}>
-                    {likedVideos ? likedVideos.map((video) => {
-                        return <p>{video.videoName}</p>
-                    }) : <p>No Likes Now</p>}
+                <Grid container wrap="nowrap">
+                    {(loadingContent ? Array.from(new Array(5))  
+                    : likedVideos).map((video, index) => (
+                    <Box key={index} sx={{ width: 210, marginRight: 5.5, my: 5 }}>
+                        {video ? (
+                        <Link to={`/video/${video._id}`}>
+                        <img
+                        style={{ width: 210, height: 118 }}
+                        alt={video.videoName}
+                        src={video.cover}/></Link>
+                        ) : (
+                        <Skeleton variant="rectangular" width={210} height={118} />
+                        )}
+                        {video ? (
+                        <Box sx={{ pr: 2 }}>
+                            <Typography gutterBottom variant="body2">
+                                <Link className='likedVideoLink' to={`/video/${video._id}`}>{video.videoName}</Link>
+                            </Typography>
+                        <Typography display="block" variant="caption" color="text.secondary">
+                            {video.description}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                            {`${video.viewCount} views • ${video.uploadDate.year}/${video.uploadDate.month}/${video.uploadDate.day}`}
+                        </Typography>
+                        </Box>
+                        ) : (
+                        <Box sx={{ pt: 0.5 }}>
+                            <Skeleton />
+                            <Skeleton width="60%" />
+                        </Box>
+                        )}
+                        </Box>
+                    ))}
+                    {!loadingContent && likedVideos.length === 0 && <div>No Likes, go to add some</div>}
+                    {likedVideos.length > 5 && <Link>view all</Link>}
+                </Grid>
                 </TabPanel>
                 <TabPanel value={tabValue} index={1}>
                     {comments ? comments.map((comment) => {
