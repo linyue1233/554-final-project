@@ -8,6 +8,8 @@ import AllVideo from './components/AllVideo';
 import Home from './components/homePage/Home';
 import VideoPlay from './components/videoPlay/VideoPlay';
 import User from './components/User';
+import SignupPage from './components/SignupPage';
+import LoginPage from './components/LoginPage';
 
 async function postAvatar({ image, description }) {
     const formData = new FormData();
@@ -32,6 +34,11 @@ function App() {
                         <NavLink className="navlink" to="/videoPlay">
                             VideoPlay
                         </NavLink>
+                        <NavLink className="navlink" to="/login">
+                            Login</NavLink>
+                        <NavLink className="navlink" to="/signup">
+                            Signup
+                        </NavLink>
                     </nav>
                 </header>
                 <br />
@@ -40,6 +47,8 @@ function App() {
                         <Route index path="/" element={<Home />} />
                         <Route index path="/videoPlay" element={<VideoPlay />}/>
                         <Route path="/users/:id" element={<User />} />
+                        <Route path="/signup" element={<SignupPage/>}/>
+                        <Route path="/login" element={<LoginPage/>}/>
                         <Route
                             path="/videos/getAllVideosByTag/:tag"
                             element={<AllVideo />}

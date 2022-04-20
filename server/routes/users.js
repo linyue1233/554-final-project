@@ -12,7 +12,7 @@ const xss = require('xss');
 const sharp = require('sharp');
 const path = require('path');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads' + path.sep });
+const upload = multer({ dest: 'uploads' + path.sep});
 const { uploadFile, getFileStream } = require('../config/awsS3');
 
 
@@ -39,6 +39,7 @@ router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
         return;
     }
     const file = req.file;
+    console.log(file);
     //  check form
     let originalName = file.originalname;
     try {
