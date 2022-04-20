@@ -82,6 +82,32 @@ footer {
 }
 
 .user-content {
-    background-color: white;
     color: black;
+    background-color: grey;
+}
+
+.user-avatar {
+    margin-top: 10px;
+    margin-left: 10px;
+    float: left;
+}
+
+.user-info {
+    font-size: 16px;
+    margin-top: 10px;
+    float: left;
+    margin-left: 15px;
+}
+
+.user-tab {
+    background-color: white;
+}
+
+.video-link {
+    text-decoration: none !important;
+    color: black
+}
+
+.video-link:hover {
+    color: rgb(37, 133, 170)
 }
