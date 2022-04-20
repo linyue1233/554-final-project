@@ -12,7 +12,7 @@ const xss = require('xss');
 const sharp = require('sharp');
 const path = require('path');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads' + path.sep });
+const upload = multer({ dest: 'uploads/' });
 const { uploadFile, getFileStream } = require('../config/awsS3');
 
 
@@ -28,7 +28,7 @@ const { uploadFile, getFileStream } = require('../config/awsS3');
 // });  
 
 async function changeAvatar(filePath) {
-    let newFilePath = "uploads" + path.sep+ uuid.v4();
+    let newFilePath = path.join("uploads",uuid.v4());
     await sharp(filePath).resize(300, 300).toFile(newFilePath);
     return newFilePath;
 }
