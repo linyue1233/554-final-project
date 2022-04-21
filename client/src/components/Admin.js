@@ -31,6 +31,7 @@ import TagIcon from '@mui/icons-material/Tag';
 import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
+import Paper from '@mui/material/Paper';
 
 function TabPanel(props) {
     const { children, value, index } = props;
@@ -211,7 +212,16 @@ function Admin () {
                         </Tabs>
                     </Box>
                         <TabPanel value={tabValue} index={0}>
-                            <Grid alignItems='center' container>
+                        <div className='upload-form'>
+                        <Paper
+                        sx={{
+                            p: 2,
+                            margin: 'auto',
+                            maxWidth: 500,
+                            flexGrow: 1,
+                            backgroundColor: '#fff',
+                        }}>
+                            <Grid container sx={{ m:1 }}>
                             <form onSubmit={handleUploadVideo}>
                                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                                     <VideoLabelIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
@@ -266,7 +276,7 @@ function Admin () {
                                     <FormHelperText>Must pick at least one tag</FormHelperText>
                                 </FormControl>
                                 </Box>
-                                <Box sx={{ display: 'flex'}}>
+                                <Box sx={{ display: 'flex', mt:1 }}>
                                 <label htmlFor="upload-video">
                                     <input
                                     required
@@ -291,7 +301,7 @@ function Admin () {
                                     </Typography>
                                 </label>
                                 </Box>
-                                <Box sx={{ display: 'flex', mt: 1, mb: 1}}>
+                                <Box sx={{ display: 'flex', mt: 2, mb: 2}}>
                                 <label htmlFor="upload-cover">
                                     <input
                                     required
@@ -316,13 +326,14 @@ function Admin () {
                                     </Typography>
                                 </label>
                                 </Box>
-                                <Button sx={{marginTop: 1.2, marginLeft: 1, marginBottom: 2}} variant="contained" type="submit">Submit</Button>
+                                <Button sx={{marginTop: 1, marginLeft: 1, marginBottom: 1}} variant="contained" type="submit">Submit</Button>
                                 {uploading && <Box sx={{ display: 'flex' }}>
                                     <CircularProgress sx={{m: 2}}/>
                                 </Box>}
                             </form>
                             </Grid>
-                        
+                        </Paper>
+                        </div>
                         </TabPanel>
                         <TabPanel value={tabValue} index={1}> 
                         <Box sx={{ minWidth: 120 , marginLeft: 1.5, marginTop: 1.5}}>
