@@ -17,6 +17,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 
 function TabPanel(props) {
     const { children, value, index } = props;
@@ -153,7 +154,7 @@ function User () {
                             </Box>
                             ))}
                             {!loadingContent && likedVideos.length === 0 && <div>No Likes, go to add some</div>}
-                            {likedVideos.length > 5 && <Link>view all</Link>}
+                            {likedVideos.length > 5 && <Link className="view-all-likes-link" to={`/likedVideos/${id}`}>view all</Link>}
                         </Grid>
                     </TabPanel>
                     <TabPanel value={tabValue} index={1}>
@@ -177,7 +178,9 @@ function User () {
                             />
                             </ListItem>);
                         }): <div>No Comments Now</div>}
-                        {comments.length > 5 && <Link>view more</Link>}
+                        {comments.length > 5 && <Button variant="text" onClick={(e) => {e.preventDefault();
+                            setShowComments(showComments + 5);
+                            }}>view more</Button>}
                     </List>
                     </TabPanel>
                 </Box>

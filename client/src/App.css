@@ -124,3 +124,12 @@ footer {
 .upload-form {
     background-color: silver;
 }
+
+.view-all-likes-link {
+    text-decoration: none !important;
+    color: black;
+    width: 10px;
+    margin-top: 80px;
+    margin-left:30px;
+    font-size: 20px;
+}
