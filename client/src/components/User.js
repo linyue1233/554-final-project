@@ -31,7 +31,7 @@ function TabPanel(props) {
         {value === index && <div>{children}</div>}
       </div>
     );
-  }
+}
 
 function User () {
 
@@ -128,11 +128,11 @@ function User () {
                                 {video ? (
                                 <Link to={`/video/${video._id}`}>
                                 <img
-                                style={{ width: 210, height: 118 }}
+                                style={{ width: 210, height: 145 }}
                                 alt={video.videoName}
                                 src={video.cover}/></Link>
                                 ) : (
-                                <Skeleton variant="rectangular" width={210} height={118} />
+                                <Skeleton variant="rectangular" width={210} height={145} />
                                 )}
                                 {video ? (
                                 <Box sx={{ pr: 2 }}>

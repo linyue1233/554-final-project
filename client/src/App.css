@@ -103,6 +103,15 @@ footer {
     background-color: white;
 }
 
+.admin-tab {
+    background-color: white;
+    min-height: 170px;
+}
+
+.no-comment {
+    margin-left: 10px;
+}
+
 .video-link {
     text-decoration: none !important;
     color: black

@@ -10,6 +10,7 @@ import VideoPlay from './components/videoPlay/VideoPlay';
 import User from './components/User';
 import SignupPage from './components/SignupPage';
 import LoginPage from './components/LoginPage';
+import Admin from './components/Admin';
 
 async function postAvatar({ image, description }) {
     const formData = new FormData();
@@ -47,6 +48,7 @@ function App() {
                         <Route index path="/" element={<Home />} />
                         <Route index path="/videoPlay" element={<VideoPlay />}/>
                         <Route path="/users/:id" element={<User />} />
+                        <Route path="/admin" element={<Admin />} />
                         <Route path="/signup" element={<SignupPage/>}/>
                         <Route path="/login" element={<LoginPage/>}/>
                         <Route
