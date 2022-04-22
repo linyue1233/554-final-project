@@ -29,7 +29,7 @@ router.get('/user/:userId', async (req, res) => {
     }
 });
 // get all comments by videoId
-router.get('/video[Peace]ideoId', async (req, res) => {
+router.get('/video/:videoId', async (req, res) => {
     // get all comments by videoId
     try {
         const comments = await commentData.getAllCommentsByVideoId(req.params.videoId);

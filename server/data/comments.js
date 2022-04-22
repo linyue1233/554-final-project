@@ -104,7 +104,7 @@ module.exports = {
     async getAllCommentsByVideoId(videoId) {
         if (!videoId) throw 'please input an userId id';
         verifyFunction.isString(videoId, 'userId');
-        let videosList = await userFunctions.getAllVideos();
+        let videosList = await videoFunctions.getAllVideos();
         let commentsListById = null;
         for (let videoInfo of videosList) {
             if (videoInfo._id === videoId) commentsListById = videoInfo.commentId;

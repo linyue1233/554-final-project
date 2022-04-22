@@ -7,12 +7,13 @@ const router = express.Router();
 const data = require('../data');
 const userData = data.users;
 const videoData = data.videos;
+const commentData = data.comments;
 const verify = require('../data/verify');
 const xss = require('xss');
 const sharp = require('sharp');
 const path = require('path');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'uploads' + path.sep});
 const { uploadFile, getFileStream } = require('../config/awsS3');
 
 
@@ -39,6 +40,7 @@ router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
         return;
     }
     const file = req.file;
+    console.log(file);
     //  check form
     let originalName = file.originalname;
     try {
@@ -325,6 +327,56 @@ router.put('/removeComment/:userId', async (req, res) => {
     try {
         const removeComment = await userData.removeCommentId(userId, commentId);
         res.status(200).json(removeComment);
+    } catch (error) {
+        res.status(500).json({ message: error });
+    }
+});
+
+router.get('/AllLikedVideos/:userId', async (req, res) => {
+    let userId = req.params.userId.trim();
+
+    // check format
+    try {
+        verify.isString(userId, 'User ID');
+        verify.checkSpace(userId, 'User ID');
+    } catch (error) {
+        res.status(400).json({ message: error });
+        return;
+    }
+    // get all liked videos
+    try {
+        const user = await userData.getUserById(userId);
+        let likes = [];
+        for (let like of user.likeId) {
+            let video = await videoData.getVideoById(like);
+            likes.push(video);
+        }
+        res.status(200).json(likes);
+    } catch (error) {
+        res.status(500).json({ message: error });
+    }
+});
+
+router.get('/AllComments/:userId', async (req, res) => {
+    let userId = req.params.userId.trim();
+
+    // check format
+    try {
+        verify.isString(userId, 'User ID');
+        verify.checkSpace(userId, 'User ID');
+    } catch (error) {
+        res.status(400).json({ message: error });
+        return;
+    }
+    // get all comments
+    try {
+        const user = await userData.getUserById(userId);
+        let comments = [];
+        for (let id of user.commentId) {
+            let comment = await commentData.getCommentByCommentId(id);
+            comments.push(comment);
+        }
+        res.status(200).json(comments);
     } catch (error) {
         res.status(500).json({ message: error });
     }

@@ -80,7 +80,7 @@ router.post('/uploadVideo', upload.single('video'),async(req,res)=>{
     try{
         const result = await uploadFile(file);
         fs.unlinkSync(file.path);
-        res.send({ videoPath: "https://benchmoon-554.s3.amazonaws.com/" + `${result.key}` });
+        res.send({ videoPath: "https://benchmoon-554.s3.amazonaws.com/" + `${result.Key}` });
     }catch (error) {
         res.status(500).json( error);
         return;
