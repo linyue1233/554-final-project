@@ -40,7 +40,7 @@ function checkSpace(str, varName) {
 
 function checkAvatarSuffix(avatar) {
     if (!/\.(jpg|jpeg|png|GIF|JPG|PNG)$/.test(avatar))
-        throw `Avatar must be the form of image`;
+        throw `Your file must be the form of image`;
 }
 
 let checkTags = (arr) => {
@@ -61,7 +61,15 @@ function checkTag(tag) {
 }
 
 function checkVideoSuffix(videoPath){
-    
+    if (!videoPath) throw `Please check your file.`;
+    let availableSuffix = ["avi","wmv","mpg","mpeg","mov","rm","ram","swf","flv","mp4","mp3","wma","avi","rm","rmvb","flv","mpg","mkv"];
+    let index = videoPath.lastIndexOf(".");
+    videoSuffix = videoPath.substring(index+1);
+    videoSuffix = videoSuffix.toLowerCase();
+    console.log(videoSuffix);
+    if( availableSuffix.indexOf(videoSuffix) === -1){
+        throw `You should upload a video format file.`;
+    }
 }
 
 module.exports = {
