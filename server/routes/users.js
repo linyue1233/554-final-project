@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs');
 const util = require('util');
 const uuid = require("uuid");
-const unlinkFile = util.promisify(fs.unlink);
 const router = express.Router();
 const data = require('../data');
 const userData = data.users;
@@ -40,7 +39,6 @@ router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
         return;
     }
     const file = req.file;
-    console.log(file);
     //  check form
     let originalName = file.originalname;
     try {

@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
+const path = require('path');
 const fs = require('fs');
 const videoData = data.videos;
 const verify = require('../data/verify');
 const xss = require('xss');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'uploads' + path.sep});
 const {uploadFile} = require('../config/awsS3');
 
 router.get('/', async (req, res) => {
@@ -68,6 +69,36 @@ router.get('/:id', async (req, res) => {
 });
 
 
+router.post('/videoCover', upload.single('cover'), async (req, res) => {
+    if( req.file===null || req.file === undefined ){
+        res.status(400).json({ message: 'Please choose a file to upload.' });
+        return;
+    }
+    const file = req.file;
+    //  check form
+    let originalName = file.originalname;
+    try {
+        verify.checkAvatarSuffix(originalName);
+    } catch (e) {
+        res.status(400).json({ message: e });
+        return;
+    }
+    // reset filename
+    file.filename = `${Date.now()}-${req.file.originalname}`;
+    // resize avatarImage
+    try {
+        const result = await uploadFile(file);
+        // delete local record
+        fs.unlinkSync(file.path);
+        res.send({ imagePath: "https://benchmoon-554.s3.amazonaws.com/" + `${result.key}`  });
+        return;
+    } catch (error) {
+        res.status(500).json({ message: error });
+        return;
+    }
+});
+
+
 router.post('/uploadVideo', upload.single('video'),async(req,res)=>{
     if( req.file===null || req.file === undefined ){
         res.status(400).json({ message: 'Please choose a file to upload.' });
@@ -75,7 +106,12 @@ router.post('/uploadVideo', upload.single('video'),async(req,res)=>{
     }
     let file = req.file;
     let originalName = file.originalname;
-    // need to check form
+    try {
+        verify.checkVideoSuffix(originalName);
+    } catch (e) {
+        res.status(400).json({ message: e });
+        return;
+    }
     file.filename = `${Date.now()}-${req.file.originalname}`;
     try{
         const result = await uploadFile(file);
