@@ -272,11 +272,11 @@ function Admin () {
                             <form onSubmit={handleUploadVideo}>
                                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                                     <VideoLabelIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                                    <TextField required id="input-with-sx" label="Video Name" variant="standard" onChange={(e) => {e.preventDefault(); setVideoName(e.target.value)}}/>
+                                    <TextField required id="name-input-with-sx" label="Video Name" variant="standard" onChange={(e) => {e.preventDefault(); setVideoName(e.target.value)}}/>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                                     <DescriptionIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                                    <TextField required id="input-with-sx" label="Description" variant="standard" onChange={(e) => {e.preventDefault(); setVideoDescription(e.target.value)}}/>
+                                    <TextField required id="description-input-with-sx" label="Description" variant="standard" onChange={(e) => {e.preventDefault(); setVideoDescription(e.target.value)}}/>
                                 </Box>
                                 <Box sx={{ display: 'flex'}}>
                                 <TagIcon sx={{ color: 'action.active', mr: 1, my: 0.5, mt: 1.9}} />

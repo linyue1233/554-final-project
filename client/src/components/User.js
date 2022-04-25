@@ -24,6 +24,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Pagination from '@mui/material/Pagination';
+import TextField from '@mui/material/TextField';
 
 function TabPanel(props) {
     const { children, value, index } = props;
@@ -54,6 +56,13 @@ function User () {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [commentToDelete, setCommentToDelete] = useState(null);
     const [loadingDelete, setLoadingDelete] = useState(false);
+    const [likedVideosCount, setLikedVideosCount] = useState(0);
+    const [likedVideosPage, setLikedVideosPage] = useState(1);
+    const [searchVideo, setSearchVideo] = useState('');
+    const [searchResult, setSearchResult] = useState([]);
+    const [searchedVideosPage, setSarchedVideosPage] = useState(1);
+    const [searchedVideosPageCount, setSearchedVideosPageCount] = useState(1);
+    const [searched, setSearched] = useState(false);
     
     const handleOpenDeleteDialog = (comment) => {
         setOpenDeleteDialog(true);
@@ -68,6 +77,31 @@ function User () {
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
     };
+
+    const handleLikedVideosPageChange = (event, value) => {
+        event.preventDefault();
+        setLikedVideosPage(value);
+    }
+
+    const handleSubmitSearchlikedVideos = (event) => {
+        event.preventDefault();
+        setLoadingContent(true);
+        let result = [];
+        for (let video of likedVideos) {
+            if(video.videoName.indexOf(searchVideo) !== -1){
+                result.push(video);
+            }
+        }
+        setSearchResult(result);
+        setSearchedVideosPageCount(parseInt(result.length / 5) + 1);
+        setSearched(true);
+        setLoadingContent(false);
+    }
+
+    const handleSearchedVideosPageChange = (event, value) => {
+        event.preventDefault();
+        setSarchedVideosPage(value);
+    }
 
     const handleDeleteComment = async () => {
         console.log(commentToDelete);
@@ -116,6 +150,7 @@ function User () {
                 setLoadingContent(true);
                 const {data: likes} = await axios.get(`/users/AllLikedVideos/${id}`);
                 setLikedVideos(likes);
+                setLikedVideosCount(parseInt(likes.length / 5) + 1);
 
                 const {data: comment} = await axios.get(`/comments/user/${id}`);
                 if(comment !== "don't have any comments"){
@@ -162,9 +197,35 @@ function User () {
                         </Tabs>
                     </Box>
                     <TabPanel value={tabValue} index={0}>
-                        <Grid container wrap="nowrap">
-                            {(loadingContent ? Array.from(new Array(5))  
-                            : (likedVideos.length < 5 ? likedVideos : likedVideos.slice( 0, 5 ))).map((video, index) => (
+                    <Grid
+                        container
+                        spacing={0}
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="center"
+                        >
+                        <Grid item>
+                        <form onSubmit={handleSubmitSearchlikedVideos}>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                            <Typography variant="body1" sx={{ display: "flex", mr: 2, mb: 0.4}}>
+                                    Search:
+                            </Typography>
+                            <TextField required id="input-with-sx" label="Video Name" variant="standard" onChange={(e) => {e.preventDefault(); setSearchVideo(e.target.value)}}/>
+                            <Button sx={{marginTop: 1.2, marginLeft: 1}} variant="contained" type="submit">Submit</Button>
+                        </Box>
+                        </form>
+                        </Grid>
+                    </Grid>
+                        <Grid
+                        container
+                        spacing={0}
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="center"
+                        >          
+                        {!searched && (loadingContent ? Array.from(new Array(5))  
+                            : (likedVideos.length < 5 ? likedVideos : likedVideos.slice((likedVideosPage - 1) * 5, likedVideosPage * 5))).map((video, index) => (
+                            <Grid item key={index}>
                             <Box key={index} sx={{ width: 210, marginRight: 2.5, my: 5, marginLeft: 2.5 }}>
                                 {video ? (
                                 <Link to={`/video/${video._id}`}>
@@ -192,10 +253,59 @@ function User () {
                                 </Box>
                                 )}
                             </Box>
+                            </Grid>
                             ))}
-                            {!loadingContent && likedVideos.length === 0 && <div>No Likes, go to add some</div>}
-                            {likedVideos.length > 5 && <Link className="view-all-likes-link" to={`/likedVideos/${id}`}>view all</Link>}
+                            {!searched && !loadingContent && likedVideos.length === 0 && <div className='no-result'>No Likes, go to add some</div>}
                         </Grid>
+                        <Grid
+                        container
+                        spacing={0}
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="center"
+                        >          
+                        {searched && (loadingContent ? Array.from(new Array(5))  
+                            : (searchResult.length < 5 ? searchResult : searchResult.slice((searchedVideosPage - 1) * 5, searchedVideosPage * 5))).map((video, index) => (
+                            <Grid item key={index}>
+                            <Box key={index} sx={{ width: 210, marginRight: 2.5, my: 5, marginLeft: 2.5 }}>
+                                {video ? (
+                                <Link to={`/video/${video._id}`}>
+                                <img
+                                style={{ width: 210, height: 145 }}
+                                alt={video.videoName}
+                                src={video.cover}/></Link>
+                                ) : (
+                                <Skeleton variant="rectangular" width={210} height={145} />
+                                )}
+                                {video ? (
+                                <Box sx={{ pr: 2 }}>
+                                    <Link className='video-link' to={`/video/${video._id}`}>{video.videoName}</Link>
+                                    <Typography display="block" variant="caption" color="text.secondary">
+                                    {video.description}
+                                    </Typography>
+                                    <Typography variant="caption" color="text.secondary">
+                                    {`${video.viewCount} views • ${video.uploadDate.year}/${video.uploadDate.month}/${video.uploadDate.day}`}
+                                    </Typography>
+                                </Box>
+                                ) : (
+                                <Box sx={{ pt: 0.5 }}>
+                                    <Skeleton />
+                                    <Skeleton width="60%" />
+                                </Box>
+                                )}
+                            </Box>
+                            </Grid>
+                            ))}
+                            {searched && !loadingContent && searchResult.length === 0 && <div className='no-result'>No Video Found</div>}
+                        </Grid>
+                        {!searched &&
+                        <div className='pagination'>
+                        <Pagination className='pagination' count={likedVideosCount} showFirstButton showLastButton onChange={handleLikedVideosPageChange}/>
+                        </div>}
+                        {searched &&
+                        <div className='pagination'>
+                        <Pagination className='pagination' count={searchedVideosPageCount} showFirstButton showLastButton onChange={handleSearchedVideosPageChange}/>
+                        </div>}
                     </TabPanel>
                     <TabPanel value={tabValue} index={1}>
                     <List dense={false}>
