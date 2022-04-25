@@ -135,6 +135,16 @@ function User () {
         setSearchedCommentsPage(value);
     }
 
+    const handleBacktoAllComments = (event) => {
+        setCommentSearched(false);
+        setSearchComment('');
+    }
+
+    const handleBacktoAllVideos = (event) => {
+        setVideoSearched(false);
+        setSearchVideo('');
+    }
+
     const handleDeleteComment = async () => {
         console.log(commentToDelete);
 
@@ -331,6 +341,10 @@ function User () {
                             ))}
                             {videoSearched && !loadingContent && videoSearchResult.length === 0 && <div className='no-result'>No Video Found</div>}
                         </Grid>
+                        {videoSearched &&
+                        <div className='backButton'><Button variant="text" onClick={handleBacktoAllVideos}>Back to All Videos</Button>
+                        </div> 
+                        }
                         {!videoSearched &&
                         <div className='pagination'>
                         <Pagination className='pagination' count={likedVideosCount} page={likedVideosPage} showFirstButton showLastButton onChange={handleLikedVideosPageChange}/>
@@ -406,6 +420,10 @@ function User () {
                             </ListItem>);
                         }): <div className='no-result'>No Comments Found</div>)}
                     </List>
+                    {commentSearched &&
+                        <div className='backButton'><Button variant="text" onClick={handleBacktoAllComments}>Back to All Comments</Button>
+                        </div> 
+                    }
                     {!commentSearched &&
                         <div className='pagination'>
                         <Pagination className='pagination' count={commentsPageCount} page={commentsPage} showFirstButton showLastButton onChange={handleCommentsPageChange}/>
