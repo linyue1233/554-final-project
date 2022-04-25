@@ -32,6 +32,12 @@ import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 import Paper from '@mui/material/Paper';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 function TabPanel(props) {
     const { children, value, index } = props;
@@ -73,7 +79,20 @@ function Admin () {
     const [videoDescription, setVideoDescription] = useState(null);
     const [uploadVideo, setUploadVideo] = useState(null);
     const [uploadCover, setUploadCover] = useState(null);
-    const [uploading, setUploading] = useState(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [commentToDelete, setCommentToDelete] = useState(null);
+    const [loadingUpload, setLoadingUpload] = useState(false);
+    const [loadingDelete, setLoadingDelete] = useState(false);
+    
+    const handleOpenDeleteDialog = (comment) => {
+        setOpenDeleteDialog(true);
+        setCommentToDelete(comment);
+    };
+    
+    const handleCloseDeleteDialog = () => {
+        setOpenDeleteDialog(false);
+        setCommentToDelete(null);
+    };
 
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
@@ -100,15 +119,33 @@ function Admin () {
         setSearched(true);
     }
 
-    const handleDeleteComment = (comment) => {
-        console.log(comment);
+    const handleDeleteComment = async () => {
+        console.log(commentToDelete);
+
+        try{
+            setLoadingDelete(true);
+            let DeleteResult = await axios.delete(`/comments/${commentToDelete._id}`);
+            
+            if (DeleteResult.data === 'successfully delete this comment') {
+                let index = comments.findIndex((x) => x.id === commentToDelete.userId);
+                comments.splice(index, 1);
+                setLoadingDelete(false);
+                alert('Succesfully Deleted');
+                handleCloseDeleteDialog();
+            }
+        } catch (e) {
+            setLoadingDelete(false);
+            alert(e.message);
+            handleCloseDeleteDialog();
+        }  
+
     }
 
     const handleUploadVideo = async (event) => {
         event.preventDefault();
 
         try{
-            setUploading(true);
+            setLoadingUpload(true);
 
             const videoFormData = new FormData();
             
@@ -119,6 +156,14 @@ function Admin () {
             let newVideoPath = newVideoInfo.data.videoPath;
 
             console.log(newVideoPath);
+
+            const coverFormData = new FormData();
+
+            coverFormData.append("cover", uploadCover);
+
+            let newCoverInfo = await axios.post('/videos/videoCover', coverFormData);
+
+            let newCoverPath = newCoverInfo.data.imagePath;
 
             let checkedTags = [];
         
@@ -142,7 +187,7 @@ function Admin () {
                 name: videoName,
                 description: videoDescription,
                 tags: checkedTags,
-                cover: "https://benchmoon-554.s3.amazonaws.com/1650489309212-231430-1585408470286e.jpg",
+                cover: newCoverPath,
                 path: newVideoPath
             }
         
@@ -152,14 +197,16 @@ function Admin () {
 
             console.log(data);
 
-            setUploading(false);
+            setLoadingUpload(false);
             
             alert('Successfully uploaded');
 
             window.location.reload();
 
         }catch (e) {
-            alert(e);
+            setLoadingUpload(false);
+            alert(e.message);
+            window.location.reload();
         }
         
     }
@@ -326,10 +373,7 @@ function Admin () {
                                     </Typography>
                                 </label>
                                 </Box>
-                                <Button sx={{marginTop: 1, marginLeft: 1, marginBottom: 1}} variant="contained" type="submit">Submit</Button>
-                                {uploading && <Box sx={{ display: 'flex' }}>
-                                    <CircularProgress sx={{m: 2}}/>
-                                </Box>}
+                                <LoadingButton sx={{marginTop: 1, marginLeft: 1, marginBottom: 1}} variant="contained" type="submit" loading={loadingUpload}>Submit</LoadingButton>
                             </form>
                             </Grid>
                         </Paper>
@@ -361,14 +405,16 @@ function Admin () {
                             <Button sx={{marginTop: 1.2, marginLeft: 1}} variant="contained" type="submit">Submit</Button>
                             </form>
                         </Box>
-                        {loadingSearch && <div>Loading...</div>}
+                        {loadingSearch && <Box sx={{ display: 'flex' }}>
+                                    <CircularProgress sx={{m: 2}}/>
+                                </Box>}
                         {searched &&
                         <List dense={false}>
                             {comments !== "don't have any comments" ? comments.map((comment) => {
                                 return (
                                 <ListItem key={comment._id}
                                 secondaryAction={
-                                <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteComment(comment)}>
+                                <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteDialog(comment)}>
                                     <DeleteIcon />
                                 </IconButton>
                                 }>
@@ -388,6 +434,30 @@ function Admin () {
                         }
                         </TabPanel>
                     </Box>
+
+                    <Dialog
+                    open={openDeleteDialog}
+                    onClose={handleCloseDeleteDialog}
+                    aria-labelledby="alert-delete-dialog-label"
+                    aria-describedby="alert-delete-dialog-description"
+                    >
+                        <DialogTitle id="alert-delete-dialog-title">
+                            {"Are you Sure to Delete this comment?"}
+                        </DialogTitle>
+                        
+                        <DialogContent>
+                            <DialogContentText id="alert-delete-dialog-description">
+                                This Comment will be permanently deleted.
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            
+                        <Button onClick={handleCloseDeleteDialog}>Close</Button>
+                        <LoadingButton loading={loadingDelete} onClick={handleDeleteComment} autoFocus>
+                            Confirm
+                        </LoadingButton>
+                        </DialogActions>
+                    </Dialog>
                 </div>
         );
     }
