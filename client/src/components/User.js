@@ -243,7 +243,7 @@ function User () {
                             <Typography variant="body1" sx={{ display: "flex", mr: 2, mb: 0.4}}>
                                     Search:
                             </Typography>
-                            <TextField required id="input-with-sx" label="Video Name" variant="standard" onChange={(e) => {e.preventDefault(); setSearchVideo(e.target.value)}}/>
+                            <TextField required id="input-with-sx" value={searchVideo} label="Video Name" variant="standard" onChange={(e) => {e.preventDefault(); setSearchVideo(e.target.value)}}/>
                             <Button sx={{marginTop: 1.2, marginLeft: 1}} variant="contained" type="submit">Submit</Button>
                         </Box>
                         </form>
@@ -354,7 +354,7 @@ function User () {
                             <Typography variant="body1" sx={{ display: "flex", mr: 2, mb: 0.4}}>
                                     Search:
                             </Typography>
-                            <TextField required id="input-with-sx" label="Comment" variant="standard" onChange={(e) => {e.preventDefault(); setSearchComment(e.target.value)}}/>
+                            <TextField required id="input-with-sx" value={searchComment} label="Comment" variant="standard" onChange={(e) => {e.preventDefault(); setSearchComment(e.target.value)}}/>
                             <Button sx={{marginTop: 1.2, marginLeft: 1}} variant="contained" type="submit">Submit</Button>
                         </Box>
                         </form>
