@@ -118,7 +118,10 @@ function User () {
                 setLikedVideos(likes);
 
                 const {data: comment} = await axios.get(`/comments/user/${id}`);
-                setComments(comment);
+                if(comment !== "don't have any comments"){
+                    setComments(comment);
+                }
+                
 
                 setLoadingContent(false);
             }catch (e){
