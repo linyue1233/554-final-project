@@ -183,7 +183,7 @@ router.delete('/delete/:videoId', async (req, res) => {
 router.post('/search', async (req, res) => {
     let searchBody = req.body;
 
-    if ((searchBody.method = 'name')) {
+   
         try {
             let searchTerm = searchBody.searchTerm;
             verify.isString(searchTerm.trim(), 'searchTerm');
@@ -192,25 +192,7 @@ router.post('/search', async (req, res) => {
         } catch (e) {
             res.status(500).json({ message: e });
         }
-    } else if ((searchBody.method = 'tag')) {
-        try {
-            let tags = searchBody.tags;
-            verify.checkTags(tags);
-            const searchResult = await videoData.getVideosByTags(tags);
-            res.status(200).json(searchResult);
-        } catch (e) {
-            res.status(500).json({ message: e });
-        }
-    } else if ((searchBody.method = 'year')) {
-        try {
-            let year = searchBody.year;
-            verify.isString(year.trim(), 'Year');
-            const searchResult = await videoData.getVideosByYear(year);
-            res.status(200).json(searchResult);
-        } catch (e) {
-            res.status(500).json({ message: e });
-        }
-    }
+   
 });
 
 router.get('/getAllVideosByTag/:tag', async (req, res) => {

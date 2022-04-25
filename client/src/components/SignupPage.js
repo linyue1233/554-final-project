@@ -2,6 +2,7 @@ import axios, { Axios } from 'axios';
 import React from 'react';
 import '../App.css';
 
+
 //username, email, password, avatar
 function SignupPage(){
     let username;
