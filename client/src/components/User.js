@@ -261,7 +261,7 @@ function User () {
                             <Grid item key={index}>
                             <Box key={index} sx={{ width: 210, marginRight: 2.5, my: 5, marginLeft: 2.5 }}>
                                 {video ? (
-                                <Link to={`/video/${video._id}`}>
+                                <Link to={`/videoPlay/${video._id}`}>
                                 <img
                                 style={{ width: 210, height: 145 }}
                                 alt={video.videoName}
@@ -271,7 +271,7 @@ function User () {
                                 )}
                                 {video ? (
                                 <Box sx={{ pr: 2 }}>
-                                    <Link className='video-link' to={`/video/${video._id}`}>{video.videoName}</Link>
+                                    <Link className='video-link' to={`/videoPlay/${video._id}`}>{video.videoName}</Link>
                                     <Typography display="block" variant="caption" color="text.secondary">
                                     {video.description}
                                     </Typography>
@@ -302,7 +302,7 @@ function User () {
                             <Grid item key={index}>
                             <Box key={index} sx={{ width: 210, marginRight: 2.5, my: 5, marginLeft: 2.5 }}>
                                 {video ? (
-                                <Link to={`/video/${video._id}`}>
+                                <Link to={`/videoPlay/${video._id}`}>
                                 <img
                                 style={{ width: 210, height: 145 }}
                                 alt={video.videoName}
@@ -312,7 +312,7 @@ function User () {
                                 )}
                                 {video ? (
                                 <Box sx={{ pr: 2 }}>
-                                    <Link className='video-link' to={`/video/${video._id}`}>{video.videoName}</Link>
+                                    <Link className='video-link' to={`/videoPlay/${video._id}`}>{video.videoName}</Link>
                                     <Typography display="block" variant="caption" color="text.secondary">
                                     {video.description}
                                     </Typography>
