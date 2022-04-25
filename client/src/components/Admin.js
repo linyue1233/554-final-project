@@ -460,6 +460,10 @@ function Admin () {
                     </Dialog>
                 </div>
         );
+    } else if(loading) {
+        return <p>loading...</p>
+    } else if (error) {
+        return <p>{error.message}</p>
     }
     
 }
