@@ -46,7 +46,7 @@ function App() {
                 <div className="App-body">
                     <Routes>
                         <Route index path="/" element={<Home />} />
-                        <Route index path="/videoPlay" element={<VideoPlay />}/>
+                        <Route index path="/videoPlay/:videoId" element={<VideoPlay />}/>
                         <Route path="/users/:id" element={<User />} />
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/signup" element={<SignupPage/>}/>
