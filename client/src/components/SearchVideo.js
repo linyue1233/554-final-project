@@ -7,15 +7,12 @@ function SearchVideo(){
     const [result, setResult] = useState(null);
 
     const handleChange = (e)=>{
-        console.log(3);
         setSearchTerm(e.target.value);
-        console.log(4);
     }
 
     const handleSubmit = async(e)=>{
         try {
             e.preventDefault();
-            console.log(1);
             let {data} = await axios(
                 {
                     method: 'POST',
@@ -27,10 +24,7 @@ function SearchVideo(){
                 
 
             );
-            console.log(2);
             setResult(data);
-            console.log("data");
-            console.log(data);
         } catch (e) {
             console.log(e);
         }
