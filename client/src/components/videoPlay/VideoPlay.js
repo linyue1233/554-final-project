@@ -6,6 +6,20 @@ import { Box, Container } from '@mui/material'
 import axios from 'axios';
 
 function VideoPlay() {
+
+    const {videoId} = useParams();
+    const [loading, setLoading] = useState(true);
+    const [notFound, setNotFound] = useState(false);
+
+
+    // async function fetchData(videoId) {
+    //     try{
+            
+    //     }
+    // }
+
+
+
     return (
         <div className="App-body">
             <div width="100%" >

@@ -13,22 +13,10 @@ const sharp = require('sharp');
 const path = require('path');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads' + path.sep});
-const { uploadFile, getFileStream } = require('../config/awsS3');
-
-
-// router.get('/avatarImage/:keyId', async (req, res) => {
-//     const keyId = req.params.keyId;
-//     try {
-//         const readStream = getFileStream(keyId);
-//         // console.log(readStream);
-//         readStream.pipe(res);
-//     } catch (e) {
-//         res.status(500).json({ message: e });
-//     }
-// });  
+const { uploadFile } = require('../config/awsS3');
 
 async function changeAvatar(filePath) {
-    let newFilePath = "uploads" + path.sep+ uuid.v4();
+    let newFilePath = path.join("uploads",uuid.v4());
     await sharp(filePath).resize(300, 300).toFile(newFilePath);
     return newFilePath;
 }
