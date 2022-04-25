@@ -26,6 +26,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Pagination from '@mui/material/Pagination';
 import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function TabPanel(props) {
     const { children, value, index } = props;
@@ -49,7 +50,6 @@ function User () {
     const [comments, setComments] = useState([]);
     const [error, setError] = useState(null);
     const [tabValue, setTabValue] = useState(0);
-    const [showComments, setShowComments] = useState(5);
     const [loading, setLoading] = useState(false);
     const [loadingContent, setLoadingContent] = useState(false);
     const { id } = useParams();
@@ -59,10 +59,17 @@ function User () {
     const [likedVideosCount, setLikedVideosCount] = useState(0);
     const [likedVideosPage, setLikedVideosPage] = useState(1);
     const [searchVideo, setSearchVideo] = useState('');
-    const [searchResult, setSearchResult] = useState([]);
+    const [videoSearchResult, setVideoSearchResult] = useState([]);
     const [searchedVideosPage, setSarchedVideosPage] = useState(1);
     const [searchedVideosPageCount, setSearchedVideosPageCount] = useState(1);
-    const [searched, setSearched] = useState(false);
+    const [videoSearched, setVideoSearched] = useState(false);
+    const [searchComment, setSearchComment] = useState('');
+    const [commentSearchResult, setCommentSearchResult] = useState([]);
+    const [commentSearched, setCommentSearched] = useState(false);
+    const [commentsPage, setCommentsPage] = useState(1);
+    const [commentsPageCount, setCommentsPageCount] = useState(1);
+    const [searchedCommentsPage, setSearchedCommentsPage] = useState(1);
+    const [searchedCommentsPageCount, setSearchedCommentsPageCount] = useState(1);
     
     const handleOpenDeleteDialog = (comment) => {
         setOpenDeleteDialog(true);
@@ -92,15 +99,40 @@ function User () {
                 result.push(video);
             }
         }
-        setSearchResult(result);
+        setVideoSearchResult(result);
         setSearchedVideosPageCount(parseInt(result.length / 5) + 1);
-        setSearched(true);
+        setVideoSearched(true);
         setLoadingContent(false);
     }
 
     const handleSearchedVideosPageChange = (event, value) => {
         event.preventDefault();
         setSarchedVideosPage(value);
+    }
+
+    const handleSubmitSearchComment = (event) => {
+        event.preventDefault();
+        setLoadingContent(true);
+        let result = [];
+        for (let comment of comments) {
+            if(comment.content.indexOf(searchComment) !== -1){
+                result.push(comment);
+            }
+        }
+        setCommentSearchResult(result);
+        setSearchedCommentsPageCount(parseInt(result.length / 5) + 1)
+        setCommentSearched(true);
+        setLoadingContent(false);
+    }
+
+    const handleCommentsPageChange = (event, value) => {
+        event.preventDefault();
+        setCommentsPage(value);
+    }
+
+    const handleSearchedCommentsPageChange = (event, value) => {
+        event.preventDefault();
+        setSearchedCommentsPage(value);
     }
 
     const handleDeleteComment = async () => {
@@ -155,6 +187,7 @@ function User () {
                 const {data: comment} = await axios.get(`/comments/user/${id}`);
                 if(comment !== "don't have any comments"){
                     setComments(comment);
+                    setCommentsPageCount(parseInt(comment.length / 5) + 1)
                 }
                 
 
@@ -223,7 +256,7 @@ function User () {
                         alignItems="center"
                         justifyContent="center"
                         >          
-                        {!searched && (loadingContent ? Array.from(new Array(5))  
+                        {!videoSearched && (loadingContent ? Array.from(new Array(5))  
                             : (likedVideos.length < 5 ? likedVideos : likedVideos.slice((likedVideosPage - 1) * 5, likedVideosPage * 5))).map((video, index) => (
                             <Grid item key={index}>
                             <Box key={index} sx={{ width: 210, marginRight: 2.5, my: 5, marginLeft: 2.5 }}>
@@ -255,7 +288,7 @@ function User () {
                             </Box>
                             </Grid>
                             ))}
-                            {!searched && !loadingContent && likedVideos.length === 0 && <div className='no-result'>No Likes, go to add some</div>}
+                            {!videoSearched && !loadingContent && likedVideos.length === 0 && <div className='no-result'>No Likes, go to add some</div>}
                         </Grid>
                         <Grid
                         container
@@ -264,8 +297,8 @@ function User () {
                         alignItems="center"
                         justifyContent="center"
                         >          
-                        {searched && (loadingContent ? Array.from(new Array(5))  
-                            : (searchResult.length < 5 ? searchResult : searchResult.slice((searchedVideosPage - 1) * 5, searchedVideosPage * 5))).map((video, index) => (
+                        {videoSearched && (loadingContent ? Array.from(new Array(5))  
+                            : (videoSearchResult.length < 5 ? videoSearchResult : videoSearchResult.slice((searchedVideosPage - 1) * 5, searchedVideosPage * 5))).map((video, index) => (
                             <Grid item key={index}>
                             <Box key={index} sx={{ width: 210, marginRight: 2.5, my: 5, marginLeft: 2.5 }}>
                                 {video ? (
@@ -296,20 +329,45 @@ function User () {
                             </Box>
                             </Grid>
                             ))}
-                            {searched && !loadingContent && searchResult.length === 0 && <div className='no-result'>No Video Found</div>}
+                            {videoSearched && !loadingContent && videoSearchResult.length === 0 && <div className='no-result'>No Video Found</div>}
                         </Grid>
-                        {!searched &&
+                        {!videoSearched &&
                         <div className='pagination'>
                         <Pagination className='pagination' count={likedVideosCount} showFirstButton showLastButton onChange={handleLikedVideosPageChange}/>
                         </div>}
-                        {searched &&
+                        {videoSearched &&
                         <div className='pagination'>
                         <Pagination className='pagination' count={searchedVideosPageCount} showFirstButton showLastButton onChange={handleSearchedVideosPageChange}/>
                         </div>}
                     </TabPanel>
                     <TabPanel value={tabValue} index={1}>
+                    <Grid
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="center"
+                        justifyContent="center"
+                        >
+                        <Grid item>
+                        <form onSubmit={handleSubmitSearchComment}>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                            <Typography variant="body1" sx={{ display: "flex", mr: 2, mb: 0.4}}>
+                                    Search:
+                            </Typography>
+                            <TextField required id="input-with-sx" label="Comment" variant="standard" onChange={(e) => {e.preventDefault(); setSearchComment(e.target.value)}}/>
+                            <Button sx={{marginTop: 1.2, marginLeft: 1}} variant="contained" type="submit">Submit</Button>
+                        </Box>
+                        </form>
+                        </Grid>
+                        <Grid item>
+                        {loadingContent && <Box sx={{ display: 'flex' }}>
+                                    <CircularProgress sx={{m: 2}}/>
+                                </Box>}
+                        </Grid>
+                    </Grid>
+                    
                     <List dense={false}>
-                        {comments.length !== 0 ? (comments.length < 5 ? comments : comments.slice( 0, showComments )).map((comment) => {
+                        {!commentSearched && !loadingContent && (comments.length !== 0 ? (comments.length < 5 ? comments : comments.slice( (commentsPage - 1) * 5, commentsPage * 5 )).map((comment) => {
                         return (
                             <ListItem key={comment._id}
                             secondaryAction={
@@ -327,11 +385,35 @@ function User () {
                                 secondary={comment.date ? `${comment.date.year}/${comment.date.month}/${comment.date.day}` : null}
                             />
                             </ListItem>);
-                        }): <div>No Comments Now</div>}
-                        {comments.length > 5 && <Button variant="text" onClick={(e) => {e.preventDefault();
-                            setShowComments(showComments + 5);
-                            }}>view more</Button>}
+                        }): <div className='no-result'>No Comments Now</div>)}
+                        {(commentSearched && !loadingContent) && (commentSearchResult.length !== 0 ? (commentSearchResult.length < 5 ? commentSearchResult : commentSearchResult.slice( (searchedCommentsPage - 1) * 5, searchedCommentsPage * 5 )).map((comment) => {
+                        return (
+                            <ListItem key={comment._id}
+                            secondaryAction={
+                                <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteDialog(comment)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            }>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <CommentIcon />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={comment.content}
+                                secondary={comment.date ? `${comment.date.year}/${comment.date.month}/${comment.date.day}` : null}
+                            />
+                            </ListItem>);
+                        }): <div className='no-result'>No Comments Found</div>)}
                     </List>
+                    {!commentSearched &&
+                        <div className='pagination'>
+                        <Pagination className='pagination' count={commentsPageCount} showFirstButton showLastButton onChange={handleCommentsPageChange}/>
+                        </div>}
+                    {commentSearched &&
+                        <div className='pagination'>
+                        <Pagination className='pagination' count={searchedCommentsPageCount} showFirstButton showLastButton onChange={handleSearchedCommentsPageChange}/>
+                        </div>}
                     </TabPanel>
                 </Box>
 
