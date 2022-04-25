@@ -12,6 +12,9 @@ import SignupPage from './components/SignupPage';
 import LoginPage from './components/LoginPage';
 import Admin from './components/Admin';
 
+import SearchVideo from './components/SearchVideo';
+
+
 async function postAvatar({ image, description }) {
     const formData = new FormData();
     formData.append('image', image);
@@ -41,6 +44,7 @@ function App() {
                             Signup
                         </NavLink>
                     </nav>
+                    <SearchVideo/>
                 </header>
                 <br />
                 <div className="App-body">
