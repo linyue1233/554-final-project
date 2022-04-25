@@ -40,11 +40,10 @@ function checkSpace(str, varName) {
 
 function checkAvatarSuffix(avatar) {
     if (!avatar) throw `Please check your file.`;
-    let availableSuffix = ["jpeg","jfif","exif","gif","bmp","png","ppm","pgm","pbm","pnm","webp","tiff","helf","svg","eps","bat","cgm"];
+    let availableSuffix = ["jpeg","jfif","exif","gif","bmp","png","ppm","pgm","pbm","pnm","webp","tiff","helf","svg","eps","bat","cgm","jpg"];
     let index = avatar.lastIndexOf(".");
     avatarSuffix = avatar.substring(index+1);
     avatarSuffix = avatarSuffix.toLowerCase();
-    console.log(avatarSuffix);
     if( availableSuffix.indexOf(avatarSuffix) === -1){
         throw `You should upload a image format file.`;
     }
@@ -73,7 +72,6 @@ function checkVideoSuffix(videoPath){
     let index = videoPath.lastIndexOf(".");
     videoSuffix = videoPath.substring(index+1);
     videoSuffix = videoSuffix.toLowerCase();
-    console.log(videoSuffix);
     if( availableSuffix.indexOf(videoSuffix) === -1){
         throw `You should upload a video format file.`;
     }

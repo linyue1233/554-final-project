@@ -14,7 +14,11 @@ function VideoPlay() {
 
     // async function fetchData(videoId) {
     //     try{
-            
+    //         const {data} = await get(`/videos/${videoId}`)
+    //         if(data === null){
+    //             setNotFound(true);
+    //             return;
+    //         }
     //     }
     // }
 
