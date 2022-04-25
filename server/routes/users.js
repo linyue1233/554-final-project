@@ -355,31 +355,4 @@ router.get('/AllLikedVideos/:userId', async (req, res) => {
     }
 });
 
-router.get('/AllComments/:userId', async (req, res) => {
-    let userId = req.params.userId.trim();
-
-    // check format
-    try {
-        verify.isString(userId, 'User ID');
-        verify.checkSpace(userId, 'User ID');
-    } catch (error) {
-        res.status(400).json({ message: error });
-        return;
-    }
-    // get all comments
-    try {
-        const user = await userData.getUserById(userId);
-        let comments = [];
-        for (let id of user.commentId) {
-            let comment = await commentData.getCommentByCommentId(id);
-            comments.push(comment);
-        }
-        res.status(200).json(comments);
-    } catch (error) {
-        res.status(500).json({ message: error });
-    }
-});
-
-
-
 module.exports = router;
