@@ -333,11 +333,11 @@ function User () {
                         </Grid>
                         {!videoSearched &&
                         <div className='pagination'>
-                        <Pagination className='pagination' count={likedVideosCount} showFirstButton showLastButton onChange={handleLikedVideosPageChange}/>
+                        <Pagination className='pagination' count={likedVideosCount} page={likedVideosPage} showFirstButton showLastButton onChange={handleLikedVideosPageChange}/>
                         </div>}
                         {videoSearched &&
                         <div className='pagination'>
-                        <Pagination className='pagination' count={searchedVideosPageCount} showFirstButton showLastButton onChange={handleSearchedVideosPageChange}/>
+                        <Pagination className='pagination' count={searchedVideosPageCount} page={searchedVideosPage} showFirstButton showLastButton onChange={handleSearchedVideosPageChange}/>
                         </div>}
                     </TabPanel>
                     <TabPanel value={tabValue} index={1}>
@@ -408,11 +408,11 @@ function User () {
                     </List>
                     {!commentSearched &&
                         <div className='pagination'>
-                        <Pagination className='pagination' count={commentsPageCount} showFirstButton showLastButton onChange={handleCommentsPageChange}/>
+                        <Pagination className='pagination' count={commentsPageCount} page={commentsPage} showFirstButton showLastButton onChange={handleCommentsPageChange}/>
                         </div>}
                     {commentSearched &&
                         <div className='pagination'>
-                        <Pagination className='pagination' count={searchedCommentsPageCount} showFirstButton showLastButton onChange={handleSearchedCommentsPageChange}/>
+                        <Pagination className='pagination' count={searchedCommentsPageCount} page={searchedCommentsPage} showFirstButton showLastButton onChange={handleSearchedCommentsPageChange}/>
                         </div>}
                     </TabPanel>
                 </Box>
