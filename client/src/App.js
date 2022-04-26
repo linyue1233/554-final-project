@@ -34,23 +34,13 @@ function App() {
                                 Home
                             </NavLink>
                         </div>
-                        <div className="col-md-1">
-                            <NavLink
-                                className="navlink col-md-1"
-                                to="/videoPlay/1e625977-ca18-416c-88bf-475a66bd0ba1"
-                            >
-                                VideoPlay
-                            </NavLink>
-                        </div>
-                        <div className="col-md-4 offset-md-2">
+                        <div className="col-md-4 offset-md-3">
                             <SearchVideo />
                         </div>
-                        <div className="col-md-1 offset-md-2">
+                        <div className="col-md-2 offset-md-2">
                             <NavLink className="navlink" to="/login">
                                 Login
                             </NavLink>
-                        </div>
-                        <div className="col-md-1">
                             <NavLink className="navlink" to="/signup">
                                 Signup
                             </NavLink>
