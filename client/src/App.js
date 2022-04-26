@@ -56,7 +56,7 @@ function App() {
                         <Route path="/signup" element={<SignupPage/>}/>
                         <Route path="/login" element={<LoginPage/>}/>
                         <Route
-                            path="/videos/getAllVideosByTag/:tag"
+                            path="/videos/getAllVideosByTag/:tag/:type"
                             element={<AllVideo />}
                         />
                     </Routes>

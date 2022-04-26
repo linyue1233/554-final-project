@@ -77,7 +77,7 @@ function Classification(props) {
                             2020
                         </Button>
                         <Button>
-                            <Link to={`/videos/getAllVideosByTag/${tag}`}>All</Link>
+                            <Link to={`/videos/getAllVideosByTag/${tag}/likeCount`}>All</Link>
                         </Button>
                     </ButtonGroup>
                 </small>
