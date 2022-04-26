@@ -2,32 +2,33 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import '../../css/VideoPlayer.css';
-import { Box, Container,Avatar } from '@mui/material';
+import { Box, Container, Avatar } from '@mui/material';
 import Comment from './Comment';
 import axios from 'axios';
 
 function VideoPlay() {
-
     const { videoId } = useParams();
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
-    const [videoInfo, setVideoInfo] = useState(null);
-    const [videoComments,setComments] = useState([]);
+    const [videoInfo, setVideoInfo] = useState(undefined);
+    const [videoComments, setComments] = useState([]);
 
     async function fetchData(videoId) {
         try {
             const result = await axios.get(`/videos/${videoId}`);
-            const {data} = result;
+            const { data } = result;
+
             if (data === null) {
                 setNotFound(true);
                 return;
             }
             setVideoInfo(data);
+            console.log(videoInfo);
             setLoading(true);
             setNotFound(false);
         } catch (e) {
             setNotFound(true);
-            alert("Your path is error")
+            alert('Your path is error');
         } finally {
             setLoading(false);
         }
@@ -51,8 +52,7 @@ function VideoPlay() {
     useEffect(() => {
         fetchData(videoId);
         fetchComments(videoId);
-    }, [videoId])
-
+    }, [videoId]);
 
     if (loading || notFound) {
         return (
@@ -63,30 +63,40 @@ function VideoPlay() {
     } else {
         return (
             <div className="App-body">
-                <div width="100%" >
-                    <h1 style={{color:"red"}}>Video Name: {videoInfo.videoName}</h1>
+                <div width="100%">
+                    <h1 style={{ color: 'red' }}>Video Name: {videoInfo.videoName}</h1>
                 </div>
                 <br></br>
-                <div className="video-player" key ={videoInfo.videoName}>
-                    <ReactPlayer id ={videoInfo.videoName} width='1024px' height='480px' controls url={videoInfo.videoPath}>
-                    </ReactPlayer>
+                <div className="video-player" key={videoInfo.videoName}>
+                    <ReactPlayer
+                        id={videoInfo.videoName}
+                        width="1024px"
+                        height="480px"
+                        controls
+                        url={videoInfo.videoPath}
+                    ></ReactPlayer>
                 </div>
-                <div width="100%" >
-                    <h2 style={{color:"green"}}>Description: {videoInfo.description}</h2>
+                <div width="100%">
+                    <h2 style={{ color: 'green' }}>
+                        Description: {videoInfo.description}
+                    </h2>
                 </div>
                 {/* comments part */}
                 <div className="comments">
-                    <h3 className="comments-title" style={{color:"green"}}>Comments</h3>
+                    <h3 className="comments-title" style={{ color: 'green' }}>
+                        Comments
+                    </h3>
                     <div className="comments-container">
-                        {videoComments.map((comment) =>(
-                            <Comment key ={comment.id} comment={comment}>comment.content</Comment>
+                        {videoComments.map((comment) => (
+                            <Comment key={comment.id} comment={comment}>
+                                comment.content
+                            </Comment>
                         ))}
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
-
 
 export default VideoPlay;

@@ -42,7 +42,7 @@ function OneVideo(props) {
         return (
             <Card className={classes.card} variant="outlined">
                 <CardActionArea>
-                    <Link to={`/video/${videoId}`}>
+                    <Link to={`/videoPlay/${videoId}`}>
                         <CardMedia
                             className={classes.media}
                             component="img"
