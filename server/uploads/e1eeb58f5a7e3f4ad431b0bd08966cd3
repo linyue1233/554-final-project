@@ -1,0 +1,62 @@
+## mybatis plus生成策略
+
+* 自动增长 auto increment，在分表时下一张表需要获得上一张表最后一个值再加一。
+
+* uuid，每次生成随机唯一的值。根据ID排序不方便。
+
+* redis生成ID
+
+* mp自带策略。使用雪花算法。  加注解，@Table（type = Idtype。auto）
+
+  >  auto:自动增长, 
+  >
+  > input 和 none自己输入
+  >
+  >  id_worker   mp自带策略生成19位数字类型使用这种策略，比如说long,id_worker_str,字符串类型使用
+  >
+  > uuid
+
+
+
+## 自动填充
+
+create_time : datetime, id: bigint
+
+注解：@TableField(fill = FieldFill.INSERT)
+
+​			@TableField(fill = FieldFill.INSERT_UPDATE)
+
+创建一个类，实现接口MetaObjectHadnler
+
+
+
+乐观锁主要解决丢失更新，  取出记录时，获取当前version，更新时，带上这个version，执行更新，set version = new Version where version = oldVersion,如果版本号不对，就更新失败
+
+在实体类加@version注解
+
+
+
+乐观锁插件
+
+![image-20220209160058137](/Users/linyue/Library/Application Support/typora-user-images/image-20220209160058137.png)
+
+
+
+
+
+## 实现分页
+
+1.配置分页插件
+
+![image-20220209162048825](/Users/linyue/Library/Application Support/typora-user-images/image-20220209162048825.png)
+
+2.编写分页代码，直接new page对象，两个参数，一个是当前页，一个是每页显示记录数。
+
+
+
+
+
+## Wrapper (条件构造器)
+
+  一般用queryWrapper接口多，方法有ge,gt,le,lt,    eq,ne   between,   like,orderBy, last(拼接)
+

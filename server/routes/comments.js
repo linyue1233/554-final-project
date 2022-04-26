@@ -5,6 +5,7 @@ const unlinkFile = util.promisify(fs.unlink);
 const router = express.Router();
 const data = require('../data');
 const commentData = data.comments;
+const userData = data.users;
 const verify = require('../data/verify');
 const xss = require('xss');
 
@@ -33,6 +34,10 @@ router.get('/video/:videoId', async (req, res) => {
     // get all comments by videoId
     try {
         const comments = await commentData.getAllCommentsByVideoId(req.params.videoId);
+        for(let comment of comments) {
+            let tempUser = await userData.getUserById(comment.userId);
+            comment.avatar = tempUser.avatar;
+        }
         res.status(200).json(comments);
     } catch (error) {
         res.status(500).json({ error: error });

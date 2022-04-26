@@ -2,7 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import '../../css/VideoPlayer.css';
-import { Box, Container,Avatar } from '@mui/material'
+import { Box, Container,Avatar } from '@mui/material';
+import Comment from './Comment';
 import axios from 'axios';
 
 function VideoPlay() {
@@ -11,10 +12,12 @@ function VideoPlay() {
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
     const [videoInfo, setVideoInfo] = useState(null);
-    const [videoComments,setComments] = useState(null);
+    const [videoComments,setComments] = useState([]);
+
     async function fetchData(videoId) {
         try {
-            const { data } = await axios.get(`/videos/${videoId}`)
+            const result = await axios.get(`/videos/${videoId}`);
+            const {data} = result;
             if (data === null) {
                 setNotFound(true);
                 return;
@@ -24,6 +27,7 @@ function VideoPlay() {
             setNotFound(false);
         } catch (e) {
             setNotFound(true);
+            alert("Your path is error")
         } finally {
             setLoading(false);
         }
@@ -31,24 +35,23 @@ function VideoPlay() {
 
     async function fetchComments(videoId) {
         try {
-            const { data } = await axios.get(`/comments/video/${videoId}`)
+            const { data } = await axios.get(`/comments/video/${videoId}`);
+            console.log(data);
             if (data === null) {
                 setNotFound(true);
                 return;
             }
-            videoComments(data);
+            setComments(data);
         } catch (e) {
         } finally {
             setLoading(false);
         }
     }
 
-
     useEffect(() => {
         fetchData(videoId);
         fetchComments(videoId);
     }, [videoId])
-
 
 
     if (loading || notFound) {
@@ -72,10 +75,14 @@ function VideoPlay() {
                     <h2 style={{color:"green"}}>Description: {videoInfo.description}</h2>
                 </div>
                 {/* comments part */}
-                <Container maxWidth="sm">
-                    <h2 style={{color:"green"}}>Comments:</h2>
-
-                </Container>
+                <div className="comments">
+                    <h3 className="comments-title" style={{color:"green"}}>Comments</h3>
+                    <div className="comments-container">
+                        {videoComments.map((comment) =>(
+                            <Comment key ={comment.id} comment={comment}>comment.content</Comment>
+                        ))}
+                    </div>
+                </div>
             </div>
         )
     }

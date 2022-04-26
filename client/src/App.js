@@ -35,7 +35,7 @@ function App() {
                         <NavLink className="navlink" to="/">
                             Home
                         </NavLink>
-                        <NavLink className="navlink" to="/videoPlay">
+                        <NavLink className="navlink" to="/videoPlay/1e625977-ca18-416c-88bf-475a66bd0ba1">
                             VideoPlay
                         </NavLink>
                         <NavLink className="navlink" to="/login">
