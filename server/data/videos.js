@@ -275,7 +275,37 @@ async function getAllVideosByOneTag(tag) {
         .toArray();
     return videoList;
 }
-
+//get all videos by tag, ordering by likeCount, viewCount or uploadDates
+async function getAllVideosByOneTagAndByOneFunc(tag, type) {
+    const videoCollection = await videos();
+    let videoList
+    switch (type) {
+        case 'viewCount':
+            videoList = await videoCollection
+                .find({
+                    Tags: { $all: [tag] },
+                })
+                .sort({ viewCount: -1 })
+                .toArray();
+            break;
+        case 'uploadDate':
+            videoList = await videoCollection
+                .find({
+                    Tags: { $all: [tag] },
+                })
+                .sort({'uploadDate.year':-1,'uploadDate.month':-1,'uploadDate.day':-1})
+                .toArray();
+            break;
+        default:
+            videoList = await videoCollection
+                .find({
+                    Tags: { $all: [tag] },
+                })
+                .sort({ likeCount: -1 })
+                .toArray();
+    }
+    return videoList;
+}
 module.exports = {
     createVideo,
     getVideoById,
@@ -292,4 +322,5 @@ module.exports = {
     get5VideosByTagAndYear,
     get5VideosByTag,
     getAllVideosByOneTag,
+    getAllVideosByOneTagAndByOneFunc,
 };

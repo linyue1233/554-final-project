@@ -68,7 +68,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-
 router.post('/videoCover', upload.single('cover'), async (req, res) => {
     if( req.file===null || req.file === undefined ){
         res.status(400).json({ message: 'Please choose a file to upload.' });
@@ -97,7 +96,6 @@ router.post('/videoCover', upload.single('cover'), async (req, res) => {
         return;
     }
 });
-
 
 router.post('/uploadVideo', upload.single('video'),async(req,res)=>{
     if( req.file===null || req.file === undefined ){
@@ -195,15 +193,13 @@ router.post('/search', async (req, res) => {
    
 });
 
-router.get('/getAllVideosByTag/:tag', async (req, res) => {
+router.get('/getAllVideosByTag/:tag/:type', async (req, res) => {
     try {
         verify.isString(req.params.tag, 'Tag');
-
+        // verify.isString(req.params.type, 'Type'); 
         verify.checkTag(req.params.tag);
-
         verify.checkSpace(req.params.tag);
-
-        const videos = await videoData.getAllVideosByOneTag(req.params.tag);
+        const videos = await videoData.getAllVideosByOneTagAndByOneFunc(req.params.tag, req.params.type);
         res.status(200).json(videos);
     } catch (e) {
         res.status(500).json({ message: e });
