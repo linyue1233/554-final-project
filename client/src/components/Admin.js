@@ -112,6 +112,7 @@ function Admin () {
             setComments(data);
             setLoadingSearch(false);
         }catch(e) {
+            setComments("don't have any comments");
             setError(e);
             setLoadingSearch(false);
         }
