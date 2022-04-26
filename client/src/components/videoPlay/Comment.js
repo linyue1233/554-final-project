@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
+import { Avatar, Container } from '@mui/material';
 
 
 const Comment = ({comment}) => {
     return (
         <div className="comment">
             <div className="comment-image-container">
-                <img src ={comment.avatar} ></img>
+                <Avatar alt={comment.userName} src ={comment.avatar} ></Avatar>
             </div>
             <div className="comment-right-part">
                 <div className="comment-content">
