@@ -6,29 +6,17 @@ body {
     min-height: 100%;
     margin: 0;
     padding: 0;
-    position: relative;
     background-color: #011e3c;
-}
-
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
 }
 
 .App-header {
     background-color: #071a2f;
     height: 64px;
     width: 100%;
-    color: white;
-    text-align: left;
-    position: relative;
-    padding: 20px;
+}
+div {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
 }
 
 .App-body {
@@ -38,12 +26,12 @@ body {
 }
 
 .navlink {
-    padding: 0.4rem 0.8rem;
+    /* padding: 0.4rem 0.8rem; */
     background-color: white;
     border-radius: 3px;
     color: #28547a;
-    text-decoration: none !important;
-    margin-left: 10px;
+    /* text-decoration: none !important; */
+    /* margin-left: 10px; */
 }
 
 .navlink:hover {
@@ -54,15 +42,6 @@ body {
 
 .App-link {
     color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
 }
 
 .text-center {
@@ -114,11 +93,11 @@ footer {
 
 .video-link {
     text-decoration: none !important;
-    color: black
+    color: black;
 }
 
 .video-link:hover {
-    color: rgb(37, 133, 170)
+    color: rgb(37, 133, 170);
 }
 
 .upload-form {
@@ -130,7 +109,7 @@ footer {
     color: black;
     width: 10px;
     margin-top: 80px;
-    margin-left:30px;
+    margin-left: 30px;
     font-size: 20px;
 }
 
@@ -139,7 +118,7 @@ footer {
     margin-bottom: 20px;
 }
 
-.likedVideos{
+.likedVideos {
     margin: 0 auto;
 }
 

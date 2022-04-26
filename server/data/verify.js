@@ -40,11 +40,30 @@ function checkSpace(str, varName) {
 
 function checkAvatarSuffix(avatar) {
     if (!avatar) throw `Please check your file.`;
-    let availableSuffix = ["jpeg","jfif","exif","gif","bmp","png","ppm","pgm","pbm","pnm","webp","tiff","helf","svg","eps","bat","cgm","jpg"];
-    let index = avatar.lastIndexOf(".");
-    avatarSuffix = avatar.substring(index+1);
+    let availableSuffix = [
+        'jpeg',
+        'jfif',
+        'exif',
+        'gif',
+        'bmp',
+        'png',
+        'ppm',
+        'pgm',
+        'pbm',
+        'pnm',
+        'webp',
+        'tiff',
+        'helf',
+        'svg',
+        'eps',
+        'bat',
+        'cgm',
+        'jpg',
+    ];
+    let index = avatar.lastIndexOf('.');
+    avatarSuffix = avatar.substring(index + 1);
     avatarSuffix = avatarSuffix.toLowerCase();
-    if( availableSuffix.indexOf(avatarSuffix) === -1){
+    if (availableSuffix.indexOf(avatarSuffix) === -1) {
         throw `You should upload a image format file.`;
     }
 }
@@ -66,13 +85,32 @@ function checkTag(tag) {
     if (validTags.indexOf(tag) === -1) throw `${tag} is not a valid tag`;
 }
 
-function checkVideoSuffix(videoPath){
+function checkVideoSuffix(videoPath) {
     if (!videoPath) throw `Please check your file.`;
-    let availableSuffix = ["avi","wmv","mpg","mpeg","mov","rm","ram","swf","flv","mp4","mp3","wma","avi","rm","rmvb","flv","mpg","mkv"];
-    let index = videoPath.lastIndexOf(".");
-    videoSuffix = videoPath.substring(index+1);
+    let availableSuffix = [
+        'avi',
+        'wmv',
+        'mpg',
+        'mpeg',
+        'mov',
+        'rm',
+        'ram',
+        'swf',
+        'flv',
+        'mp4',
+        'mp3',
+        'wma',
+        'avi',
+        'rm',
+        'rmvb',
+        'flv',
+        'mpg',
+        'mkv',
+    ];
+    let index = videoPath.lastIndexOf('.');
+    videoSuffix = videoPath.substring(index + 1);
     videoSuffix = videoSuffix.toLowerCase();
-    if( availableSuffix.indexOf(videoSuffix) === -1){
+    if (availableSuffix.indexOf(videoSuffix) === -1) {
         throw `You should upload a video format file.`;
     }
 }

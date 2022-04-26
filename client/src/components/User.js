@@ -100,7 +100,7 @@ function User () {
             }
         }
         setVideoSearchResult(result);
-        setSearchedVideosPageCount(parseInt(result.length / 5) + 1);
+        setSearchedVideosPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1);
         setVideoSearched(true);
         setLoadingContent(false);
     }
@@ -120,7 +120,7 @@ function User () {
             }
         }
         setCommentSearchResult(result);
-        setSearchedCommentsPageCount(parseInt(result.length / 5) + 1)
+        setSearchedCommentsPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1)
         setCommentSearched(true);
         setLoadingContent(false);
     }
@@ -192,12 +192,12 @@ function User () {
                 setLoadingContent(true);
                 const {data: likes} = await axios.get(`/users/AllLikedVideos/${id}`);
                 setLikedVideos(likes);
-                setLikedVideosCount(parseInt(likes.length / 5) + 1);
+                setLikedVideosCount((likes.length % 5 === 0) ? likes.length / 5 : parseInt(likes.length / 5) + 1);
 
                 const {data: comment} = await axios.get(`/comments/user/${id}`);
                 if(comment !== "don't have any comments"){
                     setComments(comment);
-                    setCommentsPageCount(parseInt(comment.length / 5) + 1)
+                    setCommentsPageCount((comment.length % 5 === 0) ? comment.length / 5 : parseInt(comment.length / 5) + 1)
                 }
                 
 
