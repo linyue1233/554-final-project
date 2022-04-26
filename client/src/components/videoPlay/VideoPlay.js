@@ -23,7 +23,6 @@ function VideoPlay() {
                 return;
             }
             setVideoInfo(data);
-            console.log(videoInfo);
             setLoading(true);
             setNotFound(false);
         } catch (e) {
@@ -60,7 +59,7 @@ function VideoPlay() {
                 <h2>{loading ? 'Loading....' : '404 - your page not found'}</h2>
             </div>
         );
-    } else {
+    } else if(videoInfo) {
         return (
             <div className="App-body">
                 <div width="100%">
