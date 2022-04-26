@@ -29,8 +29,8 @@ module.exports = {
             isDeleted: false,
             date: {
                 year: date.getFullYear(),
-                month: date.getMonth(),
-                day: date.getDay(),
+                month: date.getMonth() + 1,
+                day: date.getDate(),
             },
             _id: uuid.v4(),
         };
@@ -69,7 +69,6 @@ module.exports = {
         if (insertInfo.insertedCount === 0) throw 'Could not add comment';
         const newId = insertInfo.insertedId;
         const thisComment = await this.getCommentByCommentId(newId);
-
         return thisComment;
     },
     async getCommentByCommentId(commentId) {
