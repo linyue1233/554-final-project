@@ -132,3 +132,30 @@ footer {
     text-align: center;
     margin-bottom: 20px;
 }
+
+.loginForm {
+    
+    text-align: left;
+    
+    width: 300px;
+    height: 400px;
+    margin:auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+}
+
+.signupForm {
+    text-align: left;
+    
+    width: 300px;
+    height: 400px;
+    margin:auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+}

@@ -29,13 +29,14 @@ function LoginPage(){
     }
 
     body = (
+        <div className = 'loginForm'>
         <form className='form' id='create_user' onSubmit={handleSubmit}>
             
-            <div className='form-group'>
+            <div className='mb-3'>
                 <label>
                 Email:
-                    <br/>
-                    <input
+                    
+                    <input class="form-control"
                         ref={(node)=>{
                             email = node;
                         }}
@@ -46,11 +47,11 @@ function LoginPage(){
             </div>
             <br/>
             
-            <div className='form-group'>
+            <div className='mb-3'>
                 <label>
                 Password:
-                    <br/>
-                    <input type="password"
+                    
+                    <input type="password" class="form-control"
                         ref={(node)=>{
                             password = node;
                         }}
@@ -62,13 +63,13 @@ function LoginPage(){
             <br/>
             
             
-            <br/>
-            <br/>
-            <br/>
-            <button className='button' type='submit'>
+            
+            <button className="btn btn-primary" type='submit'>
                 Comfirm
             </button>
         </form>
+        </div>
+        
     );
 
     return(

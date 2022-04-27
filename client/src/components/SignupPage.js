@@ -49,12 +49,13 @@ function SignupPage(){
 
 
     body = (
+        <div className='signupForm'>
         <form className='form' id='create_user' onSubmit={handleSubmit}>
-            <div className='form-group'>
+            <div className='mb-3'>
                 <label>
                 Username:
                     <br/>
-                    <input
+                    <input class="form-control"
                         ref={(node)=>{
                             username = node;
                         }}
@@ -63,12 +64,12 @@ function SignupPage(){
                     />
                 </label>
             </div>
-            <br/>
-            <div className='form-group'>
+            
+            <div className='mb-3'>
                 <label>
                 Password:
                     <br/>
-                    <input type="password"
+                    <input type="password" class="form-control"
                         ref={(node)=>{
                             password = node;
                         }}
@@ -77,12 +78,12 @@ function SignupPage(){
                     />
                 </label>
             </div>
-            <br/>
-            <div className='form-group'>
+           
+            <div className='mb-3'>
                 <label>
                 Email:
                     <br/>
-                    <input
+                    <input class="form-control"
                         ref={(node)=>{
                             email = node;
                         }}
@@ -91,12 +92,12 @@ function SignupPage(){
                     />
                 </label>
             </div>
-            <br/>
-            <div className='form-group'>
+            
+            <div className='mb-3'>
                 <label>
                 Avatar:
                     <br/>
-                    <input type="file" id='chooseAvatar'
+                    <input type="file" id='chooseAvatar' class="form-control"
                     onChange={handlefile}
                         ref={(node)=>{
                             avatar = node;
@@ -107,12 +108,12 @@ function SignupPage(){
                 </label>
             </div>
             <br/>
-            <br/>
-            <br/>
-            <button className='button' type='submit'>
+            
+            <button className="btn btn-primary" type='submit'>
                 Comfirm
             </button>
         </form>
+        </div>
     );
 
     return(
