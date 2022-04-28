@@ -17,7 +17,7 @@ module.exports = {
         verifyFunction.isString(userId, 'userId');
         verifyFunction.isString(videoId, 'videoId');
         verifyFunction.checkUsername(userName);
-        const commentsCollections = await comments();
+        const commentsCollections = await comments();   
         const userCollection = await users();
         const videoCollection = await videos();
         let date = new Date();

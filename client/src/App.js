@@ -3,7 +3,7 @@ import './App.css';
 import { useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
-
+import ShowSearchVideo from './components/ShowSearchVideo';
 import AllVideo from './components/AllVideo';
 import Home from './components/homePage/Home';
 import VideoPlay from './components/videoPlay/VideoPlay';
@@ -59,6 +59,10 @@ function App() {
                         <Route
                             path="/videos/getAllVideosByTag/:tag/:type"
                             element={<AllVideo />}
+                        />
+                        <Route
+                            path="/videos/getAllVideosBySearchName/:searchTerm"
+                            element={<ShowSearchVideo />}
                         />
                     </Routes>
                 </div>

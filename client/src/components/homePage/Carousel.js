@@ -9,7 +9,7 @@ function Carousel() {
     useEffect(() => {
         async function fetchData() {
             const { data } = await axios.get('/videos/get3VideosSortByLikeCount');
-            console.log(data);
+            // console.log(data);
             setCarouselData(data);
         }
         fetchData();

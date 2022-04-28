@@ -19,7 +19,6 @@ function AllVideo() {
             setVideoData(group(data.data,2));
             setCurData(group(data.data,2)[0]);
             let pageNum = (data.data.length % 2)=== 0 ? parseInt(data.data.length / 2) :parseInt( data.data.length / 2 )+ 1;
-            // console.log(pageNum);
             setTotalPage(pageNum);
             setPage(1);
         }
