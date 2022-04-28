@@ -14,6 +14,7 @@ const path = require('path');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads' + path.sep});
 const { uploadFile } = require('../config/awsS3');
+const redis = require('../util/redisUtil');
 
 async function changeAvatar(filePath) {
     let newFilePath = path.join("uploads",uuid.v4());
@@ -121,6 +122,8 @@ router.post('/login', async (req, res) => {
             xss(req.body.password).trim()
         );
         if (checkUser) {
+            req.session.user = userInfo.email;
+            redis.setExpire(userInfo.email,userInfo.email,60*30);
             res.status(200).json({ authenticated: true });
         }
     } catch (error) {

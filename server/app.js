@@ -2,6 +2,16 @@ const express = require('express');
 const app = express();
 const configRoutes = require('./routes');
 const bodyParser = require('body-parser');
+const session = require("express-session");
+
+app.use(
+    session({
+      name: "AuthCookie",
+      secret: "sacredword",
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
