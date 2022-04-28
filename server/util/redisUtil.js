@@ -15,20 +15,11 @@ let setKey = (key,value)=>{
 };
 
 let getKey = (key)=>{
-    return new Promise((resolve, reject) => {
-        client.get(key,(err,replay)=>{
-            if(err){
-                reject(err);
-            }else{
-                resolve(replay);
-            }
-        })
-    })
+    return client.get(key);
 };
 
 let setExpire = function(key, value, timeout) {
     client.set(key,value);
-    console.log(key,value,timeout);
     client.expire(key,timeout);
 };
 
