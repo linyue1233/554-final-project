@@ -23,10 +23,6 @@ async function changeAvatar(filePath) {
 }
 
 router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
-    if(req.session){
-        let userKey = req.session.user;
-        redis.setExpire(userKey,userKey,60*30);
-    }
     if( req.file===null || req.file === undefined ){
         res.status(400).json({ message: 'Please choose a file to upload.' });
         return;
@@ -60,10 +56,6 @@ router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
 
 //get all users
 router.get('/all', async (req, res) => {
-    if(req.session){
-        let userKey = req.session.user;
-        redis.setExpire(userKey,userKey,60*30);
-    }
     try {
         let userList = await userData.getAllUsers();
         res.status(200).json(userList);
@@ -73,10 +65,6 @@ router.get('/all', async (req, res) => {
 });
 // signup
 router.post('/signup', async (req, res) => {
-    if(req.session){
-        let userKey = req.session.user;
-        redis.setExpire(userKey,userKey,60*30);
-    }
     let userInfo = req.body;
     // check format
     try {
@@ -115,10 +103,6 @@ router.post('/signup', async (req, res) => {
 });
 // login
 router.post('/login', async (req, res) => {
-    if(req.session){
-        let userKey = req.session.user;
-        redis.setExpire(userKey,userKey,60*30);
-    }
     let userInfo = req.body;
     // check format
     try {
@@ -140,7 +124,7 @@ router.post('/login', async (req, res) => {
         if (checkUser) {
             req.session.user = userInfo.email;
             req.session.cookie.username = userInfo.email;
-            redis.setExpire(userInfo.email,userInfo.email,60*30);
+            redis.setExpire(userInfo.email,userInfo.email,15);
             res.status(200).json({ authenticated: true });
         }
     } catch (error) {

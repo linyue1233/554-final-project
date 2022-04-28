@@ -13,9 +13,18 @@ const redis = require('../util/redisUtil')
 // get comment by commentId
 router.get('/:commentId', async (req, res) => {
     // get comment by commentId
-    if(req.session){
-        let userKey = req.session.user;
-        redis.setExpire(userKey,userKey,60*30);
+    console.log(req.session.user);
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
     }
     try {
         const comment = await commentData.getCommentByCommentId(req.params.commentId);
@@ -27,9 +36,17 @@ router.get('/:commentId', async (req, res) => {
 // get all comments by userId
 router.get('/user/:userId', async (req, res) => {
     // get all comments by userId
-    if(req.session){
-        let userKey = req.session.user;
-        redis.setExpire(userKey,userKey,60*30);
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
     }
     try {
         const comments = await commentData.getAllCommentsByUserId(req.params.userId);
@@ -41,9 +58,17 @@ router.get('/user/:userId', async (req, res) => {
 // get all comments by videoId
 router.get('/video/:videoId', async (req, res) => {
     // get all comments by videoId
-    if(req.session){
-        let userKey = req.session.user;
-        redis.setExpire(userKey,userKey,60*30);
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
     }
     try {
         const comments = await commentData.getAllCommentsByVideoId(req.params.videoId);
@@ -58,24 +83,26 @@ router.get('/video/:videoId', async (req, res) => {
 });
 // delete one comment by commentId
 router.delete('/:commentId', async (req, res) => {
-    if(req.session){
-        let userKey = req.session.user;
-        redis.setExpire(userKey,userKey,60*30);
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans === null){
+                // delete session
+                req.session.destroy();
+                return res.status(401).json({ status:"401",message:"Your status is expired."})
+            }else{
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
     }
     // delete one comment by commentId
     if(!req.session.user){
-        return res.status(403).json({ code:"403",message:"Please login firstly."})
+        return res.status(403).json({ status:"403",message:"Please login firstly."})
     }
-    try{
-        let ans = await redis.getKey(req.session.user);
-        if(ans === null){
-            // delete session
-            req.session.destroy();
-            return res.status(401).json({ code:"401",message:"Please login firstly."})
-        }
-    }catch(error){
-        return res.status(403).json({ code:"403",message:"Please login firstly."})
-    }
+    
     try {
         const comment = await commentData.deleteOneCommentByCommentId(req.params.commentId);
         res.status(200).json(comment);
