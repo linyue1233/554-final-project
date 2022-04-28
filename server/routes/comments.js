@@ -83,6 +83,35 @@ router.delete('/:commentId', async (req, res) => {
         res.status(500).json({ error: error });
     }
 });
+//create one comment
+// createComment(content, userId, userName, videoId)
+router.post('/', async (req, res) => {
+    // create one comment
+    if(!req.session.user){
+        return res.status(403).json({ code:"403",message:"Please login firstly."})
+    }
+    try{
+        let ans = await redis.getKey(req.session.user);
+        if(ans === null){
+            // delete session
+            req.session.destroy();
+            return res.status(401).json({ code:"401",message:"Please login firstly."})
+        }
+    }
+    catch(error){
+        return res.status(403).json({ code:"403",message:"Please login firstly."})
+    }
+    try {
+
+        const userInfo =await userData.getUserByEmail(req.body.email);
+        // console.log(req.body.content);
+        // console.log(userInfo)
+        const comment = await commentData.createComment(xss(req.body.content), userInfo._id, userInfo.username,req.body.videoId);
+        res.status(200).json({status:200,data:comment});
+    } catch (error) {
+        res.status(500).json({ error: error });
+    }
+});
 // // delete all comments by userId
 // router.delete('/user/:userId', async (req, res) => {
 //     // delete all comments by userId
