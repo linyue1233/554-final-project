@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import axios from 'axios';
 import { Avatar, Container } from '@mui/material';
 
 

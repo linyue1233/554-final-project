@@ -5,6 +5,7 @@ import '../../css/VideoPlayer.css';
 import { Box, Container, Avatar } from '@mui/material';
 import Comment from './Comment';
 import axios from 'axios';
+import CommentForm from './CommentForm';
 
 function VideoPlay() {
     const { videoId } = useParams();
@@ -36,7 +37,6 @@ function VideoPlay() {
     async function fetchComments(videoId) {
         try {
             const { data } = await axios.get(`/comments/video/${videoId}`);
-            console.log(data);
             if (data === null) {
                 setNotFound(true);
                 return;
@@ -52,6 +52,12 @@ function VideoPlay() {
         fetchData(videoId);
         fetchComments(videoId);
     }, [videoId]);
+
+
+    const addComment = (text)=>{
+        console.log('add Comment' +text);
+    }
+
 
     if (loading || notFound) {
         return (
@@ -85,6 +91,10 @@ function VideoPlay() {
                     <h3 className="comments-title" style={{ color: 'green' }}>
                         Comments
                     </h3>
+                    <div className="comment-form-title">Write comment</div>
+                    <CommentForm submitLable="Write" handleSubmit={addComment}>
+
+                    </CommentForm>
                     <div className="comments-container">
                         {videoComments.map((comment) => (
                             <Comment key={comment.id} comment={comment}>
