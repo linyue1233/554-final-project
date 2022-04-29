@@ -13,7 +13,7 @@ const redis = require('../util/redisUtil')
 // get comment by commentId
 router.get('/:commentId', async (req, res) => {
     // get comment by commentId
-    console.log(req.session.user);
+    console.log(req.headers.cookie);
     if(req.session.user){
         try{
             let ans = await redis.getKey(req.session.user);
@@ -76,9 +76,9 @@ router.get('/video/:videoId', async (req, res) => {
             let tempUser = await userData.getUserById(comment.userId);
             comment.avatar = tempUser.avatar;
         }
-        res.status(200).json(comments);
+        res.status(200).json({status:200, data:comments});
     } catch (error) {
-        res.status(500).json({ error: error });
+        res.status(500).json({status:500, message:error.message});
     }
 });
 // delete one comment by commentId
@@ -115,25 +115,26 @@ router.delete('/:commentId', async (req, res) => {
 router.post('/', async (req, res) => {
     // create one comment
     if(!req.session.user){
-        return res.status(403).json({ code:"403",message:"Please login firstly."})
+        return res.status(403).json({ status:"403",message:"Please login firstly."})
     }
     try{
         let ans = await redis.getKey(req.session.user);
         if(ans === null){
             // delete session
             req.session.destroy();
-            return res.status(401).json({ code:"401",message:"Please login firstly."})
+            return res.status(401).json({ status:"401",message:"Please login firstly."})
         }
     }
     catch(error){
-        return res.status(403).json({ code:"403",message:"Please login firstly."})
+        return res.status(403).json({ status:"403",message:"Please login firstly."})
     }
     try {
 
-        const userInfo =await userData.getUserByEmail(req.body.email);
+        const userInfo =await userData.getUserByEmail(req.session.user);
         // console.log(req.body.content);
         // console.log(userInfo)
         const comment = await commentData.createComment(xss(req.body.content), userInfo._id, userInfo.username,req.body.videoId);
+        comment.avatar = userInfo.avatar;
         res.status(200).json({status:200,data:comment});
     } catch (error) {
         res.status(500).json({ error: error });

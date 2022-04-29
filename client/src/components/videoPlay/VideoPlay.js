@@ -21,6 +21,8 @@ function VideoPlay() {
 
             if (data === null) {
                 setNotFound(true);
+                alert('Your path is error, we will return homPage');
+                window.location.href = "http://localhost:4000/";
                 return;
             }
             setVideoInfo(data);
@@ -28,7 +30,8 @@ function VideoPlay() {
             setNotFound(false);
         } catch (e) {
             setNotFound(true);
-            alert('Your path is error');
+            alert('Your path is error, we will return homPage');
+            window.location.href = "http://localhost:4000/";
         } finally {
             setLoading(false);
         }
@@ -36,12 +39,15 @@ function VideoPlay() {
 
     async function fetchComments(videoId) {
         try {
-            const { data } = await axios.get(`/comments/video/${videoId}`);
-            if (data === null) {
+            const result = await axios.get(`/comments/video/${videoId}`);
+            const { data, status } = result;
+            if (status !== 200) {
                 setNotFound(true);
+                alert('There is some error, we will return homePage');
+                window.location.href = "http://localhost:4000/";
                 return;
             }
-            setComments(data);
+            setComments(data.data);
         } catch (e) {
         } finally {
             setLoading(false);
@@ -53,9 +59,14 @@ function VideoPlay() {
         fetchComments(videoId);
     }, [videoId]);
 
-
-    const addComment = (text)=>{
-        console.log('add Comment' +text);
+    const addComment = (text) => {
+        const params = { 'content': text, "videoId": videoId };
+        axios.post(`/comments`, params).then(res => {
+            setComments([...videoComments, res.data.data]);
+        }).catch(err => {
+            alert("You need to login first")
+            window.location.href = "http://localhost:4000/login";
+        })
     }
 
 
@@ -65,7 +76,7 @@ function VideoPlay() {
                 <h2>{loading ? 'Loading....' : '404 - your page not found'}</h2>
             </div>
         );
-    } else if(videoInfo) {
+    } else if (videoInfo) {
         return (
             <div className="App-body">
                 <div width="100%">
@@ -96,7 +107,7 @@ function VideoPlay() {
 
                     </CommentForm>
                     <div className="comments-container">
-                        {videoComments.map((comment) => (
+                        {videoComments && videoComments.map((comment) => (
                             <Comment key={comment.id} comment={comment}>
                                 comment.content
                             </Comment>

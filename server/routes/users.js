@@ -124,7 +124,8 @@ router.post('/login', async (req, res) => {
         if (checkUser) {
             req.session.user = userInfo.email;
             req.session.cookie.username = userInfo.email;
-            redis.setExpire(userInfo.email,userInfo.email,15);
+            redis.setExpire(userInfo.email,userInfo.email,60*30);
+            res.setHeader('Set-Cookie',`user=${userInfo.email}`);
             res.status(200).json({ authenticated: true });
         }
     } catch (error) {

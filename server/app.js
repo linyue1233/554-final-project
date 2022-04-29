@@ -3,6 +3,7 @@ const app = express();
 const configRoutes = require('./routes');
 const bodyParser = require('body-parser');
 const session = require("express-session");
+const cors = require('cors');
 
 app.use(
     session({
@@ -15,6 +16,8 @@ app.use(
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// sett corross
+app.use(cors({credentials:true,origin:true}));
 app.use(express.json());
 
 configRoutes(app);
