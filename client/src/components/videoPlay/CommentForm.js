@@ -13,6 +13,7 @@ const CommentForm=({handleSubmit,submitLable})=>{
     return (
         <form onSubmit={onSubmit}>
             <textarea className="comment-form-textarea" value={content} onChange={(e)=>setContent(e.target.value)}></textarea>
+            <br></br>
             <button className="comment-form-button" disabled={isContentAvailable}>{submitLable}</button>
         </form>
     )

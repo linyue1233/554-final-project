@@ -10,6 +10,7 @@ const xss = require('xss');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads' + path.sep});
 const {uploadFile} = require('../config/awsS3');
+const redis = require('../util/redisUtil')
 
 router.get('/', async (req, res) => {
     try {
@@ -208,7 +209,7 @@ router.get('/getAllVideosByTag/:tag/:type', async (req, res) => {
 });
 
 // user add like for the video
-router.get('/addLikeForVideo',async(req,res)=>{
+router.post('/addLikeForVideo',async(req,res)=>{
     // check user
     if(req.session.user){
         try{
@@ -216,13 +217,13 @@ router.get('/addLikeForVideo',async(req,res)=>{
             if(ans === null){
                 // delete session
                 req.session.destroy();
-                return res.status(401).json({ status:"401",message:"Your status is expired."})
+                return res.status(401).json({ status:401,message:"Your status is expired."})
             }else{
                 let userKey = req.session.user;
                 redis.setExpire(userKey,userKey,60*30);
             }
         }catch(error){
-            return res.status(403).json({ status:"403",message:"Please login firstly."})
+            return res.status(403).json({ status:403,message:"Please login firstly."})
         }
     }
     let userEmail = req.session.user;
@@ -246,7 +247,27 @@ router.get('/addLikeForVideo',async(req,res)=>{
 })
 
 router.post('/addViewCount',async(req,res)=>{
-    
+    // check user and update time 
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:403,message:error})
+        }
+    }
+    let videoId = req.body.videoId;
+    videoId = videoId.trim();
+    try{
+        let videoInfo = await videoData.increaseViewCount(videoId);
+        return res.status(200).json({ status:200,data:videoInfo})
+    }catch(error){
+        return res.status(400).json({ status:500,message:error})
+    }
 })
 
 module.exports = router;
