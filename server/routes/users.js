@@ -22,6 +22,12 @@ async function changeAvatar(filePath) {
     return newFilePath;
 }
 
+router.get("/logout",async(req,res) => {
+    req.session.destroy();
+    res.redirect("/");
+    return;
+})
+
 router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
     if( req.file===null || req.file === undefined ){
         res.status(400).json({ message: 'Please choose a file to upload.' });

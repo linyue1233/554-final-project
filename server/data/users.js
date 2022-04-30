@@ -288,24 +288,6 @@ module.exports = {
 
         return await this.getUserById(userId.trim());
     },
-    // logout
-    async logout(userId) {
-        verify.isString(userId, 'User ID');
-        verify.checkSpace(userId, 'User ID');
-        // find user by ID
-        let oldUser = await this.getUserById(userId.trim());
-        if (!oldUser) throw `There is no user it the id of ${userId}`;
-        // logout
-        const userCollection = await users();
-        const updateInfo = await userCollection.updateOne(
-            { _id: userId },
-            { $set: { isLogin: false } }
-        );
-        if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
-            throw `Failed to logout`;
-
-        return await this.getUserById(userId.trim());
-    },
     //get user information by email
     async getUserByEmail(email) {
         try{

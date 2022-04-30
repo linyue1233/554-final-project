@@ -54,9 +54,20 @@ function VideoPlay() {
         }
     }
 
+    async function addViewCount(videoId) {
+        const params = { "videoId": videoId };
+        axios.post(`/videos/addViewCount`, params).then(res => {
+        }).catch(err => {
+            alert("Some thing wrong, we will return homePage.")
+            window.location.href = "http://localhost:4000/";
+            return;
+        })
+    }
+
     useEffect(() => {
         fetchData(videoId);
         fetchComments(videoId);
+        addViewCount(videoId);
     }, [videoId]);
 
     const addComment = (text) => {
@@ -65,7 +76,6 @@ function VideoPlay() {
             setComments([...videoComments, res.data.data]);
         }).catch(err => {
             alert("You need to login first")
-            window.location.href = "http://localhost:4000/login";
         })
     }
 
@@ -92,6 +102,17 @@ function VideoPlay() {
                         url={videoInfo.videoPath}
                     ></ReactPlayer>
                 </div>
+                <Box mt={2} sx={{ textAlign: 'center' }}>
+                    <div className="comments-title" style={{ color: 'green', display: 'inline-block' }}>
+                        ViewCount:{videoInfo.viewCount}
+                    </div>
+                    <div className="comments-title" style={{ color: 'green', display: 'inline-block' }}>
+                        ViewCount:{videoInfo.likeCount}
+                    </div>
+                    <button className="comment-form-button">
+                        Like
+                    </button>
+                </Box>
                 <div width="100%">
                     <h2 style={{ color: 'green' }}>
                         Description: {videoInfo.description}
