@@ -133,7 +133,7 @@ router.post('/login', async (req, res) => {
     }
 });
 // get user by ID
-router.get('/:userId', async (req, res) => {
+router.get('/:userId([0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12})', async (req, res) => {
     let userId = req.params.userId.trim();
     //check format
     try {
@@ -345,6 +345,20 @@ router.get('/AllLikedVideos/:userId', async (req, res) => {
         res.status(200).json(likes);
     } catch (error) {
         res.status(500).json({ message: error });
+    }
+});
+
+router.get('/currentUser', async (req, res) => {
+    if(!req.session.user){
+        res.status(401).json({ message: "Unauthorized request" });
+        return;
+    }
+
+    try {
+        const user = await userData.getUserByEmail(req.session.user);
+        res.status(200).json(user);
+    } catch (e) {
+        res.status(500).json({ status: 500, message: e });
     }
 });
 

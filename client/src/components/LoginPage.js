@@ -1,6 +1,7 @@
 import axios, { Axios } from 'axios';
 import React from 'react';
 import '../App.css';
+import AuthService from '../service/auth_service';
 
 function LoginPage(){
     let email;
@@ -11,7 +12,7 @@ function LoginPage(){
         e.preventDefault();
 
         try {
-            await axios({
+            const {data} = await axios({
                 method: 'POST',
                 url: '/users/login',
                 data: {
@@ -19,6 +20,12 @@ function LoginPage(){
                     password: password.value  
                 }
             }); 
+
+            if(data.authenticated) {
+                const {data: user} = await axios.get('/users/currentUser');
+                console.log(user);
+                AuthService.setCurrentUser(user);
+            }
             window.location.href = '/';
         } catch (e) {
             alert("Either email or password is wrong");

@@ -11,6 +11,7 @@ import User from './components/User';
 import SignupPage from './components/SignupPage';
 import LoginPage from './components/LoginPage';
 import Admin from './components/Admin';
+import AuthService from './service/auth_service';
 
 import SearchVideo from './components/SearchVideo';
 
@@ -24,6 +25,11 @@ async function postAvatar({ image, description }) {
 }
 
 function App() {
+
+    const currentUser = AuthService.getCurrentUser();
+
+    console.log(currentUser);
+
     return (
         <BrowserRouter>
             <div className="App">
@@ -37,7 +43,16 @@ function App() {
                         <div className="col-md-4 offset-md-3">
                             <SearchVideo />
                         </div>
-                        <div className="col-md-2 offset-md-2">
+                        {currentUser && <div className="col-md-2 offset-md-2">
+                            <NavLink to={`/users/${currentUser._id}`}>
+                                {currentUser.email}
+                            </NavLink>
+                            <NavLink className="navlink" to="/" onClick={() => {AuthService.logout(); window.location.href = '/';}}>
+                                Logout
+                            </NavLink>
+                        </div>
+                        }
+                        {!currentUser && <div className="col-md-2 offset-md-2">
                             <NavLink className="navlink" to="/login">
                                 Login
                             </NavLink>
@@ -45,6 +60,7 @@ function App() {
                                 Signup
                             </NavLink>
                         </div>
+                        }
                     </div>
                 </header>
                 <br />
