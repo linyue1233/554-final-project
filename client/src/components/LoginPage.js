@@ -36,13 +36,16 @@ function LoginPage(){
     }
 
     useEffect(async () => {
+    
+        let currentUser = AuthService.getCurrentUser();
         let authStatus = await AuthService.checkAuth();
-        console.log(authStatus);
         if(authStatus) {
             console.log('Already logged in');
             window.location.href = '/';
+        }else if(!authStatus && currentUser) {
+            window.location.reload();
         }
-    }, []);
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     body = (
         <div className = 'loginForm'>

@@ -16,8 +16,6 @@ class AuthService {
   async logout() {
     Cookies.remove('user');
 
-    console.log('logged out');
-
     try {
       await axios.get('/users/logout');
     }catch (e) {
@@ -27,19 +25,22 @@ class AuthService {
 
   async checkAuth() {
 
-    const {data} = await axios.get('/users/checkAuth').catch((error) => {
-      
-      if(error.response) {
+    try{
+      const {data} = await axios.get('/users/checkAuth');
+
+      if(data && data.status == '200') {
+        console.log('Authenticated');
+        return true;
+      }
+    } catch(error) {
+
+      if(error.response){
         console.log(error.response.status);
         this.logout();
       }
-      return false;
-    });
-
-    if(data.status == '200') {
-      console.log('Authenticated');
-      return true;
     }
+
+    
   }
 
   getCurrentUser() {
