@@ -13,7 +13,6 @@ const redis = require('../util/redisUtil')
 // get comment by commentId
 router.get('/:commentId', async (req, res) => {
     // get comment by commentId
-    console.log(req.headers.cookie);
     if(req.session.user){
         try{
             let ans = await redis.getKey(req.session.user);
