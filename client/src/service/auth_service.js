@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 class AuthService {
   setCurrentUser(data) {
@@ -12,8 +13,33 @@ class AuthService {
     Cookies.set('user', JSON.stringify(user), { path: '' });
   }
 
-  logout() {
+  async logout() {
     Cookies.remove('user');
+
+    console.log('logged out');
+
+    try {
+      await axios.get('/users/logout');
+    }catch (e) {
+      console.log(e);
+    }
+  }
+
+  async checkAuth() {
+
+    const {data} = await axios.get('/users/checkAuth').catch((error) => {
+      
+      if(error.response) {
+        console.log(error.response.status);
+        this.logout();
+      }
+      return false;
+    });
+
+    if(data.status == '200') {
+      console.log('Authenticated');
+      return true;
+    }
   }
 
   getCurrentUser() {

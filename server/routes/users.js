@@ -130,7 +130,7 @@ router.post('/login', async (req, res) => {
         if (checkUser) {
             req.session.user = userInfo.email;
             req.session.cookie.username = userInfo.email;
-            redis.setExpire(userInfo.email,userInfo.email,60*30);
+            redis.setExpire(userInfo.email,userInfo.email, 60);
             res.setHeader('Set-Cookie',`user=${userInfo.email}`);
             res.status(200).json({ authenticated: true });
         }
@@ -356,7 +356,7 @@ router.get('/AllLikedVideos/:userId', async (req, res) => {
 
 router.get('/currentUser', async (req, res) => {
     if(!req.session.user){
-        res.status(401).json({ message: "Unauthorized request" });
+        res.status(403).json({ message: "Unauthorized request" });
         return;
     }
 
@@ -367,5 +367,23 @@ router.get('/currentUser', async (req, res) => {
         res.status(500).json({ status: 500, message: e });
     }
 });
+
+router.get('/checkAuth', async (req, res) => {
+    if(!req.session.user){
+        return res.status(403).json({ status:"403",message:"Please login firstly."})
+    }
+    try{
+        let ans = await redis.getKey(req.session.user);
+        if(ans === null){
+            // delete session
+            req.session.destroy();
+            return res.status(401).json({ status:"401",message:"Please login firstly."})
+        }
+        return res.status(200).json({status: "200", message: "Authenticated"});
+    }
+    catch(error){
+        return res.status(403).json({ status:"403",message:"Please login firstly."})
+    }
+})
 
 module.exports = router;

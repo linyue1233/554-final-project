@@ -1,5 +1,5 @@
 import axios, { Axios } from 'axios';
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../App.css';
 import AuthService from '../service/auth_service';
 
@@ -34,6 +34,15 @@ function LoginPage(){
 
 
     }
+
+    useEffect(async () => {
+        let authStatus = await AuthService.checkAuth();
+        console.log(authStatus);
+        if(authStatus) {
+            console.log('Already logged in');
+            window.location.href = '/';
+        }
+    }, []);
 
     body = (
         <div className = 'loginForm'>
