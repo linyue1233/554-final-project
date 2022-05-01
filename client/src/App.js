@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import axios from 'axios';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import ShowSearchVideo from './components/ShowSearchVideo';
@@ -26,9 +26,14 @@ async function postAvatar({ image, description }) {
 
 function App() {
 
-    const currentUser = AuthService.getCurrentUser();
+    // const [currentUser,setCurrentUser] = useState(null);
 
-    console.log(currentUser);
+
+    // useEffect(()=>{
+    //     let tempUser = AuthService.getCurrentUser();
+    //     setCurrentUser(tempUser);
+    // },[currentUser?.email])
+    const currentUser = AuthService.getCurrentUser();
 
     return (
         <BrowserRouter>

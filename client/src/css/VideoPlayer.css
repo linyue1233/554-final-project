@@ -42,6 +42,12 @@ body {
   background-color: #011e3c;
 }
 
+.video-body {
+  height          : 100%;
+  width           : 100%;
+  background-color: #c2d7ee;
+}
+
 .navlink {
   padding         : 0.4rem 0.8rem;
   background-color: white;

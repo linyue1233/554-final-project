@@ -23,7 +23,9 @@ async function changeAvatar(filePath) {
 }
 
 router.get("/logout",async(req,res) => {
+    let userEmail = req.session.user;
     req.session.destroy();
+    redis.setExpire(userEmail,userEmail,1);
     res.redirect("/");
     return;
 })
@@ -130,7 +132,7 @@ router.post('/login', async (req, res) => {
         if (checkUser) {
             req.session.user = userInfo.email;
             req.session.cookie.username = userInfo.email;
-            redis.setExpire(userInfo.email,userInfo.email, 60);
+            redis.setExpire(userInfo.email,userInfo.email, 60*30);
             res.setHeader('Set-Cookie',`user=${userInfo.email}`);
             res.status(200).json({ authenticated: true });
         }

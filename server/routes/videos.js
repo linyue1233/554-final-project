@@ -225,19 +225,51 @@ router.post('/addLikeForVideo',async(req,res)=>{
         }catch(error){
             return res.status(403).json({ status:403,message:"Please login firstly."})
         }
+    }   
+    if(!req.session.user){
+        return res.status(403).json({ status:"403",message:"Please login firstly."})
     }
     let userEmail = req.session.user;
     let videoId = req.body.videoId;
-    let isAddLiked = req.body.liked;
     try{
         let userInfo = await userData.getUserByEmail(userEmail);
+        let updateUser = await userData.addLikeId(userInfo._id,videoId);
         let videoInfo = await videoData.increaseLikeCount(videoId);
-        let updateUser;
-        if( isAddLiked ){
-            updateUser = await userData.addLikeId(userInfo._id);
-        }else{
-            updateUser = await userData.addLikeId(userInfo._id);
+        return res.status(200).json({status:200,data:{user:updateUser,video:videoInfo}});
+    }catch(error){
+        return res.status(400).json({status:400, message:error});
+    }
+    
+
+})
+
+// user remove like for the video
+router.post('/removeLikeForVideo',async(req,res)=>{
+    // check user
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans === null){
+                // delete session
+                req.session.destroy();
+                return res.status(401).json({ status:401,message:"Your status is expired."})
+            }else{
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:403,message:"Please login firstly."})
         }
+    }   
+    if(!req.session.user){
+        return res.status(403).json({ status:"403",message:"Please login firstly."})
+    }
+    let userEmail = req.session.user;
+    let videoId = req.body.videoId;
+    try{
+        let userInfo = await userData.getUserByEmail(userEmail);
+        let updateUser = await userData.removeLikeId(userInfo._id,videoId);
+        let videoInfo = await videoData.decreaseLikeCount(videoId);
         return res.status(200).json({status:200,data:{user:updateUser,video:videoInfo}});
     }catch(error){
         return res.status(400).json({status:400, message:error});

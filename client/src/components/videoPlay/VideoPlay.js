@@ -6,6 +6,7 @@ import { Box, Container, Avatar } from '@mui/material';
 import Comment from './Comment';
 import axios from 'axios';
 import CommentForm from './CommentForm';
+import AuthService from '../../service/auth_service';
 
 function VideoPlay() {
     const { videoId } = useParams();
@@ -13,6 +14,9 @@ function VideoPlay() {
     const [notFound, setNotFound] = useState(false);
     const [videoInfo, setVideoInfo] = useState(undefined);
     const [videoComments, setComments] = useState([]);
+    const [isLikeBtn, setIsLikeBtn] = useState(false);
+    const [likeCount,setLikeCount] = useState(0);
+    const currentUser = AuthService.getCurrentUser();
 
     async function fetchData(videoId) {
         try {
@@ -26,6 +30,7 @@ function VideoPlay() {
                 return;
             }
             setVideoInfo(data);
+            setLikeCount(data.likeCount);
             setLoading(true);
             setNotFound(false);
         } catch (e) {
@@ -64,21 +69,64 @@ function VideoPlay() {
         })
     }
 
+    async function likeBtnStatus() {
+        let userId = currentUser._id;
+        try {
+            const result = await axios.get(`/users/${userId}`);
+            const { data } = result;
+            let userLiked = data.likeId;
+            setIsLikeBtn(userLiked.includes(videoId));
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     useEffect(() => {
         fetchData(videoId);
         fetchComments(videoId);
         addViewCount(videoId);
+        likeBtnStatus();
     }, [videoId]);
 
     const addComment = (text) => {
+        if (!currentUser) {
+            alert("You need to login.")
+            AuthService.logout();
+            window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
+        }
         const params = { 'content': text, "videoId": videoId };
         axios.post(`/comments`, params).then(res => {
             setComments([...videoComments, res.data.data]);
         }).catch(err => {
-            alert("You need to login first")
+            alert("You are expoired, login again plz.");
+            AuthService.logout();
+            window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
         })
     }
 
+    const addLike = ()=>{
+        const params = { "videoId": videoId };
+        axios.post(`/videos/addLikeForVideo`, params).then(res => {
+            setLikeCount(likeCount+1);
+            setIsLikeBtn(!isLikeBtn);
+        }).catch(err => { 
+            alert("You are expoired, login again plz.");
+            AuthService.logout();
+            window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
+        })
+    }
+
+    const removeLike = ()=>{
+        const params = { "videoId": videoId };
+        axios.post(`/videos/removeLikeForVideo`, params).then(res => {
+            setLikeCount(likeCount-1);
+            setIsLikeBtn(!isLikeBtn);
+        }).catch(err => { 
+            // AuthService.logout();
+            alert("You are expoired, login again plz.");
+            window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
+        })
+    }
 
     if (loading || notFound) {
         return (
@@ -107,11 +155,16 @@ function VideoPlay() {
                         ViewCount:{videoInfo.viewCount}
                     </div>
                     <div className="comments-title" style={{ color: 'green', display: 'inline-block' }}>
-                        ViewCount:{videoInfo.likeCount}
+                        LikeCount:{likeCount}
                     </div>
-                    <button className="comment-form-button">
-                        Like
-                    </button>
+                    {currentUser && Boolean(isLikeBtn) ?
+                        (<button className="comment-form-button" onClick={removeLike}>
+                            unLike
+                        </button>) :
+                        (<button className="comment-form-button" onClick={addLike}>
+                            Like
+                        </button>)
+                    }
                 </Box>
                 <div width="100%">
                     <h2 style={{ color: 'green' }}>
