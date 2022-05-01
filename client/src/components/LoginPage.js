@@ -35,17 +35,22 @@ function LoginPage(){
 
     }
 
-    useEffect(async () => {
+    useEffect(() => {
     
-        let currentUser = AuthService.getCurrentUser();
-        let authStatus = await AuthService.checkAuth();
-        if(authStatus) {
-            console.log('Already logged in');
-            window.location.href = '/';
-        }else if(!authStatus && currentUser) {
-            window.location.reload();
+        async function checkState () {
+            let currentUser = AuthService.getCurrentUser();
+            let authStatus = await AuthService.checkAuth();
+            if(authStatus) {
+                console.log('Already logged in');
+                window.location.href = '/';
+            }else if(!authStatus && currentUser) {
+                window.location.reload();
+            }
         }
-    }, []);// eslint-disable-line react-hooks/exhaustive-deps
+
+        checkState();
+        
+    }, []);
 
     body = (
         <div className = 'loginForm'>
