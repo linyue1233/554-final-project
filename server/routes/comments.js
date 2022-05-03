@@ -97,11 +97,10 @@ router.delete('/:commentId', async (req, res) => {
             return res.status(403).json({ status:"403",message:"Please login firstly."})
         }
     }
-    // delete one comment by commentId
     if(!req.session.user){
         return res.status(403).json({ status:"403",message:"Please login firstly."})
     }
-    
+    // delete one comment by commentId
     try {
         const comment = await commentData.deleteOneCommentByCommentId(req.params.commentId);
         res.status(200).json(comment);
@@ -113,18 +112,22 @@ router.delete('/:commentId', async (req, res) => {
 // createComment(content, userId, userName, videoId)
 router.post('/', async (req, res) => {
     // create one comment
-    if(!req.session.user){
-        return res.status(403).json({ status:"403",message:"Please login firstly."})
-    }
-    try{
-        let ans = await redis.getKey(req.session.user);
-        if(ans === null){
-            // delete session
-            req.session.destroy();
-            return res.status(401).json({ status:"401",message:"Please login firstly."})
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans === null){
+                // delete session
+                req.session.destroy();
+                return res.status(401).json({ status:"401",message:"Your status is expired."})
+            }else{
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
         }
     }
-    catch(error){
+    if(!req.session.user){
         return res.status(403).json({ status:"403",message:"Please login firstly."})
     }
     try {

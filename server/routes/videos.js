@@ -13,6 +13,18 @@ const {uploadFile} = require('../config/awsS3');
 const redis = require('../util/redisUtil')
 
 router.get('/', async (req, res) => {
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
+    }
     try {
         let videoList = await videoData.getAllVideos();
         res.status(200).json(videoList);
@@ -22,6 +34,18 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/get3VideosSortByLikeCount', async (req, res) => {
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
+    }
     try {
         const recommendList = await videoData.get3VideosSortByLikeCount();
         res.status(200).json(recommendList);
@@ -31,6 +55,18 @@ router.get('/get3VideosSortByLikeCount', async (req, res) => {
 });
 // get 5 videos by tag and year, ordering by likeCount
 router.get('/get5VideosByTagAndYear/:tag/:year', async (req, res) => {
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
+    }
     const tag = req.params.tag;
     const year = req.params.year;
     try {
@@ -47,6 +83,18 @@ router.get('/get5VideosByTagAndYear/:tag/:year', async (req, res) => {
 });
 // get 5 videos by tag, ordering by likeCount
 router.get('/get5VideosByTag/:tag', async (req, res) => {
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
+    }
     const tag = req.params.tag;
     try {
         verify.isString(tag);
@@ -60,6 +108,18 @@ router.get('/get5VideosByTag/:tag', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
+    }
     try {
         verify.isString(req.params.id, 'Video Id');
         verify.checkSpace(req.params.id, 'Video Id');
@@ -71,6 +131,24 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/videoCover', upload.single('cover'), async (req, res) => {
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans === null){
+                // delete session
+                req.session.destroy();
+                return res.status(401).json({ status:"401",message:"Your status is expired."})
+            }else{
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
+    }
+    if(!req.session.user){
+        return res.status(403).json({ status:"403",message:"Please login firstly."})
+    }
     if( req.file===null || req.file === undefined ){
         res.status(400).json({ message: 'Please choose a file to upload.' });
         return;
@@ -100,6 +178,24 @@ router.post('/videoCover', upload.single('cover'), async (req, res) => {
 });
 
 router.post('/uploadVideo', upload.single('video'),async(req,res)=>{
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans === null){
+                // delete session
+                req.session.destroy();
+                return res.status(401).json({ status:"401",message:"Your status is expired."})
+            }else{
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
+    }
+    if(!req.session.user){
+        return res.status(403).json({ status:"403",message:"Please login firstly."})
+    }
     if( req.file===null || req.file === undefined ){
         res.status(400).json({ message: 'Please choose a file to upload.' });
         return;
@@ -181,6 +277,18 @@ router.delete('/delete/:videoId', async (req, res) => {
 });
 
 router.post('/search', async (req, res) => {
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
+    }
     let searchBody = req.body;
 
    
@@ -196,6 +304,18 @@ router.post('/search', async (req, res) => {
 });
 
 router.get('/getAllVideosByTag/:tag/:type', async (req, res) => {
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
+    }
     try {
         verify.isString(req.params.tag, 'Tag');
         // verify.isString(req.params.type, 'Type'); 

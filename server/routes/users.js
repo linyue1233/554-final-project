@@ -31,6 +31,24 @@ router.get("/logout",async(req,res) => {
 })
 
 router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans === null){
+                // delete session
+                req.session.destroy();
+                return res.status(401).json({ status:"401",message:"Your status is expired."})
+            }else{
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
+    }
+    if(!req.session.user){
+        return res.status(403).json({ status:"403",message:"Please login firstly."})
+    }
     if( req.file===null || req.file === undefined ){
         res.status(400).json({ message: 'Please choose a file to upload.' });
         return;
@@ -64,6 +82,18 @@ router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
 
 //get all users
 router.get('/all', async (req, res) => {
+    if(req.session.user){
+        try{
+            let ans = await redis.getKey(req.session.user);
+            if(ans !== null){
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey,userKey,60*30);
+            }
+        }catch(error){
+            return res.status(403).json({ status:"403",message:"Please login firstly."})
+        }
+    }
     try {
         let userList = await userData.getAllUsers();
         res.status(200).json(userList);
