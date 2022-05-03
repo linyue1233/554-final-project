@@ -15,7 +15,7 @@ function VideoPlay() {
     const [videoInfo, setVideoInfo] = useState(undefined);
     const [videoComments, setComments] = useState([]);
     const [isLikeBtn, setIsLikeBtn] = useState(false);
-    const [likeCount,setLikeCount] = useState(0);
+    const [likeCount, setLikeCount] = useState(0);
     const currentUser = AuthService.getCurrentUser();
 
     async function fetchData(videoId) {
@@ -93,6 +93,11 @@ function VideoPlay() {
             alert("You need to login.")
             AuthService.logout();
             window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
+            return;
+        }
+        if (text.trim() === "") {
+            alert("Your comment is invalid.");
+            return;
         }
         const params = { 'content': text, "videoId": videoId };
         axios.post(`/comments`, params).then(res => {
@@ -104,24 +109,24 @@ function VideoPlay() {
         })
     }
 
-    const addLike = ()=>{
+    const addLike = () => {
         const params = { "videoId": videoId };
         axios.post(`/videos/addLikeForVideo`, params).then(res => {
-            setLikeCount(likeCount+1);
+            setLikeCount(likeCount + 1);
             setIsLikeBtn(!isLikeBtn);
-        }).catch(err => { 
+        }).catch(err => {
             alert("You are expoired, login again plz.");
             AuthService.logout();
             window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
         })
     }
 
-    const removeLike = ()=>{
+    const removeLike = () => {
         const params = { "videoId": videoId };
         axios.post(`/videos/removeLikeForVideo`, params).then(res => {
-            setLikeCount(likeCount-1);
+            setLikeCount(likeCount - 1);
             setIsLikeBtn(!isLikeBtn);
-        }).catch(err => { 
+        }).catch(err => {
             // AuthService.logout();
             alert("You are expoired, login again plz.");
             window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
@@ -138,17 +143,24 @@ function VideoPlay() {
         return (
             <div className="App-body">
                 <div width="100%">
-                    <h1 style={{ color: 'red' }}>Video Name: {videoInfo.videoName}</h1>
+                    <h1 style={{color:"#6D3BF6" }}>Video Name: {videoInfo.videoName}</h1>
                 </div>
                 <br></br>
                 <div className="video-player" key={videoInfo.videoName}>
-                    <ReactPlayer
-                        id={videoInfo.videoName}
+                    <label for="myVideo">
+                    </label>
+                    <video id = "myVideo" width="1024px"
+                        height="480px"
+                        controls>
+                            <source src={videoInfo.videoPath}  type="video/mp4"></source>
+                    </video>
+                    {/* <ReactPlayer
+                        id="myVideo"
                         width="1024px"
                         height="480px"
                         controls
                         url={videoInfo.videoPath}
-                    ></ReactPlayer>
+                    ></ReactPlayer> */}
                 </div>
                 <Box mt={2} sx={{ textAlign: 'center' }}>
                     <div className="comments-title" style={{ color: 'green', display: 'inline-block' }}>

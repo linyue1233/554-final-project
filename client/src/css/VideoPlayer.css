@@ -161,6 +161,7 @@ footer {
 }
 
 .comment-form-title {
+  color:#ffffff;
   font-size: 22px;
 }
 
@@ -175,19 +176,22 @@ footer {
 .comment-form-button {
   font-size    : 16px;
   padding      : 8px 16px;
-  background   : rgb(59, 130, 246);
+  background   : rgb(109, 59, 246);
   border-radius: 8px;
   color        : white;
 }
 
 .comment-form-button:hover:enabled {
   cursor    : pointer;
-  background: rgb(37, 99, 235);
+  color:#ffffff;
+  /* background: rgb(37, 99, 235); */
 }
 
 .comment-form-button:disabled {
+  color:#ffffff;
   opacity: 0.7;
-  cursor : default;
+  background   :rgb(240, 59, 246);
+  /* cursor : default; */
 }
 
 .comment-form-cancel-button {
@@ -212,6 +216,7 @@ footer {
 }
 
 .comment-content {
+  color:#ffffff;
   display: flex;
 }
 
@@ -222,6 +227,7 @@ footer {
 }
 
 .comment-text {
+  color:#ffffff;
   font-size: 18px;
 }
 
