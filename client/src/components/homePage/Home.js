@@ -5,29 +5,33 @@ import Classification from './Classification';
 
 function Home() {
     return (
-        <div className="container">
-            <div className="text-center">
+        <div className="container" key="home-container">
+            <div className="text-center" key="carousel">
                 <Carousel />
             </div>
             <br />
             <br />
-            <div>
+            <div key="action">
                 <Classification tag={'action'} />
             </div>
             <br />
-            <div>
+            <br />
+            <div key="love">
                 <Classification tag={'love'} />
             </div>
             <br />
-            <div>
+            <br />
+            <div key="thriller">
                 <Classification tag={'thriller'} />
             </div>
             <br />
-            <div>
+            <br />
+            <div key="comedy">
                 <Classification tag={'comedy'} />
             </div>
             <br />
-            <div>
+            <br />
+            <div key="documentary">
                 <Classification tag={'documentary'} />
             </div>
         </div>

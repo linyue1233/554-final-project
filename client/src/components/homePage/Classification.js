@@ -42,46 +42,51 @@ function Classification(props) {
     } else {
         videoCard = (
             <div className="card col">
-                <p className="card-text">
-                    <h5 className="card-title">No Videos Found</h5>
-                </p>
+                <p className="card-title text-center">No Videos Found</p>
             </div>
         );
     }
 
     return (
         <div className="container">
-            <h1 className="title text-white">
-                {tag}
-                <small>
-                    <ButtonGroup variant="text" aria-label="text button group">
-                        <Button
-                            onClick={() => {
-                                setYear(2022);
-                            }}
-                        >
-                            2022
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                setYear(2021);
-                            }}
-                        >
-                            2021
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                setYear(2020);
-                            }}
-                        >
-                            2020
-                        </Button>
-                        <Button>
-                            <Link to={`/videos/getAllVideosByTag/${tag}/likeCount`}>All</Link>
-                        </Button>
-                    </ButtonGroup>
-                </small>
-            </h1>
+            <div className="row">
+                <h1 className="title col-md-auto cap-first-letter">{tag}</h1>
+                <ButtonGroup
+                    className="col-md-auto"
+                    variant="text"
+                    aria-label="text button group"
+                >
+                    <Button
+                        onClick={() => {
+                            setYear(2022);
+                        }}
+                    >
+                        2022
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            setYear(2021);
+                        }}
+                    >
+                        2021
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            setYear(2020);
+                        }}
+                    >
+                        2020
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            window.location.href = `/videos/getAllVideosByTag/${tag}/likeCount`;
+                        }}
+                    >
+                        All
+                    </Button>
+                </ButtonGroup>
+            </div>
+            <br />
             <div className="container">
                 <div className="row">{videoCard}</div>
             </div>

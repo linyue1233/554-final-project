@@ -1,252 +1,168 @@
-html {
-  height: 100%;
-}
-
-body {
-  min-height      : 100%;
-  margin          : 0;
-  padding         : 0;
-  position        : relative;
-  background-color: #011e3c;
-}
-
-.App-logo {
-  height        : 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #071a2f;
-  height          : 64px;
-  width           : 100%;
-  color           : white;
-  text-align      : left;
-  position        : relative;
-  padding         : 20px;
-}
-
 .video-player {
-  display        : flex;
-  justify-content: center;
-}
-
-.App-body {
-  height          : 100%;
-  width           : 100%;
-  background-color: #011e3c;
+    display: flex;
+    justify-content: center;
 }
 
 .video-body {
-  height          : 100%;
-  width           : 100%;
-  background-color: #c2d7ee;
-}
-
-.navlink {
-  padding         : 0.4rem 0.8rem;
-  background-color: white;
-  border-radius   : 3px;
-  color           : #28547a;
-  text-decoration : none !important;
-  margin-left     : 10px;
-}
-
-.navlink:hover {
-  background-color: transparent;
-  color           : white;
-  border          : 1px solid white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-white {
-  color: white;
-}
-
-footer {
-  position        : absolute;
-  bottom          : 0;
-  width           : 100%;
-  height          : auto;
-  background-color: #071a2f;
+    height: 100%;
+    width: 100%;
+    background-color: #c2d7ee;
 }
 
 .user-content {
-  color           : black;
-  background-color: grey;
+    color: black;
+    background-color: grey;
 }
 
 .user-avatar {
-  margin-top : 10px;
-  margin-left: 10px;
-  float      : left;
+    margin-top: 10px;
+    margin-left: 10px;
+    float: left;
 }
 
 .user-info {
-  font-size  : 16px;
-  margin-top : 10px;
-  float      : left;
-  margin-left: 15px;
+    font-size: 16px;
+    margin-top: 10px;
+    float: left;
+    margin-left: 15px;
 }
 
 .user-tab {
-  background-color: white;
+    background-color: white;
 }
 
 .admin-tab {
-  background-color: white;
-  min-height      : 170px;
+    background-color: white;
+    min-height: 170px;
 }
 
 .no-comment {
-  margin-left: 10px;
+    margin-left: 10px;
 }
 
 .video-link {
-  text-decoration: none !important;
-  color          : black
+    text-decoration: none !important;
+    color: black;
 }
 
 .video-link:hover {
-  color: rgb(37, 133, 170)
+    color: rgb(37, 133, 170);
 }
 
 .upload-form {
-  background-color: silver;
+    background-color: silver;
 }
 
 .view-all-likes-link {
-  text-decoration: none !important;
-  color          : black;
-  width          : 10px;
-  margin-top     : 80px;
-  margin-left    : 30px;
-  font-size      : 20px;
+    text-decoration: none !important;
+    color: black;
+    width: 10px;
+    margin-top: 80px;
+    margin-left: 30px;
+    font-size: 20px;
 }
 
 .comments {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .comments-title {
-  font-size    : 30px;
-  margin-bottom: 20px;
-  width: 10em
+    font-size: 30px;
+    margin-bottom: 20px;
+    width: 10em;
 }
 
 .comments-container {
-  margin-top: 40px;
+    margin-top: 40px;
 }
 
 .comment-form-title {
-  color:#ffffff;
-  font-size: 22px;
+    color: #ffffff;
+    font-size: 22px;
 }
 
 .comment-form-textarea {
-  width        : 80%;
-  height       : 80px;
-  margin-bottom: 8px;
-  margin-top   : 8px;
-  border       : 1px solid rgb(107, 114, 12);
+    width: 80%;
+    height: 80px;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    border: 1px solid rgb(107, 114, 12);
 }
 
 .comment-form-button {
-  font-size    : 16px;
-  padding      : 8px 16px;
-  background   : rgb(109, 59, 246);
-  border-radius: 8px;
-  color        : white;
+    font-size: 16px;
+    padding: 8px 16px;
+    background: rgb(109, 59, 246);
+    border-radius: 8px;
+    color: white;
 }
 
 .comment-form-button:hover:enabled {
-  cursor    : pointer;
-  color:#ffffff;
-  /* background: rgb(37, 99, 235); */
+    cursor: pointer;
+    color: #ffffff;
+    /* background: rgb(37, 99, 235); */
 }
 
 .comment-form-button:disabled {
-  color:#ffffff;
-  opacity: 0.7;
-  background   :rgb(240, 59, 246);
-  /* cursor : default; */
+    color: #ffffff;
+    opacity: 0.7;
+    background: rgb(240, 59, 246);
+    /* cursor : default; */
 }
 
 .comment-form-cancel-button {
-  margin-left: 10px;
+    margin-left: 10px;
 }
 
 .comment {
-  display      : flex;
-  margin-bottom: 28px;
+    display: flex;
+    margin-bottom: 28px;
 }
 
 .comment-image-container {
-  margin-right: 12px;
+    margin-right: 12px;
 }
 
 .comment-image-container img {
-  border-radius: 50px;
+    border-radius: 50px;
 }
 
 .comment-right-part {
-  width: 100%;
+    width: 100%;
 }
 
 .comment-content {
-  color:#ffffff;
-  display: flex;
+    color: #ffffff;
+    display: flex;
 }
 
 .comment-author {
-  margin-right: 8px;
-  font-size   : 20px;
-  color       : rgb(59, 130, 246);
+    margin-right: 8px;
+    font-size: 20px;
+    color: rgb(59, 130, 246);
 }
 
 .comment-text {
-  color:#ffffff;
-  font-size: 18px;
+    color: #ffffff;
+    font-size: 18px;
 }
 
 .comment-actions {
-  display   : flex;
-  font-size : 12px;
-  color     : rgb(51, 51, 51);
-  cursor    : pointer;
-  margin-top: 8px;
+    display: flex;
+    font-size: 12px;
+    color: rgb(51, 51, 51);
+    cursor: pointer;
+    margin-top: 8px;
 }
 
 .comment-action {
-  margin-right: 8px;
+    margin-right: 8px;
 }
 
 .comment-action:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .replies {
-  margin-top: 20px;
+    margin-top: 20px;
 }

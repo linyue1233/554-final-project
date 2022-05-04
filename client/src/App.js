@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import ShowSearchVideo from './components/ShowSearchVideo';
@@ -25,9 +25,7 @@ async function postAvatar({ image, description }) {
 }
 
 function App() {
-
     // const [currentUser,setCurrentUser] = useState(null);
-
 
     // useEffect(()=>{
     //     let tempUser = AuthService.getCurrentUser();
@@ -48,28 +46,37 @@ function App() {
                         <div className="col-md-4 offset-md-3">
                             <SearchVideo />
                         </div>
-                        {currentUser && <div className="col-md-2 offset-md-2">
-                            <NavLink to={`/users/${currentUser._id}`}>
-                                {currentUser.email}
-                            </NavLink>
-                            <NavLink className="navlink" to="/" onClick={() => {AuthService.logout(); window.location.href = '/';}}>
-                                Logout
-                            </NavLink>
-                        </div>
-                        }
-                        {!currentUser && <div className="col-md-2 offset-md-2">
-                            <NavLink className="navlink" to="/login">
-                                Login
-                            </NavLink>
-                            <NavLink className="navlink" to="/signup">
-                                Signup
-                            </NavLink>
-                        </div>
-                        }
+                        {currentUser && (
+                            <div className="col-md-2 offset-md-2">
+                                <NavLink to={`/users/${currentUser._id}`}>
+                                    {currentUser.email}
+                                </NavLink>
+                                <NavLink
+                                    className="navlink"
+                                    to="/"
+                                    onClick={() => {
+                                        AuthService.logout();
+                                        window.location.href = '/';
+                                    }}
+                                >
+                                    Logout
+                                </NavLink>
+                            </div>
+                        )}
+                        {!currentUser && (
+                            <div className="col-md-2 offset-md-2">
+                                <NavLink className="navlink" to="/login">
+                                    Login
+                                </NavLink>
+                                <NavLink className="navlink" to="/signup">
+                                    Signup
+                                </NavLink>
+                            </div>
+                        )}
                     </div>
                 </header>
-                <br />
                 <div className="App-body">
+                    <br />
                     <Routes>
                         <Route index path="/" element={<Home />} />
                         <Route index path="/videoPlay/:videoId" element={<VideoPlay />} />
