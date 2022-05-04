@@ -54,15 +54,10 @@ function Carousel() {
                                         : ' carousel-item'
                                 }
                             >
-                                <img
-                                    src={video.cover}
-                                    alt={video.videoName}
-                                    type="button"
-                                    onClick={() => {
-                                        window.location.href = `/videoPlay/${video._id}`;
-                                    }}
-                                />
-                                <div className="carousel-caption d-none d-md-block">
+                                <a href={`/videoPlay/${video._id}`}>
+                                    <img src={video.cover} alt={video.videoName} />
+                                </a>
+                                <div className="carousel-caption d-none d-md-block black-color">
                                     <h1>{video.videoName}</h1>
                                     <p>{video.description}</p>
                                 </div>
@@ -77,10 +72,10 @@ function Carousel() {
                     data-bs-slide="prev"
                 >
                     <span
-                        className="carousel-control-prev-icon"
+                        className="carousel-control-prev-icon black-bg"
                         aria-hidden="true"
                     ></span>
-                    <span className="visually-hidden">Previous</span>
+                    <span className="visually-hidden black-color">Previous</span>
                 </button>
                 <button
                     className="carousel-control-next"
@@ -89,10 +84,10 @@ function Carousel() {
                     data-bs-slide="next"
                 >
                     <span
-                        className="carousel-control-next-icon"
+                        className="carousel-control-next-icon black-bg"
                         aria-hidden="true"
                     ></span>
-                    <span className="visually-hidden">Next</span>
+                    <span className="visually-hidden black-color">Next</span>
                 </button>
             </div>
         );
