@@ -1,4 +1,4 @@
-import Cookies from 'js-cookie';
+//import Cookies from 'js-cookie';
 import axios from 'axios';
 
 class AuthService {
@@ -10,11 +10,11 @@ class AuthService {
         isAdmin: data.isAdmin
     }
 
-    Cookies.set('user', JSON.stringify(user), { path: '' });
+    localStorage.setItem("user", JSON.stringify(user));
   }
 
   async logout() {
-    Cookies.remove('user');
+    localStorage.removeItem("user");
 
     try {
       await axios.get('/users/logout');
@@ -44,12 +44,7 @@ class AuthService {
   }
 
   getCurrentUser() {
-    if(Cookies.get('user')) {
-        return JSON.parse(Cookies.get('user'));
-    }
-    else{
-        return null;
-    }
+    return JSON.parse(localStorage.getItem('user'));;
   }
 }
 

@@ -108,8 +108,8 @@ function Admin () {
         try{
             setLoadingSearch(true);
             const {data} = await axios.get(`/comments/video/${searchVideo}`);
-            console.log(data);
-            setComments(data);
+            console.log(data.data);
+            setComments(data.data);
             setLoadingSearch(false);
         }catch(e) {
             setComments("don't have any comments");
@@ -134,9 +134,10 @@ function Admin () {
                 alert('Succesfully Deleted');
                 handleCloseDeleteDialog();
             }
-        } catch (e) {
+        } catch (error) {
             setLoadingDelete(false);
-            alert(e.message);
+            console.log(error.response);
+            alert(JSON.stringify(error.response.data));
             handleCloseDeleteDialog();
         }  
 
