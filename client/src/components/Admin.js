@@ -38,6 +38,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LoadingButton from '@mui/lab/LoadingButton';
+import auth_service from '../service/auth_service';
 
 function TabPanel(props) {
     const { children, value, index } = props;
@@ -60,6 +61,7 @@ function Admin () {
 
     const [videoData, setVideoData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [checking, setChecking] = useState(true);
     const [error, setError] = useState(null);
     const [tabValue, setTabValue] = useState(0);
     const [searchVideo, setSearchVideo] = useState('');
@@ -234,6 +236,23 @@ function Admin () {
 
     useEffect (() => {
 
+        async function checkAdmin() {
+            if(await auth_service.checkAuth()){
+                let currentUser = auth_service.getCurrentUser();
+                if(!currentUser.isAdmin){
+                    window.location.href = '/';
+                    alert('Not Authorized');
+                }else{
+                    setChecking(false);
+                }
+            }else {
+                window.location.href = '/';
+                alert('Not Logged in'); 
+            }
+
+            return true;
+        }
+        
         async function fetchData() {
             try{
                 setLoading(true);
@@ -247,10 +266,14 @@ function Admin () {
             }
         }
 
-        fetchData();
+        if(checkAdmin()) fetchData();
+        
     }, []);
 
-    if(!loading){
+    if(loading) {
+        return <div><CircularProgress sx={{m: 2}}/></div>
+    }
+    else if(!loading && !checking){
         return(
             <div className='admin-tab'>
                 <Box sx={{ width: '100%' }}>
@@ -462,9 +485,8 @@ function Admin () {
                     </Dialog>
                 </div>
         );
-    } else if(loading) {
-        return <p>loading...</p>
-    } else if (error) {
+    } 
+    else if (!checking && error) {
         return <p>{error.message}</p>
     }
     

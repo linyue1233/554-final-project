@@ -1,5 +1,7 @@
 const dbConnection = require('../config/mongoConnection');
+const mongoCollections = require('../config/mongoCollections');
 const data = require('../data/');
+const user = mongoCollections.users;
 const users = data.users;
 const videos = data.videos;
 const comments = data.comments;
@@ -35,6 +37,19 @@ const main = async () => {
         'jonyabcdef@gmail.com',
         '123456',
         'https://benchmoon-554.s3.amazonaws.com/1649987446046-WechatIMG915.jpeg'
+    );
+
+    const admin = await users.createUser(
+        'admin',
+        'thisisadmin@gmail.com',
+        '123456',
+        'https://benchmoon-554.s3.amazonaws.com/1649987446046-WechatIMG915.jpeg'
+    );
+
+    const userCollection = await user();
+    await userCollection.updateOne( 
+        { _id: admin._id },
+        { $set: { isAdmin: true } }
     );
 
     try {

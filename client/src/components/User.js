@@ -27,6 +27,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Pagination from '@mui/material/Pagination';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
+import AuthService from '../service/auth_service';
 
 function TabPanel(props) {
     const { children, value, index } = props;
@@ -51,6 +52,7 @@ function User () {
     const [error, setError] = useState(null);
     const [tabValue, setTabValue] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [checking, setChecking] = useState(true);
     const [loadingContent, setLoadingContent] = useState(false);
     const { id } = useParams();
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -168,6 +170,18 @@ function User () {
     }
 
     useEffect(() => {
+
+        async function checkState () {
+            let authStatus = await AuthService.checkAuth();
+            if(!authStatus) {
+                alert('Not logged in');
+                window.location.href = '/';
+            }else{
+                setChecking(false);
+            }
+        }
+
+        checkState();
         async function fetchData() {
             try{
                 setLoading(true);
@@ -176,7 +190,7 @@ function User () {
                 setUserData(data);
                 setLoading(false);
             }catch(e) {
-                setError(e);
+                setError(JSON.stringify(e.response.data));
                 setLoading(false);
             }
         }
@@ -214,9 +228,9 @@ function User () {
 
     }, [userData]);// eslint-disable-line react-hooks/exhaustive-deps
 
-    if (error) {
+    if (!checking && error) {
         return <div>{error}</div>
-    } else if (userData) {
+    } else if (!checking && userData) {
         return( 
         <div className='user-content'>
             <div className='user-avatar'>
@@ -461,7 +475,7 @@ function User () {
             </div>
         </div>);
     }else if(loading){
-        return <p>loading</p>
+        return <div><CircularProgress sx={{m: 2}}/></div>
     }
     
 }

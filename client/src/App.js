@@ -46,7 +46,27 @@ function App() {
                         <div className="col-md-4 offset-md-3">
                             <SearchVideo />
                         </div>
-                        {currentUser && (
+                        {currentUser && currentUser.isAdmin &&
+                            <div className="col-md-2 offset-md-1">
+                                <NavLink className="navlink" to="/admin">
+                                    Admin
+                                </NavLink>
+                                <NavLink to={`/users/${currentUser._id}`}>
+                                    {currentUser.email}
+                                </NavLink>
+                                <NavLink
+                                    className="navlink"
+                                    to="/"
+                                    onClick={() => {
+                                        AuthService.logout();
+                                        window.location.href = '/';
+                                    }}
+                                >
+                                    Logout
+                                </NavLink>
+                            </div>
+                        }
+                        {currentUser && !currentUser.isAdmin &&
                             <div className="col-md-2 offset-md-2">
                                 <NavLink to={`/users/${currentUser._id}`}>
                                     {currentUser.email}
@@ -62,7 +82,7 @@ function App() {
                                     Logout
                                 </NavLink>
                             </div>
-                        )}
+                        }
                         {!currentUser && (
                             <div className="col-md-2 offset-md-2">
                                 <NavLink className="navlink" to="/login">
