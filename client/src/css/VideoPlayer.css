@@ -1,86 +1,13 @@
-/* html {
-  height: 100%;
-}
-
-body {
-  min-height      : 100%;
-  margin          : 0;
-  padding         : 0;
-  position        : relative;
-  background-color: #011e3c;
-} */
-/* 
-.App-header {
-    background-color: #071a2f;
-    height: 64px;
-    width: 100%;
-    color: white;
-    text-align: left;
-    position: relative;
-    padding: 20px;
-} */
-
 .video-player {
     display: flex;
     justify-content: center;
 }
-/* 
-.App-body {
-  height          : 100%;
-  width           : 100%;
-  background-color: #011e3c;
-} */
 
 .video-body {
     height: 100%;
     width: 100%;
     background-color: #c2d7ee;
 }
-/* 
-.navlink {
-    padding: 0.4rem 0.8rem;
-    background-color: white;
-    border-radius: 3px;
-    color: #28547a;
-    text-decoration: none !important;
-    margin-left: 10px;
-}
-
-.navlink:hover {
-    background-color: transparent;
-    color: white;
-    border: 1px solid white;
-} */
-/* 
-.App-link {
-  color: #61dafb;
-} */
-
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-/* 
-.text-center {
-  text-align: center;
-}
-
-.text-white {
-  color: white;
-}
-
-footer {
-  position        : absolute;
-  bottom          : 0;
-  width           : 100%;
-  height          : auto;
-  background-color: #071a2f;
-} */
 
 .user-content {
     color: black;
