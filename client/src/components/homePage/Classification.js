@@ -88,7 +88,7 @@ function Classification(props) {
             </div>
             <br />
             <Grid key='card' container className="allVideo" spacing={0} direction="row" alignItems="center" justifyContent="flex-start">
-                {videoData && videoData.map((video) => { return <OneVideo video={video} /> })}
+                {videoCard}
             </Grid>
         </div>
     );
