@@ -110,6 +110,12 @@ function VideoPlay() {
     }
 
     const addLike = () => {
+        if (!currentUser) {
+            alert("You need to login.")
+            AuthService.logout();
+            window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
+            return;
+        }
         const params = { "videoId": videoId };
         axios.post(`/videos/addLikeForVideo`, params).then(res => {
             setLikeCount(likeCount + 1);
