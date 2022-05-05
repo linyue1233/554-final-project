@@ -109,7 +109,7 @@ function App() {
                             element={<AllVideo />}
                         />
                         <Route
-                            path="/videos/getAllVideosBySearchName/:searchTerm"
+                            path="/videos/getAllVideosBySearchName/search=:searchTerm"
                             element={<ShowSearchVideo />}
                         />
                     </Routes>

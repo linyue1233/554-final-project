@@ -29,7 +29,7 @@ function ShowSearchVideo(){
                let {data} = await axios(
                   {
                      method: 'POST',
-                     url: '/videos/search',
+                     url: '/videos/search=' + searchTerm ,
                      data:{
                            searchTerm: searchTerm
                      }
@@ -46,6 +46,7 @@ function ShowSearchVideo(){
          }
          fetchData();
    },[searchTerm]);
+
     return videoData ? (
         <Grid sx={{ textAlign: 'center',display: 'flex'}} direction="column" alignItems="center" justifyContent="center"> 
         <Grid>

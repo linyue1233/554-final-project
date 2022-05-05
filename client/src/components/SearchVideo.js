@@ -12,25 +12,8 @@ const navigate = useNavigate();
     }
 
     const handleSubmit = async(e)=>{
-        // try {
-        //     e.preventDefault();
-        //     let {data} = await axios(
-        //         {
-        //             method: 'POST',
-        //             url: '/videos/search',
-        //             data:{
-        //                 searchTerm: searchTerm
-        //             }
-        //         }
-        //     );
-        //    setResult(data);
-        // } catch (e) {
-        //     console.log(e);
-        // }
         e.preventDefault();
-        console.log("asdasdad");
-         navigate(`/videos/getAllVideosBySearchName/${searchTerm}`);
-        // <Link to={`/videos/getAllVideosBySearchName/${searchTerm}`}/> 
+        navigate(`/videos/getAllVideosBySearchName/search=${searchTerm}`);
     }
 
 

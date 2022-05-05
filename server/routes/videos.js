@@ -180,7 +180,7 @@ router.delete('/delete/:videoId', async (req, res) => {
     }
 });
 
-router.post('/search', async (req, res) => {
+router.post('/search=:searchTerm', async (req, res) => {
     let searchBody = req.body;
 
    
