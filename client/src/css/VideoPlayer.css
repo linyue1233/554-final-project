@@ -139,12 +139,13 @@
 .comment-author {
     margin-right: 8px;
     font-size: 20px;
-    color: rgb(59, 130, 246);
+    color: #0073eb
 }
 
 .comment-text {
     color: #ffffff;
     font-size: 18px;
+    color: #0073eb
 }
 
 .comment-actions {

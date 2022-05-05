@@ -13,7 +13,7 @@ const Comment = ({comment}) => {
                     <div className="comment-author">
                         {comment.userName}
                     </div>
-                    <div>{comment.date.year}-{comment.date.month}-{comment.date.day}</div>
+                    <div style={{color:"black"}}>{comment.date.year}-{comment.date.month}-{comment.date.day}</div>
                 </div>
                 <div className="comment-text">
                     {comment.content}

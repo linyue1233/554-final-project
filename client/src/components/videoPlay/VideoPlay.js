@@ -1,14 +1,13 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import ReactPlayer from 'react-player';
+import { useParams } from 'react-router-dom';
 import '../../css/VideoPlayer.css';
-import { Box, Container, Avatar } from '@mui/material';
+import { Box} from '@mui/material';
 import Comment from './Comment';
 import axios from 'axios';
 import CommentForm from './CommentForm';
 import AuthService from '../../service/auth_service';
 
-function VideoPlay() {
+function VideoPlay(props) {
     const { videoId } = useParams();
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
@@ -82,10 +81,11 @@ function VideoPlay() {
     }
 
     useEffect(() => {
+        likeBtnStatus();
         fetchData(videoId);
         fetchComments(videoId);
-        addViewCount(videoId);
-        likeBtnStatus();
+        currentUser && addViewCount(videoId);
+
     }, [videoId]);
 
     const addComment = (text) => {
@@ -112,6 +112,7 @@ function VideoPlay() {
     const addLike = () => {
         if (!currentUser) {
             alert("You need to login.")
+            props.onChangeState();
             AuthService.logout();
             window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
             return;
@@ -123,11 +124,19 @@ function VideoPlay() {
         }).catch(err => {
             alert("You are expoired, login again plz.");
             AuthService.logout();
+            props.onChangeState();
             window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
         })
     }
 
     const removeLike = () => {
+        if (!currentUser) {
+            alert("You need to login.")
+            props.onChangeState();
+            AuthService.logout();
+            window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
+            return;
+        }
         const params = { "videoId": videoId };
         axios.post(`/videos/removeLikeForVideo`, params).then(res => {
             setLikeCount(likeCount - 1);
@@ -135,6 +144,7 @@ function VideoPlay() {
         }).catch(err => {
             // AuthService.logout();
             alert("You are expoired, login again plz.");
+            props.onChangeState();
             window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
         })
     }
@@ -149,24 +159,17 @@ function VideoPlay() {
         return (
             <div className="App-body">
                 <div width="100%">
-                    <h1 style={{color:"#6D3BF6" }}>Video Name: {videoInfo.videoName}</h1>
+                    <h1 style={{ color: "#6D3BF6" }}>Video Name: {videoInfo.videoName}</h1>
                 </div>
                 <br></br>
                 <div className="video-player" key={videoInfo.videoName}>
                     <label for="myVideo">
                     </label>
-                    <video id = "myVideo" width="1024px"
+                    <video id="myVideo" width="1024px"
                         height="480px"
                         controls>
-                            <source src={videoInfo.videoPath}  type="video/mp4"></source>
+                        <source src={videoInfo.videoPath} type="video/mp4"></source>
                     </video>
-                    {/* <ReactPlayer
-                        id="myVideo"
-                        width="1024px"
-                        height="480px"
-                        controls
-                        url={videoInfo.videoPath}
-                    ></ReactPlayer> */}
                 </div>
                 <Box mt={2} sx={{ textAlign: 'center' }}>
                     <div className="comments-title" style={{ color: 'green', display: 'inline-block' }}>
@@ -185,26 +188,32 @@ function VideoPlay() {
                     }
                 </Box>
                 <div width="100%">
-                    <h2 style={{ color: 'green' }}>
+                    <h2 style={{ color: '#6D3BF6' }}>
                         Description: {videoInfo.description}
                     </h2>
                 </div>
                 {/* comments part */}
                 <div className="comments">
-                    <h3 className="comments-title" style={{ color: 'green' }}>
+                    <h3 className="comments-title" style={{ color: '#6D3BF6' }}>
                         Comments
                     </h3>
-                    <div className="comment-form-title">Write comment</div>
+                    <div className="comment-form-title" style={{ color: 'black' }}>Write comment</div>
                     <CommentForm submitLable="Write" handleSubmit={addComment}>
 
                     </CommentForm>
-                    <div className="comments-container">
+                    {videoComments.length > 0 ? (<div className="comments-container">
                         {videoComments && videoComments.map((comment) => (
                             <Comment key={comment.id} comment={comment}>
                                 comment.content
                             </Comment>
                         ))}
-                    </div>
+                    </div>) :
+                        (
+                        <div style={{fontSize: "40px"}}>
+                            There are no comments for this video, you can write now.
+                        </div>)
+                    }
+
                 </div>
             </div>
         );

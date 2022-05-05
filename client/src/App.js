@@ -25,13 +25,18 @@ async function postAvatar({ image, description }) {
 }
 
 function App() {
-    // const [currentUser,setCurrentUser] = useState(null);
+    const [currentUser,setCurrentUser] = useState(null);
 
-    // useEffect(()=>{
-    //     let tempUser = AuthService.getCurrentUser();
-    //     setCurrentUser(tempUser);
-    // },[currentUser?.email])
-    const currentUser = AuthService.getCurrentUser();
+    useEffect(()=>{
+        let tempUser = AuthService.getCurrentUser();
+        setCurrentUser(tempUser);
+    },[JSON.stringify(currentUser)])
+
+    const onChangeState = ()=>{
+        setCurrentUser(null);
+    }
+
+    // const currentUser = AuthService.getCurrentUser();
 
     return (
         <BrowserRouter>
@@ -99,7 +104,7 @@ function App() {
                     <br />
                     <Routes>
                         <Route index path="/" element={<Home />} />
-                        <Route index path="/videoPlay/:videoId" element={<VideoPlay />} />
+                        <Route index path="/videoPlay/:videoId" element={<VideoPlay onChangeState={onChangeState}/>} />
                         <Route path="/users/:id" element={<User />} />
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/signup" element={<SignupPage />} />

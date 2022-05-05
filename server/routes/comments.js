@@ -71,13 +71,17 @@ router.get('/video/:videoId', async (req, res) => {
     }
     try {
         const comments = await commentData.getAllCommentsByVideoId(req.params.videoId);
+        if(comments.length === 0){
+            res.status(200).json({status:200, data:comments});
+            return;
+        }
         for(let comment of comments) {
             let tempUser = await userData.getUserById(comment.userId);
             comment.avatar = tempUser.avatar;
         }
-        res.status(200).json({status:200, data:comments});
+        return res.status(200).json({status:200, data:comments});
     } catch (error) {
-        res.status(500).json({status:500, message:error.message});
+        return res.status(500).json({status:500, message:error});
     }
 });
 // delete one comment by commentId

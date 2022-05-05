@@ -12,7 +12,7 @@ const CommentForm = ({ handleSubmit, submitLable }) => {
 
     return (
         <form onSubmit={onSubmit}>
-            <label for="myComment">
+            <label for="myComment" style={{color:"#6D3BF6"}}>
             </label>
             <textarea id ="myComment" className="comment-form-textarea" value={content} onChange={(e) => setContent(e.target.value)}></textarea>
             <br></br>

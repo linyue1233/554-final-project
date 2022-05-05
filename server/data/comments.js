@@ -116,7 +116,7 @@ module.exports = {
                 result.push(temp);
             }
         }
-        if (result.length == 0) return "don't have any comments";
+        // if (result.length == 0) return "don't have any comments";
         return result;
     },
     async deleteOneCommentByCommentId(commentId) {
