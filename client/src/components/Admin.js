@@ -115,6 +115,11 @@ function Admin () {
             setLoadingSearch(false);
         }catch(e) {
             setComments("don't have any comments");
+            if(e.response.status === 401 || e.response.status === 403) {
+                auth_service.logout();
+                alert('Session Expired');
+                window.location.href = '/login';
+            }
             setError(e);
             setLoadingSearch(false);
         }
@@ -139,7 +144,12 @@ function Admin () {
         } catch (error) {
             setLoadingDelete(false);
             console.log(error.response);
-            alert(JSON.stringify(error.response.data));
+            if(error.response.status === 401 || error.response.status === 403) {
+                auth_service.logout();
+                alert('Session Expired');
+                window.location.href = '/login';
+            }
+            setError(JSON.stringify(error.response.data));
             handleCloseDeleteDialog();
         }  
 
@@ -209,8 +219,13 @@ function Admin () {
 
         }catch (e) {
             setLoadingUpload(false);
-            alert(e.message);
-            window.location.reload();
+            if(e.response.status === 401 || e.response.status === 403) {
+                auth_service.logout();
+                alert('Session Expired');
+                window.location.href = '/login';
+            }else{
+                window.location.reload();
+            }
         }
         
     }
@@ -246,7 +261,7 @@ function Admin () {
                     setChecking(false);
                 }
             }else {
-                window.location.href = '/';
+                window.location.href = '/login';
                 alert('Not Logged in'); 
             }
 

@@ -163,7 +163,14 @@ function User () {
             }
         } catch (e) {
             setLoadingDelete(false);
-            alert(e.message);
+            if(e.response.status === 403 || e.response.status === 401) {
+                alert('Session Expired');
+                AuthService.logout();
+                window.location.href = '/login';
+            }else{
+                alert('Server Error');
+            }
+            
             handleCloseDeleteDialog();
         }  
 
@@ -175,7 +182,7 @@ function User () {
             let authStatus = await AuthService.checkAuth();
             if(!authStatus) {
                 alert('Not logged in');
-                window.location.href = '/';
+                window.location.href = '/login';
             }else{
                 setChecking(false);
             }
