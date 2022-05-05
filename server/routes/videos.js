@@ -276,19 +276,7 @@ router.delete('/delete/:videoId', async (req, res) => {
     }
 });
 
-router.post('/search', async (req, res) => {
-    if(req.session.user){
-        try{
-            let ans = await redis.getKey(req.session.user);
-            if(ans !== null){
-                // update redis session
-                let userKey = req.session.user;
-                redis.setExpire(userKey,userKey,60*30);
-            }
-        }catch(error){
-            return res.status(403).json({ status:"403",message:"Please login firstly."})
-        }
-    }
+router.post('/search=:searchTerm', async (req, res) => {
     let searchBody = req.body;
 
    
