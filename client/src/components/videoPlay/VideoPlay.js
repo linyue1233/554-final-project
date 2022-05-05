@@ -104,6 +104,7 @@ function VideoPlay(props) {
             setComments([...videoComments, res.data.data]);
         }).catch(err => {
             alert("You are expoired, login again plz.");
+            props.onChangeState();
             AuthService.logout();
             window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
         })
@@ -114,7 +115,7 @@ function VideoPlay(props) {
             alert("You need to login.")
             props.onChangeState();
             AuthService.logout();
-            window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
+            // window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
             return;
         }
         const params = { "videoId": videoId };
@@ -125,7 +126,7 @@ function VideoPlay(props) {
             alert("You are expoired, login again plz.");
             AuthService.logout();
             props.onChangeState();
-            window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
+            // window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
         })
     }
 
@@ -134,7 +135,7 @@ function VideoPlay(props) {
             alert("You need to login.")
             props.onChangeState();
             AuthService.logout();
-            window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
+            // window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
             return;
         }
         const params = { "videoId": videoId };
@@ -142,10 +143,10 @@ function VideoPlay(props) {
             setLikeCount(likeCount - 1);
             setIsLikeBtn(!isLikeBtn);
         }).catch(err => {
-            // AuthService.logout();
+            AuthService.logout();
             alert("You are expoired, login again plz.");
             props.onChangeState();
-            window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
+            // window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
         })
     }
 
