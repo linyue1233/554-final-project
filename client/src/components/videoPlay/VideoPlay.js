@@ -59,6 +59,7 @@ function VideoPlay(props) {
     }
 
     async function addViewCount(videoId) {
+        console.log(videoId);
         const params = { "videoId": videoId };
         axios.post(`/videos/addViewCount`, params).then(res => {
         }).catch(err => {
@@ -69,6 +70,9 @@ function VideoPlay(props) {
     }
 
     async function likeBtnStatus() {
+        if(currentUser === null){
+            return;
+        }
         let userId = currentUser._id;
         try {
             const result = await axios.get(`/users/${userId}`);
@@ -81,10 +85,10 @@ function VideoPlay(props) {
     }
 
     useEffect(() => {
-        likeBtnStatus();
+        Boolean(currentUser) && likeBtnStatus();
         fetchData(videoId);
         fetchComments(videoId);
-        currentUser && addViewCount(videoId);
+        addViewCount(videoId);
 
     }, [videoId]);
 
