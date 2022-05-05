@@ -25,16 +25,16 @@ async function postAvatar({ image, description }) {
 }
 
 function App() {
-    const [currentUser,setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
 
-    useEffect(()=>{
+    useEffect(() => {
         let tempUser = AuthService.getCurrentUser();
         setCurrentUser(tempUser);
-    },[JSON.stringify(currentUser)])
+    }, [JSON.stringify(currentUser)]);
 
-    const onChangeState = ()=>{
+    const onChangeState = () => {
         setCurrentUser(null);
-    }
+    };
 
     // const currentUser = AuthService.getCurrentUser();
 
@@ -48,54 +48,60 @@ function App() {
                                 Home
                             </NavLink>
                         </div>
-                        <div className="col-md-4 offset-md-3">
+                        <div className="col-md-3 offset-md-3">
                             <SearchVideo />
                         </div>
-                        {currentUser && currentUser.isAdmin &&
-                            <div className="col-md-2 offset-md-1">
-                                <NavLink className="navlink" to="/admin">
-                                    Admin
-                                </NavLink>
-                                <NavLink to={`/users/${currentUser._id}`}>
-                                    {currentUser.email}
-                                </NavLink>
-                                <NavLink
-                                    className="navlink"
-                                    to="/"
-                                    onClick={() => {
-                                        AuthService.logout();
-                                        window.location.href = '/';
-                                    }}
-                                >
-                                    Logout
-                                </NavLink>
+                        {currentUser && currentUser.isAdmin && (
+                            <div className="col-md-2 offset-md-3">
+                                <div className="float-end">
+                                    <NavLink className="navlink" to="/admin">
+                                        Admin
+                                    </NavLink>
+                                    <NavLink to={`/users/${currentUser._id}`}>
+                                        {currentUser.email}
+                                    </NavLink>
+                                    <NavLink
+                                        className="navlink"
+                                        to="/"
+                                        onClick={() => {
+                                            AuthService.logout();
+                                            window.location.href = '/';
+                                        }}
+                                    >
+                                        Logout
+                                    </NavLink>
+                                </div>
                             </div>
-                        }
-                        {currentUser && !currentUser.isAdmin &&
-                            <div className="col-md-2 offset-md-2">
-                                <NavLink to={`/users/${currentUser._id}`}>
-                                    {currentUser.email}
-                                </NavLink>
-                                <NavLink
-                                    className="navlink"
-                                    to="/"
-                                    onClick={() => {
-                                        AuthService.logout();
-                                        window.location.href = '/';
-                                    }}
-                                >
-                                    Logout
-                                </NavLink>
+                        )}
+                        {currentUser && !currentUser.isAdmin && (
+                            <div className="col-md-2 offset-md-3">
+                                <div className="float-end">
+                                    <NavLink to={`/users/${currentUser._id}`}>
+                                        {currentUser.email}
+                                    </NavLink>
+                                    <NavLink
+                                        className="navlink"
+                                        to="/"
+                                        onClick={() => {
+                                            AuthService.logout();
+                                            window.location.href = '/';
+                                        }}
+                                    >
+                                        Logout
+                                    </NavLink>
+                                </div>
                             </div>
-                        }
+                        )}
                         {!currentUser && (
-                            <div className="col-md-2 offset-md-2">
-                                <NavLink className="navlink" to="/login">
-                                    Login
-                                </NavLink>
-                                <NavLink className="navlink" to="/signup">
-                                    Signup
-                                </NavLink>
+                            <div className="col-md-2 offset-md-3">
+                                <div className="float-end">
+                                    <NavLink className="navlink" to="/login">
+                                        Login
+                                    </NavLink>
+                                    <NavLink className="navlink" to="/signup">
+                                        Signup
+                                    </NavLink>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -104,7 +110,11 @@ function App() {
                     <br />
                     <Routes>
                         <Route index path="/" element={<Home />} />
-                        <Route index path="/videoPlay/:videoId" element={<VideoPlay onChangeState={onChangeState}/>} />
+                        <Route
+                            index
+                            path="/videoPlay/:videoId"
+                            element={<VideoPlay onChangeState={onChangeState} />}
+                        />
                         <Route path="/users/:id" element={<User />} />
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/signup" element={<SignupPage />} />
