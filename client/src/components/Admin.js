@@ -85,6 +85,10 @@ function Admin () {
     const [commentToDelete, setCommentToDelete] = useState(null);
     const [loadingUpload, setLoadingUpload] = useState(false);
     const [loadingDelete, setLoadingDelete] = useState(false);
+    const [videoNameError, setVideoNameError] = useState(false);
+    const [videoNameHelper, setVideoNameHelper] = useState(null);
+    const [descriptionError, setDescriptionError] = useState(false);
+    const [descriptionHelper, setDescriptionHelper] = useState(null);
     
     const handleOpenDeleteDialog = (comment) => {
         setOpenDeleteDialog(true);
@@ -249,6 +253,32 @@ function Admin () {
         setUploadCover(e.target.files[0]);
     }
 
+    const handleVideoNameChange = (e) => {
+        e.preventDefault(); 
+        setVideoName(e.target.value);
+
+        if(videoName && !videoName.trim()) {
+            setVideoNameError(true);
+            setVideoNameHelper('Video Name cannot be only empty spaces');
+        }else{
+            setVideoNameError(false);
+            setVideoNameHelper(null);
+        }
+    }
+
+    const handleDescriptionChange = (e) => {
+        e.preventDefault(); 
+        setVideoDescription(e.target.value);
+
+        if(videoDescription && !videoDescription.trim()) {
+            setDescriptionError(true);
+            setDescriptionHelper('Decription cannot be only empty spaces');
+        }else{
+            setDescriptionError(false);
+            setDescriptionHelper(null);
+        }
+    }
+
     useEffect (() => {
 
         async function checkAdmin() {
@@ -310,13 +340,13 @@ function Admin () {
                         }}>
                             <Grid container sx={{ m:1 }}>
                             <form onSubmit={handleUploadVideo}>
-                                <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'flex-end', mb: 1 }}>
                                     <VideoLabelIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                                    <TextField required id="name-input-with-sx" label="Video Name" variant="standard" onChange={(e) => {e.preventDefault(); setVideoName(e.target.value)}}/>
+                                    <TextField required error={videoNameError} id="name-input-with-sx" label="Video Name" variant="standard" helperText={videoNameHelper} onChange={handleVideoNameChange}/>
                                 </Box>
-                                <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'flex-end', mb: 1 }}>
                                     <DescriptionIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                                    <TextField required id="description-input-with-sx" label="Description" variant="standard" onChange={(e) => {e.preventDefault(); setVideoDescription(e.target.value)}}/>
+                                    <TextField required error={descriptionError} id="description-input-with-sx" label="Description" variant="standard" helperText={descriptionHelper} onChange={handleDescriptionChange}/>
                                 </Box>
                                 <Box sx={{ display: 'flex'}}>
                                 <TagIcon sx={{ color: 'action.active', mr: 1, my: 0.5, mt: 1.9}} />
