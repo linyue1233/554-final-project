@@ -98,7 +98,10 @@ async function updateVideo(id, name, description) {
         name: name,
         description: description,
     };
-    const updatedInfo = await videoCollection.updateOne({ _id: id }, { $set: updateVideo });
+    const updatedInfo = await videoCollection.updateOne(
+        { _id: id },
+        { $set: updateVideo }
+    );
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update video successfully';
     }
@@ -159,7 +162,11 @@ async function getVideosByYear(year) {
 
 async function get3VideosSortByLikeCount() {
     const videoCollection = await videos();
-    let videoList = await videoCollection.find({}).sort({ likeCount: -1 }).limit(3).toArray();
+    let videoList = await videoCollection
+        .find({})
+        .sort({ likeCount: -1 })
+        .limit(3)
+        .toArray();
 
     return videoList;
 }
@@ -177,7 +184,10 @@ async function increaseLikeCount(id) {
     const updateVideo = {
         likeCount: preLikeCount + 1,
     };
-    const updatedInfo = await videoCollection.updateOne({ _id: id }, { $set: updateVideo });
+    const updatedInfo = await videoCollection.updateOne(
+        { _id: id },
+        { $set: updateVideo }
+    );
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update video successfully';
     }
@@ -197,7 +207,10 @@ async function decreaseLikeCount(id) {
     const updateVideo = {
         likeCount: preLikeCount - 1,
     };
-    const updatedInfo = await videoCollection.updateOne({ _id: id }, { $set: updateVideo });
+    const updatedInfo = await videoCollection.updateOne(
+        { _id: id },
+        { $set: updateVideo }
+    );
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update video successfully';
     }
@@ -217,15 +230,18 @@ async function increaseViewCount(id) {
     const updateVideo = {
         viewCount: preViewCount + 1,
     };
-    const updatedInfo = await videoCollection.updateOne({ _id: id }, { $set: updateVideo });
+    const updatedInfo = await videoCollection.updateOne(
+        { _id: id },
+        { $set: updateVideo }
+    );
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update video successfully';
     }
     return await getVideoById(id);
 }
 
-// get 5 videos by tag and year, ordering by likeCount
-async function get5VideosByTagAndYear(tag, year) {
+// get 4 videos by tag and year, ordering by likeCount
+async function get4VideosByTagAndYear(tag, year) {
     // check format
     verify.isString(tag);
     verify.isString(year);
@@ -241,14 +257,14 @@ async function get5VideosByTagAndYear(tag, year) {
             'uploadDate.year': parseInt(year),
         })
         .sort({ likeCount: -1 })
-        .limit(5)
+        .limit(4)
         .toArray();
 
     return videoList;
 }
 
-// get 5 videos by tag, ordering by likeCount
-async function get5VideosByTag(tag) {
+// get 4 videos by tag, ordering by likeCount
+async function get4VideosByTag(tag) {
     // check format
     verify.isString(tag);
     verify.checkTag(tag);
@@ -261,7 +277,7 @@ async function get5VideosByTag(tag) {
             Tags: { $all: [tag] },
         })
         .sort({ likeCount: -1 })
-        .limit(5)
+        .limit(4)
         .toArray();
 
     return videoList;
@@ -278,7 +294,7 @@ async function getAllVideosByOneTag(tag) {
 //get all videos by tag, ordering by likeCount, viewCount or uploadDates
 async function getAllVideosByOneTagAndByOneFunc(tag, type) {
     const videoCollection = await videos();
-    let videoList
+    let videoList;
     switch (type) {
         case 'viewCount':
             videoList = await videoCollection
@@ -293,7 +309,11 @@ async function getAllVideosByOneTagAndByOneFunc(tag, type) {
                 .find({
                     Tags: { $all: [tag] },
                 })
-                .sort({'uploadDate.year':-1,'uploadDate.month':-1,'uploadDate.day':-1})
+                .sort({
+                    'uploadDate.year': -1,
+                    'uploadDate.month': -1,
+                    'uploadDate.day': -1,
+                })
                 .toArray();
             break;
         default:
@@ -319,8 +339,8 @@ module.exports = {
     increaseLikeCount,
     decreaseLikeCount,
     increaseViewCount,
-    get5VideosByTagAndYear,
-    get5VideosByTag,
+    get4VideosByTagAndYear,
+    get4VideosByTag,
     getAllVideosByOneTag,
     getAllVideosByOneTagAndByOneFunc,
 };

@@ -2,9 +2,9 @@ import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ButtonGroup, Button,Grid } from '@mui/material';
+import { ButtonGroup, Button, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
-import OneVideo from '../OneVideo';
+import OneVideo from './VideoCard';
 
 function Classification(props) {
     let tag = props.tag;
@@ -16,7 +16,7 @@ function Classification(props) {
         async function fetchData() {
             if (year) {
                 const { data } = await axios.get(
-                    `/videos/get5VideosByTagAndYear/${tag}/${year}`
+                    `/videos/get4VideosByTagAndYear/${tag}/${year}`
                 );
                 if (data.length === 0) {
                     setVideoData(undefined);
@@ -24,7 +24,7 @@ function Classification(props) {
                     setVideoData(data);
                 }
             } else {
-                const { data } = await axios.get(`/videos/get5VideosByTag/${tag}`);
+                const { data } = await axios.get(`/videos/get4VideosByTag/${tag}`);
                 if (data.length === 0) {
                     setVideoData(undefined);
                 } else {
@@ -87,9 +87,18 @@ function Classification(props) {
                 </ButtonGroup>
             </div>
             <br />
-            <Grid key='card' container className="allVideo" spacing={0} direction="row" alignItems="center" justifyContent="flex-start">
+            {/* <Grid
+                key="card"
+                container
+                className="allVideo"
+                spacing={0}
+                direction="row"
+                alignItems="center"
+                justifyContent="flex-start"
+            >
                 {videoCard}
-            </Grid>
+            </Grid> */}
+            <div className="row">{videoCard}</div>
         </div>
     );
 }
