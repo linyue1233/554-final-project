@@ -35,9 +35,9 @@ function ShowSearchVideo(){
                      }
                   }
                );
-            setVideoData(group(data,1));
-            setCurData(group(data,1)[0]);
-            let pageNum = (data.length % 1)=== 0 ? parseInt(data.length / 1) :parseInt( data.length / 1 )+ 1;
+            setVideoData(group(data,4));
+            setCurData(group(data,4)[0]);
+            let pageNum = (data.length % 4)=== 0 ? parseInt(data.length / 4) :parseInt( data.length / 4 )+ 1;
             setTotalPage(pageNum);
             setPage(1);
             } catch (e) {
@@ -47,12 +47,14 @@ function ShowSearchVideo(){
          fetchData();
    },[searchTerm]);
     return videoData ? (
-         <Box> 
+        <Grid sx={{ textAlign: 'center',display: 'flex'}} direction="column" alignItems="center" justifyContent="center"> 
+        <Grid>
               <Pagination className='pagination' count={totalPage} page={+page} showFirstButton showLastButton onChange={handChangePage}/>
-            <Grid container className="allVideo" spacing={2}>
+              </Grid>
+            <Grid key='card' container className="allVideo" spacing={0} direction="row" alignItems="center" justifyContent="center">
                 {curData && curData.map((video) => {return <OneVideo video={video} />})}
             </Grid>
-        </Box>  
+        </Grid>  
     ):(
         <div className="card col">
             <p className="card-text">
@@ -60,8 +62,6 @@ function ShowSearchVideo(){
             </p>
         </div>
     );
-
-
 }
 
 export default ShowSearchVideo;

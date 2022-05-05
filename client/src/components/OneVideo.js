@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../App.css';
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
+import { Card, CardActionArea, CardContent, CardMedia, Typography,Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles({
@@ -37,38 +37,70 @@ function OneVideo(props) {
     const videoCover = props.video.cover;
     const videoTitle = props.video.videoName;
     const videoDescription = props.video.description;
+    const likeCount= props.video.likeCount;
+    const viewCount = props.video.viewCount;
+    const year = props.video.uploadDate.year;
+    const month = props.video.uploadDate.month;
+    const day = props.video.uploadDate.day;
     const videoId = props.video._id;
     const buildCard = () => {
         return (
-            <Card className={classes.card} variant="outlined">
-                <CardActionArea>
-                    <Link to={`/videoPlay/${videoId}`}>
-                        <CardMedia
-                            className={classes.media}
-                            component="img"
-                            image={videoCover}
-                            title={videoTitle}
-                        />
-                        <CardContent>
-                            <Typography
-                                className={classes.titleHead}
-                                gutterBottom
-                                variant="h6"
-                                component="h2"
-                            >
-                                {videoTitle}
-                            </Typography>
-                            <Typography
-                                variant="body2"
-                                color="textSecondary"
-                                component="p"
-                            >
-                                {videoDescription}
-                            </Typography>
-                        </CardContent>
-                    </Link>
-                </CardActionArea>
-            </Card>
+            // <Grid item xs={3}>
+                <Card  className={classes.card} variant="outlined" sx={{display: 'flex', justifyContent: 'space-between', flexDirection: 'column'}}>
+                    <CardActionArea>
+                        <Link to={`/videoPlay/${videoId}`}>
+                            <CardMedia
+                                className={classes.media}
+                                component="img"
+                                image={videoCover}
+                                title={videoTitle}
+                            />
+                            <CardContent>
+                                <Typography
+                                    className={classes.titleHead}
+                                    gutterBottom
+                                    variant="h1"
+                                    sx={{
+                                    fontSize: '1.5rem',
+                                    fontWeight: 'bold',
+                                }}
+                                >
+                                    {videoTitle}
+                                </Typography>
+                                {/* <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    component="p"
+                                >
+                                    Description: {videoDescription}
+                                </Typography> */}
+                                <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    component="p"
+                                >
+                                    LikeCount: {likeCount}
+                                </Typography>
+                                <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    component="p"
+                                    gutterBottom 
+                                >
+                                    ViewCount: {viewCount}
+                                </Typography>
+                                <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    component="p"
+                                >
+                                    Date: {month}/{day}/{year}
+                                </Typography>
+                            </CardContent>
+                        </Link>
+                    </CardActionArea>
+                </Card>
+            // </Grid>
         );
     };
     return buildCard();

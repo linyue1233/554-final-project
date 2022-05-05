@@ -2,7 +2,7 @@ import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ButtonGroup, Button } from '@mui/material';
+import { ButtonGroup, Button,Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 import OneVideo from '../OneVideo';
 
@@ -87,9 +87,9 @@ function Classification(props) {
                 </ButtonGroup>
             </div>
             <br />
-            <div className="container">
-                <div className="row">{videoCard}</div>
-            </div>
+            <Grid key='card' container className="allVideo" spacing={0} direction="row" alignItems="center" justifyContent="flex-start">
+                {videoCard}
+            </Grid>
         </div>
     );
 }
