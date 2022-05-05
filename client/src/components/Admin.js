@@ -66,7 +66,7 @@ function Admin () {
     const [tabValue, setTabValue] = useState(0);
     const [searchVideo, setSearchVideo] = useState('');
     const [searched, setSearched] = useState(false);
-    const [comments, setComments] = useState("don't have any comments");
+    const [comments, setComments] = useState([]);
     const [loadingSearch, setLoadingSearch] = useState(null);
     const [tags, setTags] = React.useState({
         action: true,
@@ -114,7 +114,7 @@ function Admin () {
             setComments(data.data);
             setLoadingSearch(false);
         }catch(e) {
-            setComments("don't have any comments");
+            setComments([]);
             if(e.response.status === 401 || e.response.status === 403) {
                 auth_service.logout();
                 alert('Session Expired');
@@ -375,7 +375,7 @@ function Admin () {
                                     accept="video/*"
                                     />
                                     <Fab
-                                    color="secondary"
+                                    color="primary"
                                     size="small"
                                     component="span"
                                     aria-label="add"
@@ -400,7 +400,7 @@ function Admin () {
                                     accept="image/*"
                                     />
                                     <Fab
-                                    color="secondary"
+                                    color="primary"
                                     size="small"
                                     component="span"
                                     aria-label="add"
@@ -450,7 +450,7 @@ function Admin () {
                                 </Box>}
                         {searched &&
                         <List dense={false}>
-                            {comments !== "don't have any comments" ? comments.map((comment) => {
+                            {comments.length !== 0 ? comments.map((comment) => {
                                 return (
                                 <ListItem key={comment._id}
                                 secondaryAction={
@@ -465,7 +465,17 @@ function Admin () {
                                 </ListItemAvatar>
                                 <ListItemText
                                 primary={comment.content}
-                                secondary={comment.date ? `${comment.date.year}/${comment.date.month}/${comment.date.day}` : null}
+                                secondary={<React.Fragment>
+                                    <Typography
+                                        sx={{ display: 'inline' }}
+                                        component="span"
+                                        variant="body2"
+                                        color="text.primary"
+                                    >
+                                        {comment.userName}
+                                    </Typography>
+                                    {` — ${comment.date ? `${comment.date.year}/${comment.date.month}/${comment.date.day}` : null}`}
+                                </React.Fragment>}
                                 />
                                 </ListItem>
                                 );

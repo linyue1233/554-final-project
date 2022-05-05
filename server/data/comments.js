@@ -98,6 +98,10 @@ module.exports = {
             }
         }
         if (result.length == 0) return "don't have any comments";
+        for (let comment of result) {
+            let video = await videoFunctions.getVideoById(comment.videoId)
+            comment.videoId = video;
+        }
         return result;
     },
     async getAllCommentsByVideoId(videoId) {
@@ -119,8 +123,15 @@ module.exports = {
         // if (result.length == 0) return "don't have any comments";
         return result;
     },
-    async deleteOneCommentByCommentId(commentId) {
+    async deleteOneCommentByCommentId(commentId, user) {
         if (!commentId) throw 'please input a comment id';
+        if (!user) throw 'please input a user';
+        if(!user.isAdmin) {
+            const comment = await this.getCommentByCommentId(req.params.commentId);
+            if(!comment.userId === user.userId){
+                throw 'Unauthorized Request';
+            }
+        }
         verifyFunction.isString(commentId, 'commentId');
         const deleteComment = {
             isDeleted: true,
