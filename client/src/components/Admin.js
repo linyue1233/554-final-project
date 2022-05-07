@@ -167,6 +167,10 @@ function Admin() {
         event.preventDefault();
 
         try {
+
+            if (videoNameError) throw videoNameHelper;
+            else if (descriptionError) throw descriptionHelper;
+
             setLoadingUpload(true);
 
             const videoFormData = new FormData();
@@ -227,12 +231,17 @@ function Admin() {
 
         } catch (e) {
             setLoadingUpload(false);
-            if (e.response.status === 401 || e.response.status === 403) {
-                auth_service.logout();
-                alert('Session Expired');
-                window.location.href = '/login';
+            if (e.response) {
+                if (e.response.status === 401 || e.response.status === 403) {
+                    auth_service.logout();
+                    alert('Session Expired');
+                    window.location.href = '/login';
+                } else {
+                    alert(e.response.data.message);
+                    window.location.reload();
+                }
             } else {
-                window.location.reload();
+                alert(e);
             }
         }
 
@@ -286,14 +295,14 @@ function Admin() {
     const handleOpenDeleteVideoDialog = (video) => {
         setVideoToDelete(video);
         setOpenDeleteVideoDialog(true);
-    } 
+    }
 
     const handleCloseDeleteVideoDialog = () => {
         setVideoToDelete(null);
         setOpenDeleteVideoDialog(false);
     }
 
-    const handleDeleteVideo = async() => {
+    const handleDeleteVideo = async () => {
         console.log(videoToDelete);
 
         try {
@@ -318,7 +327,7 @@ function Admin() {
             alert(JSON.stringify(error.response.data));
             handleCloseDeleteVideoDialog();
         }
-    } 
+    }
 
     useEffect(() => {
 
@@ -564,9 +573,9 @@ function Admin() {
                                             <><IconButton sx={{ mr: 1 }} edge="end" aria-label="delete" onClick={() => handleOpenDeleteVideoDialog(video)}>
                                                 <UpdateIcon />
                                             </IconButton>
-                                            <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteVideoDialog(video)}>
-                                                <DeleteIcon />
-                                            </IconButton></>
+                                                <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteVideoDialog(video)}>
+                                                    <DeleteIcon />
+                                                </IconButton></>
                                         }>
                                         <ListItemAvatar>
                                             <Avatar>
