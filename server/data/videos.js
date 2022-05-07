@@ -1,5 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const videos = mongoCollections.videos;
+const comments = mongoCollections.comments;
 const verify = require('./verify');
 const uuid = require('uuid');
 
@@ -57,14 +58,16 @@ async function getVideoById(id) {
 async function getAllVideos() {
     const videoCollection = await videos();
 
-    const allVideos = await videoCollection.find({}).toArray();
+    const allVideos = await videoCollection.find({ isDeleted: false }).toArray();
 
     //console.log(allVideos);
 
     return allVideos;
 }
 
-async function removeVideo(id) {
+async function removeVideo(id, user) {
+    if (!user) throw 'please input a user';
+    if (!user.isAdmin) throw 'Unauthorized request';
     id = id.trim();
     verify.checkSpace(id, 'Video Id');
     verify.isString(id, 'Video Id');
@@ -72,31 +75,48 @@ async function removeVideo(id) {
 
     let video = await getVideoById(id);
 
-    const deletionInfo = await videoCollection.deleteOne({
-        _id: id,
-    });
+    const deletionInfo = await videoCollection.updateOne(
+        { _id: id },
+        { $set: { isDeleted: true } }
+    );
 
-    if (deletionInfo.deletedCount === 0) {
+    if (deletionInfo.modifiedCount === 0) {
         throw `Could not delete video with id of ${id}`;
     }
 
-    let resultstr = `${video.videoName} has been successfully deleted!`;
+    for (let comment of video.commentId) {
+
+        const commentsCollections = await comments();
+
+        const commentInfo = await commentsCollections.findOne({ _id: comment });
+        if (commentInfo == null) throw 'error id';
+        
+        const deleteInfo = await commentsCollections.updateOne({ _id: comment }, { $set: { isDeleted: true } });
+
+        if (deleteInfo.modifiedCount === 0) {
+            throw 'Could not delete comment successfully!';
+        }
+    }
+
+    let resultstr = 'video has been successfully deleted';
 
     return resultstr;
 }
 
-async function updateVideo(id, name, description) {
+async function updateVideo(id, name, description, tags) {
     id = id.trim();
     verify.checkSpace(id, 'Video Id');
     verify.isString(id, 'Video Id');
     verify.isString(name, 'Video Name');
     verify.isString(description, 'Videio Description');
+    verify.checkTags(tags)
     let preVideo = await getVideoById(id);
     if (name == preVideo.name) throw 'Same Video Name Error!';
     const videoCollection = await videos();
     const updateVideo = {
-        name: name,
+        videoName: name,
         description: description,
+        Tags: tags
     };
     const updatedInfo = await videoCollection.updateOne(
         { _id: id },
@@ -123,6 +143,7 @@ async function searchVideosByName(searchTerm) {
                 $regex: '.*' + searchTerm + '.*',
                 $options: 'i',
             },
+            isDeleted: false
         })
         .toArray();
 
@@ -138,9 +159,11 @@ async function getVideosByTags(tags) {
     let videoList = await videoCollection
         .find({
             Tags: { $all: [tags] },
+            isDeleted: false
         })
         .toArray();
     console.log(videoList);
+
     return videoList;
 }
 
@@ -154,6 +177,7 @@ async function getVideosByYear(year) {
     let videoList = await videoCollection
         .find({
             uploadDate: { year: year },
+            isDeleted: false
         })
         .toArray();
 
@@ -163,7 +187,7 @@ async function getVideosByYear(year) {
 async function get3VideosSortByLikeCount() {
     const videoCollection = await videos();
     let videoList = await videoCollection
-        .find({})
+        .find({ isDeleted: false })
         .sort({ likeCount: -1 })
         .limit(3)
         .toArray();
@@ -255,6 +279,7 @@ async function get4VideosByTagAndYear(tag, year) {
         .find({
             Tags: { $all: [tag] },
             'uploadDate.year': parseInt(year),
+            isDeleted: false
         })
         .sort({ likeCount: -1 })
         .limit(4)
@@ -275,6 +300,7 @@ async function get4VideosByTag(tag) {
     let videoList = await videoCollection
         .find({
             Tags: { $all: [tag] },
+            isDeleted: false
         })
         .sort({ likeCount: -1 })
         .limit(4)
@@ -287,8 +313,10 @@ async function getAllVideosByOneTag(tag) {
     let videoList = await videoCollection
         .find({
             Tags: { $all: [tag] },
+            isDeleted: false
         })
         .toArray();
+
     return videoList;
 }
 //get all videos by tag, ordering by likeCount, viewCount or uploadDates
@@ -300,6 +328,7 @@ async function getAllVideosByOneTagAndByOneFunc(tag, type) {
             videoList = await videoCollection
                 .find({
                     Tags: { $all: [tag] },
+                    isDeleted: false
                 })
                 .sort({ viewCount: -1 })
                 .toArray();
@@ -308,6 +337,7 @@ async function getAllVideosByOneTagAndByOneFunc(tag, type) {
             videoList = await videoCollection
                 .find({
                     Tags: { $all: [tag] },
+                    isDeleted: false
                 })
                 .sort({
                     'uploadDate.year': -1,
@@ -320,6 +350,7 @@ async function getAllVideosByOneTagAndByOneFunc(tag, type) {
             videoList = await videoCollection
                 .find({
                     Tags: { $all: [tag] },
+                    isDeleted: false
                 })
                 .sort({ likeCount: -1 })
                 .toArray();

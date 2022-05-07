@@ -163,6 +163,16 @@ router.post('/videoCover', upload.single('cover'), async (req, res) => {
     if (!req.session.user) {
         return res.status(403).json({ status: '403', message: 'Please login firstly.' });
     }
+
+    try {
+        const user = await userData.getUserByEmail(req.session.user)
+        if (!user.isAdmin) {
+            return res.status(500).json({ status:"500", message: "Unauthorized request"});
+        }
+    } catch (e) {
+        return res.status(500).json({ status:"500", message: e});
+    }
+
     if (req.file === null || req.file === undefined) {
         res.status(400).json({ message: 'Please choose a file to upload.' });
         return;
@@ -216,6 +226,16 @@ router.post('/uploadVideo', upload.single('video'), async (req, res) => {
     if (!req.session.user) {
         return res.status(403).json({ status: '403', message: 'Please login firstly.' });
     }
+
+    try {
+        const user = await userData.getUserByEmail(req.session.user)
+        if (!user.isAdmin) {
+            return res.status(500).json({ status:"500", message: "Unauthorized request"});
+        }
+    } catch (e) {
+        return res.status(500).json({ status:"500", message: e});
+    }
+
     if (req.file === null || req.file === undefined) {
         res.status(400).json({ message: 'Please choose a file to upload.' });
         return;
@@ -242,6 +262,38 @@ router.post('/uploadVideo', upload.single('video'), async (req, res) => {
 });
 
 router.post('/create', async (req, res) => {
+    if (req.session.user) {
+        try {
+            let ans = await redis.getKey(req.session.user);
+            if (ans === null) {
+                // delete session
+                req.session.destroy();
+                return res
+                    .status(401)
+                    .json({ status: '401', message: 'Your status is expired.' });
+            } else {
+                let userKey = req.session.user;
+                redis.setExpire(userKey, userKey, 60 * 30);
+            }
+        } catch (error) {
+            return res
+                .status(403)
+                .json({ status: '403', message: 'Please login firstly.' });
+        }
+    }
+    if (!req.session.user) {
+        return res.status(403).json({ status: '403', message: 'Please login firstly.' });
+    }
+
+    try {
+        const user = await userData.getUserByEmail(req.session.user)
+        if (!user.isAdmin) {
+            return res.status(500).json({ status:"500", message: "Unauthorized request"});
+        }
+    } catch (e) {
+        return res.status(500).json({ status:"500", message: e});
+    }
+
     let videoInfo = req.body;
 
     //upload video and cover to cloud and get cloud path
@@ -266,6 +318,38 @@ router.post('/create', async (req, res) => {
 });
 
 router.put('/update/:videoId', async (req, res) => {
+    if (req.session.user) {
+        try {
+            let ans = await redis.getKey(req.session.user);
+            if (ans === null) {
+                // delete session
+                req.session.destroy();
+                return res
+                    .status(401)
+                    .json({ status: '401', message: 'Your status is expired.' });
+            } else {
+                let userKey = req.session.user;
+                redis.setExpire(userKey, userKey, 60 * 30);
+            }
+        } catch (error) {
+            return res
+                .status(403)
+                .json({ status: '403', message: 'Please login firstly.' });
+        }
+    }
+    if (!req.session.user) {
+        return res.status(403).json({ status: '403', message: 'Please login firstly.' });
+    }
+
+    try {
+        const user = await userData.getUserByEmail(req.session.user)
+        if (!user.isAdmin) {
+            return res.status(500).json({ status:"500", message: "Unauthorized request"});
+        }
+    } catch (e) {
+        return res.status(500).json({ status:"500", message: e});
+    }
+
     let updatedInfo = req.body;
 
     try {
@@ -292,10 +376,43 @@ router.put('/update/:videoId', async (req, res) => {
 });
 
 router.delete('/delete/:videoId', async (req, res) => {
+    if (req.session.user) {
+        try {
+            let ans = await redis.getKey(req.session.user);
+            if (ans === null) {
+                // delete session
+                req.session.destroy();
+                return res
+                    .status(401)
+                    .json({ status: '401', message: 'Your status is expired.' });
+            } else {
+                let userKey = req.session.user;
+                redis.setExpire(userKey, userKey, 60 * 30);
+            }
+        } catch (error) {
+            return res
+                .status(403)
+                .json({ status: '403', message: 'Please login firstly.' });
+        }
+    }
+    if (!req.session.user) {
+        return res.status(403).json({ status: '403', message: 'Please login firstly.' });
+    }
+
+    try {
+        const user = await userData.getUserByEmail(req.session.user)
+        if (!user.isAdmin) {
+            return res.status(500).json({ status:"500", message: "Unauthorized request"});
+        }
+    } catch (e) {
+        return res.status(500).json({ status:"500", message: e});
+    }
+
     try {
         verify.isString(req.params.videoId, 'Video Id');
         verify.checkSpace(req.params.videoId, 'Video Id');
-        const deleteResult = await videoData.removeVideo(userId);
+        const user = await userData.getUserByEmail(req.session.user);
+        const deleteResult = await videoData.removeVideo(req.params.videoId, user);
         res.status(200).json(deleteResult);
     } catch (error) {
         res.status(500).json({ message: error });
