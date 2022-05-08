@@ -8,6 +8,7 @@ async function createVideo(name, path, tags, description, cover) {
     verify.isString(name, 'name');
     verify.isString(description, 'Video Description');
     verify.checkTags(tags);
+    verify.checkVideoSuffix(path);
     verify.checkAvatarSuffix(cover);
     let myDate = new Date();
     const videoCollection = await videos();
@@ -111,7 +112,17 @@ async function updateVideo(id, name, description, tags) {
     verify.isString(description, 'Videio Description');
     verify.checkTags(tags)
     let preVideo = await getVideoById(id);
-    if (name == preVideo.name) throw 'Same Video Name Error!';
+    if(preVideo.videoName === name && preVideo.description === description && preVideo.Tags.length === tags.length) {
+        let flag = 0
+        for(let tag of tags) {
+            if(preVideo.Tags.indexOf(tag) === -1){
+                flag = 1;
+            }
+        }
+        if(!flag){
+            return preVideo;
+        }
+    }
     const videoCollection = await videos();
     const updateVideo = {
         videoName: name,
@@ -122,10 +133,59 @@ async function updateVideo(id, name, description, tags) {
         { _id: id },
         { $set: updateVideo }
     );
+
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update video successfully';
     }
     return await getVideoById(id);
+}
+
+async function updateVideoCover (id, cover) {
+
+    id = id.trim();
+    verify.checkSpace(id, 'Video Id');
+    verify.isString(id, 'Video Id');
+    verify.checkAvatarSuffix(cover);
+    let preVideo = await getVideoById(id);
+    if (cover === preVideo.cover){
+        return 'updated';
+    } else {
+        const newCover = { cover: cover };
+        const videoCollection = await videos();
+        const updatedInfo = await videoCollection.updateOne(
+            { _id: id },
+            { $set: newCover }
+        );
+        if (updatedInfo.modifiedCount === 0) {
+            throw 'Could not update video successfully';
+        }
+        return 'updated';
+    }
+
+}
+
+async function updateVideoPath (id, path) {
+
+    id = id.trim();
+    verify.checkSpace(id, 'Video Id');
+    verify.isString(id, 'Video Id');
+    verify.checkVideoSuffix(path);
+    let preVideo = await getVideoById(id);
+    if (path === preVideo.path){
+        return 'updated';
+    } else {
+        const newPath = { videoPath: path };
+        const videoCollection = await videos();
+        const updatedInfo = await videoCollection.updateOne(
+            { _id: id },
+            { $set: newPath }
+        );
+        if (updatedInfo.modifiedCount === 0) {
+            throw 'Could not update video successfully';
+        }
+        return 'updated';
+    }
+
 }
 
 async function searchVideosByName(searchTerm) {
@@ -363,6 +423,8 @@ module.exports = {
     getAllVideos,
     removeVideo,
     updateVideo,
+    updateVideoCover,
+    updateVideoPath,
     searchVideosByName,
     getVideosByTags,
     getVideosByYear,

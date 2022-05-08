@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -93,6 +94,26 @@ function Admin() {
     const [descriptionHelper, setDescriptionHelper] = useState(null);
     const [videoToDelete, setVideoToDelete] = useState(null);
     const [openDeleteVideoDialog, setOpenDeleteVideoDialog] = useState(false);
+    const [openUpdateVideoDialog, setOpenUpdateVideoDialog] = useState(false);
+    const [videoToUpdate, setVideoToUpdate] = useState(null);
+    const [updateVideoName, setUpdateVideoName] = useState('');
+    const [updateVideoDescription, setUpdateVideoDescription] = useState('');
+    const [updateTags, setUpdateTags] = useState({
+        updateAction: false,
+        updateComedy: false,
+        updateThriller: false,
+        updateLove: false,
+        updateDocumentary: false
+    });
+    const { updateAction, updateComedy, updateThriller, updateLove, updateDocumentary } = updateTags;
+    const UpdateTagError = [updateAction, updateComedy, updateThriller, updateLove, updateDocumentary].filter((v) => v).length < 1;
+    const [updateCover, setUpdateCover] = useState(null);
+    const [updatePath, setUpdatePath] = useState(null);
+    const [updateVideoNameError, setUpdateVideoNameError] = useState(false);
+    const [updatevideoNameHelper, setUpdateVideoNameHelper] = useState(null);
+    const [updateDescriptionError, setUpdateDescriptionError] = useState(false);
+    const [updateDescriptionHelper, setUpdateDescriptionHelper] = useState(null);
+    const [loadingUpdate, setLoadingUpdate] = useState(false);
 
     const handleOpenDeleteDialog = (comment) => {
         setOpenDeleteDialog(true);
@@ -300,6 +321,187 @@ function Admin() {
     const handleCloseDeleteVideoDialog = () => {
         setVideoToDelete(null);
         setOpenDeleteVideoDialog(false);
+    }
+
+    const handleOpenUpdateVideoDialog = (video) => {
+        setVideoToUpdate(video);
+        setUpdateVideoName(video.videoName);
+        setUpdateVideoDescription(video.description);
+        let videoTags = {
+            updateAction: false,
+            updateComedy: false,
+            updateThriller: false,
+            updateLove: false,
+            updateDocumentary: false
+        }
+        for (let tag of video.Tags) {
+            tag = 'update' + tag[0].toUpperCase() + tag.substring(1, tag.length);
+            videoTags[tag] = true;
+        }
+        setUpdateTags(videoTags);
+        setOpenUpdateVideoDialog(true);
+    }
+
+    const handleCloseUpdateVideo = () => {
+        setVideoToUpdate(null);
+        setUpdateVideoName('');
+        setUpdateVideoDescription('');
+        setUpdateTags({
+            updateAction: false,
+            updateComedy: false,
+            updateThriller: false,
+            updateLove: false,
+            updateDocumentary: false
+        });
+        setUpdateCover(null);
+        setUpdatePath(null);
+        setOpenUpdateVideoDialog(false);
+    }
+
+    const handleChangeUpdateTags = (event) => {
+        setUpdateTags({
+            ...updateTags,
+            [event.target.name]: event.target.checked,
+        });
+    };
+
+    const handleChangeUpdateName = (e) => {
+        e.preventDefault();
+        setUpdateVideoName(e.target.value);
+
+        if (updateVideoName && !updateVideoName.trim()) {
+            setUpdateVideoNameError(true);
+            setUpdateVideoNameHelper('Video Name cannot be only empty spaces');
+        } else {
+            setUpdateVideoNameError(false);
+            setUpdateVideoNameHelper(null);
+        }
+    }
+
+    const handleChangeUpdateDescription = (e) => {
+        e.preventDefault();
+        setUpdateVideoDescription(e.target.value);
+
+        if (updateVideoDescription && !updateVideoDescription.trim()) {
+            setUpdateDescriptionError(true);
+            setUpdateDescriptionHelper('Decription cannot be only empty spaces');
+        } else {
+            setUpdateDescriptionError(false);
+            setUpdateDescriptionHelper(null);
+        }
+    }
+
+    const handleUpdateCover = (e) => {
+        e.preventDefault();
+        console.log(e.target.files[0]);
+        setUpdateCover(e.target.files[0]);
+    }
+
+    const handleUpdatePath = (e) => {
+        e.preventDefault();
+        console.log(e.target.files[0]);
+        setUpdatePath(e.target.files[0]);
+    }
+
+    const handleUpdateVideo = async (event) => {
+        event.preventDefault();
+
+        try {
+
+            if (updateVideoNameError) throw updatevideoNameHelper;
+            else if (updateDescriptionError) throw updateDescriptionHelper;
+
+            setLoadingUpdate(true);
+
+            let checkedTags = [];
+
+            if (updateTags.updateAction) {
+                checkedTags.push('action');
+            }
+            if (updateTags.updateComedy) {
+                checkedTags.push('comedy');
+            }
+            if (updateTags.updateThriller) {
+                checkedTags.push('thriller');
+            }
+            if (updateTags.updateLove) {
+                checkedTags.push('love');
+            }
+            if (updateTags.updateDocumentary) {
+                checkedTags.push('documentary');
+            }
+
+            let newVideo = {
+                name: updateVideoName,
+                description: updateVideoDescription,
+                tags: checkedTags,
+            }
+
+            if (updatePath) {
+                const videoFormData = new FormData();
+                videoFormData.append("video", updatePath);
+                let newVideoInfo = await axios.post('/videos/uploadVideo', videoFormData);
+                let newVideoPath = newVideoInfo.data.videoPath;
+                console.log(newVideoPath);
+                newVideo.path = newVideoPath;
+            }
+
+            if (updateCover) {
+                const coverFormData = new FormData();
+                coverFormData.append("cover", updateCover);
+                let newCoverInfo = await axios.post('/videos/videoCover', coverFormData);
+                let newCoverPath = newCoverInfo.data.imagePath;
+                newVideo.cover = newCoverPath;
+            }
+
+            console.log(newVideo);
+
+            const { data } = await axios.patch(`/videos/update/${videoToUpdate._id}`, newVideo);
+
+            console.log(data);
+
+            setLoadingUpdate(false);
+
+            alert('Successfully updated');
+
+            handleUpdateVideoData(newVideo);
+
+            handleCloseUpdateVideo();
+
+        } catch (e) {
+            setLoadingUpdate(false);
+            if (e.response) {
+                if (e.response.status === 401 || e.response.status === 403) {
+                    auth_service.logout();
+                    alert('Session Expired');
+                    window.location.href = '/login';
+                } else {
+                    alert(JSON.stringify(e.response.data.message));
+                    window.location.reload();
+                }
+            } else {
+                alert(e);
+            }
+        }
+
+    }
+
+    const handleUpdateVideoData = (newVideo) => {
+        let copy = videoData
+        for (let video of copy) {
+            if (video._id === videoToUpdate._id) {
+                video.videoName = newVideo.name;
+                video.description = newVideo.description;
+                video.Tags = newVideo.tags;
+                if (newVideo.path) {
+                    video.path = newVideo.path;
+                }
+                if (newVideo.cover) {
+                    video.cover = newVideo.cover;
+                }
+            }
+        }
+        setVideoData(copy);
     }
 
     const handleDeleteVideo = async () => {
@@ -570,7 +772,7 @@ function Admin() {
                                 return (
                                     <ListItem key={video._id}
                                         secondaryAction={
-                                            <><IconButton sx={{ mr: 1 }} edge="end" aria-label="delete" onClick={() => handleOpenDeleteVideoDialog(video)}>
+                                            <><IconButton sx={{ mr: 1 }} edge="end" aria-label="delete" onClick={() => handleOpenUpdateVideoDialog(video)}>
                                                 <UpdateIcon />
                                             </IconButton>
                                                 <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteVideoDialog(video)}>
@@ -583,7 +785,8 @@ function Admin() {
                                             </Avatar>
                                         </ListItemAvatar>
                                         <ListItemText
-                                            primary={video.videoName}
+                                            primary={<Link className='video-link' to={`/videoPlay/${video._id}`}>{video.videoName}</Link>}
+                                            secondary={video.description}
                                         />
                                     </ListItem>
                                 );
@@ -637,6 +840,139 @@ function Admin() {
                         <LoadingButton loading={loadingDelete} onClick={handleDeleteVideo} autoFocus>
                             Confirm
                         </LoadingButton>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog open={openUpdateVideoDialog} onClose={handleCloseUpdateVideo}>
+                    <DialogTitle>Update Video</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            {videoToUpdate ? `Update ${videoToUpdate.videoName}` : 'Update'}
+                        </DialogContentText>
+                        <TextField
+                            required
+                            autoFocus
+                            margin="dense"
+                            id="update_videoName"
+                            label="Video Name"
+                            fullWidth
+                            variant="standard"
+                            value={updateVideoName}
+                            onChange={handleChangeUpdateName}
+                            error={updateVideoNameError}
+                            helperText={updatevideoNameHelper}
+                        />
+                        <TextField
+                            required
+                            autoFocus
+                            margin="dense"
+                            id="update_videoDescription"
+                            label="Description"
+                            fullWidth
+                            variant="standard"
+                            value={updateVideoDescription}
+                            onChange={handleChangeUpdateDescription}
+                            error={updateDescriptionError}
+                            helperText={updateDescriptionHelper}
+                        />
+                        <Box sx={{ display: 'flex' }}>
+                            <FormControl
+                                required
+                                error={UpdateTagError}
+                                component="fieldset"
+                                sx={{ ml: 0.8, mr: 2, mt: 2, mb: 1 }}
+                                variant="standard"
+                            >
+                                <FormLabel component="legend">Tags</FormLabel>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox checked={updateAction} onChange={handleChangeUpdateTags} name="updateAction" />
+                                        }
+                                        label="action"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox checked={updateComedy} onChange={handleChangeUpdateTags} name="updateComedy" />
+                                        }
+                                        label="comedy"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox checked={updateThriller} onChange={handleChangeUpdateTags} name="updateThriller" />
+                                        }
+                                        label="thriller"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox checked={updateLove} onChange={handleChangeUpdateTags} name="updateLove" />
+                                        }
+                                        label="love"
+                                    />
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox checked={updateDocumentary} onChange={handleChangeUpdateTags} name="updateDocumentary" />
+                                        }
+                                        label="documentary"
+                                    />
+                                </FormGroup>
+                                <FormHelperText>Must pick at least one tag</FormHelperText>
+                            </FormControl>
+                        </Box>
+                        <Box sx={{ display: 'flex', mt: 1 }}>
+                            <label htmlFor="update-video">
+                                <input
+                                    required
+                                    style={{ display: 'none' }}
+                                    onChange={handleUpdatePath}
+                                    id="update-video"
+                                    name="update-video"
+                                    type="file"
+                                    accept="video/*"
+                                />
+                                <Fab
+                                    color="primary"
+                                    size="small"
+                                    component="span"
+                                    aria-label="add"
+                                    variant="extended"
+                                >
+                                    <AddIcon sx={{ mr: 0.5 }} /> New Video
+                                </Fab>
+                                <Typography variant="body2" sx={{ marginLeft: 1, display: "inline" }}>
+                                    {updatePath && updatePath.name}
+                                </Typography>
+                            </label>
+                        </Box>
+                        <Box sx={{ display: 'flex', mt: 2 }}>
+                            <label htmlFor="update-cover">
+                                <input
+                                    required
+                                    style={{ display: 'none' }}
+                                    onChange={handleUpdateCover}
+                                    id="update-cover"
+                                    name="update-cover"
+                                    type="file"
+                                    accept="image/*"
+                                />
+                                <Fab
+                                    color="primary"
+                                    size="small"
+                                    component="span"
+                                    aria-label="add"
+                                    variant="extended"
+                                >
+                                    <AddIcon sx={{ mr: 0.5 }} /> New Cover
+                                </Fab>
+                                <Typography variant="body2" sx={{ marginLeft: 1, display: "inline" }}>
+                                    {updateCover && updateCover.name}
+                                </Typography>
+                            </label>
+                        </Box>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseUpdateVideo}>Cancel</Button>
+                        <LoadingButton loading={loadingDelete} onClick={handleUpdateVideo}>Confirm</LoadingButton>
                     </DialogActions>
                 </Dialog>
             </div >

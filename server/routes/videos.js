@@ -317,7 +317,7 @@ router.post('/create', async (req, res) => {
     }
 });
 
-router.put('/update/:videoId', async (req, res) => {
+router.patch('/update/:videoId', async (req, res) => {
     if (req.session.user) {
         try {
             let ans = await redis.getKey(req.session.user);
@@ -355,19 +355,32 @@ router.put('/update/:videoId', async (req, res) => {
     try {
         verify.isString(req.params.videoId, 'Video Id');
         verify.checkSpace(req.params.videoId, 'Video Id');
-        let video = await videoData.getVideoById(req.params.id);
+        let video = await videoData.getVideoById(req.params.videoId);
         verify.isString(updatedInfo.name, 'Video Name');
-        if (video.name === updatedInfo.name) throw 'Provided name is the same as before';
         verify.isString(updatedInfo.description, 'Video Description');
+        if(updatedInfo.cover) verify.checkAvatarSuffix(updatedInfo.cover);
+        if(updatedInfo.path) verify.checkVideoSuffix(updatedInfo.path);
+        verify.checkTags(updatedInfo.tags);
     } catch (e) {
-        res.status(500).json({ message: e });
+        res.status(500).json({ status:"500", message: e });
     }
 
     try {
+        if(updatedInfo.path){
+            let pathResult = await videoData.updateVideoPath (req.params.videoId, updatedInfo.path);
+            console.log(pathResult);
+        } 
+        
+        if(updatedInfo.cover) {
+            let coverResult = await videoData.updateVideoCover (req.params.videoId, updatedInfo.cover);
+            console.log(coverResult);
+        }
+        
         let video = await videoData.updateVideo(
-            req.params.id,
+            req.params.videoId,
             updatedInfo.name,
-            updatedInfo.description
+            updatedInfo.description,
+            updatedInfo.tags
         );
         res.status(200).json(video);
     } catch (e) {

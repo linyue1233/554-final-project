@@ -69,6 +69,7 @@ function checkAvatarSuffix(avatar) {
 }
 
 let checkTags = (arr) => {
+    if (!arr) throw `Tags must be provided`;
     const validTags = ['action', 'love', 'thriller', 'comedy', 'documentary']; //tbd
     for (let tag of arr) {
         if (validTags.indexOf(tag) === -1) throw `${tag} is not a valid tag`;
