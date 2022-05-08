@@ -44,6 +44,16 @@ io.on('connection', (socket) => {
         io.to(oroom).emit('message', { name, message });
     });
 
+    socket.on('userJoin', (name, room) => {
+        // curRoom = room;
+        socket.join(room);
+        socket.to(room).emit('userJoin', name);
+    });
+
+    socket.on('messageClient', ({ name, message, room }) => {
+        io.in(room).emit('messageClient', { name, message, timestamp: new Date().valueOf() });
+    });
+
     socket.on('disconnect', () => {
         console.log('Disconnect Fired');
     });

@@ -15,7 +15,7 @@ import AuthService from './service/auth_service';
 import ForgetPassword from './components/resetPassword/ForgetPassword';
 import ResetPassword from './components/resetPassword/ResetPassword';
 import SearchVideo from './components/SearchVideo';
-
+import ChatroomClient from './components/websocket/Chat';
 async function postAvatar({ image, description }) {
     const formData = new FormData();
     formData.append('image', image);
@@ -49,12 +49,12 @@ function App() {
                                 Home
                             </NavLink>
                         </div>
-                        <div className='searchVideo'>
+                        <div className="searchVideo">
                             <SearchVideo />
                         </div>
-                        {currentUser && currentUser.isAdmin &&
+                        {currentUser && currentUser.isAdmin && (
                             //col-md-2 offset-md-1
-                            <div className="navBar" style={{"width":"auto"}}>
+                            <div className="navBar" style={{ width: 'auto' }}>
                                 <NavLink className="navlink" to="/admin">
                                     Admin
                                 </NavLink>
@@ -72,9 +72,9 @@ function App() {
                                     Logout
                                 </NavLink>
                             </div>
-                        }
-                        {currentUser && !currentUser.isAdmin &&
-                            <div className="navBar" style={{"width":"auto"}}>
+                        )}
+                        {currentUser && !currentUser.isAdmin && (
+                            <div className="navBar" style={{ width: 'auto' }}>
                                 <NavLink className="navlink" to={`/users/${currentUser._id}`}>
                                     {currentUser.email}
                                 </NavLink>
@@ -89,9 +89,9 @@ function App() {
                                     Logout
                                 </NavLink>
                             </div>
-                        }
+                        )}
                         {!currentUser && (
-                            <div className="navBar" style={{"width":"auto"}}>
+                            <div className="navBar" style={{ width: 'auto' }}>
                                 <NavLink className="navlink" to="/login">
                                     Login
                                 </NavLink>
@@ -106,25 +106,19 @@ function App() {
                     <br />
                     <Routes>
                         <Route index path="/" element={<Home />} />
-                        <Route
-                            index
-                            path="/videoPlay/:videoId"
-                            element={<VideoPlay onChangeState={onChangeState} />}
-                        />
+                        <Route index path="/videoPlay/:videoId" element={<VideoPlay onChangeState={onChangeState} />} />
                         <Route path="/users/:id" element={<User />} />
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/requestResetPassword" element={<ForgetPassword />} />
                         <Route path="/user/resetPassword/:userEmail" element={<ResetPassword />} />
-                        <Route
-                            path="/videos/getAllVideosByTag/:tag/:type"
-                            element={<AllVideo />}
-                        />
+                        <Route path="/videos/getAllVideosByTag/:tag/:type" element={<AllVideo />} />
                         <Route
                             path="/videos/getAllVideosBySearchName/search=:searchTerm"
                             element={<ShowSearchVideo />}
                         />
+                        <Route path="/chatroom" element={<ChatroomClient />} />
                     </Routes>
                 </div>
                 <br />
