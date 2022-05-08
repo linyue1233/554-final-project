@@ -94,7 +94,8 @@ module.exports = {
         for (let commentId of commentsListById) {
             let temp = await this.getCommentByCommentId(commentId);
             if (!temp.isDeleted) {
-                result.push(temp);
+                let videoTemp = await videoFunctions.getVideoById(temp.videoId)
+                if(!videoTemp.isDeleted) result.push(temp);
             }
         }
         if (result.length == 0) return "don't have any comments";
@@ -117,7 +118,8 @@ module.exports = {
         for (let commentId of commentsListById) {
             let temp = await this.getCommentByCommentId(commentId);
             if (!temp.isDeleted) {
-                result.push(temp);
+                let videoTemp = await videoFunctions.getVideoById(temp.videoId)
+                if(!videoTemp.isDeleted) result.push(temp);
             }
         }
         // if (result.length == 0) return "don't have any comments";

@@ -156,7 +156,7 @@ function User () {
             let DeleteResult = await axios.delete(`/comments/${commentToDelete._id}`);
             
             if (DeleteResult.data === 'successfully delete this comment') {
-                let index = comments.findIndex((x) => x.id === commentToDelete.userId);
+                let index = comments.findIndex((x) => x._id === commentToDelete._id);
                 comments.splice(index, 1);
                 setLoadingDelete(false);
                 alert('Succesfully Deleted');
