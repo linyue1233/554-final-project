@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -114,6 +114,12 @@ function Admin() {
     const [updateDescriptionError, setUpdateDescriptionError] = useState(false);
     const [updateDescriptionHelper, setUpdateDescriptionHelper] = useState(null);
     const [loadingUpdate, setLoadingUpdate] = useState(false);
+    const [searchAllVideo, setSearchAllVideo] = useState('');
+    const [loadingSearchAllVideo, setLoadingSearchAllVideo] = useState(false);
+    const [allVideoSearched, setAllVideoSearched] = useState(false);
+    const [allVideoSearchResult, setAllVideoSearchResult] = useState([]);
+    const [searchAllVideoError, setSearchAllVideoError] = useState(false);
+    const [searchAllVideoHelper, setSearchAllVideoHelper] = useState(null);
 
     const handleOpenDeleteDialog = (comment) => {
         setOpenDeleteDialog(true);
@@ -531,6 +537,64 @@ function Admin() {
         }
     }
 
+    const handleSubmitSearchAllVideos = async (e) => {
+        e.preventDefault();
+
+        try {
+            if (searchAllVideoError) throw searchAllVideoHelper;
+            setLoadingSearchAllVideo(true);
+
+            let { data } = await axios(
+                {
+                    method: 'POST',
+                    url: '/videos/search=' + searchAllVideo,
+                    data: {
+                        searchTerm: searchAllVideo
+                    }
+                }
+            );
+            setLoadingSearchAllVideo(false);
+            setAllVideoSearchResult(data);
+            setAllVideoSearched(true);
+        } catch (e) {
+            setLoadingSearchAllVideo(false);
+            if (e.response) {
+                if (e.response.status === 401 || e.response.status === 403) {
+                    auth_service.logout();
+                    alert('Session Expired');
+                    window.location.href = '/login';
+                } else {
+                    alert(JSON.stringify(e.response.data.message));
+                    window.location.reload();
+                }
+            } else {
+                alert(e);
+            }
+
+        }
+
+    }
+
+    const handleBacktoAllVideos = (event) => {
+        event.preventDefault();
+        setAllVideoSearched(false);
+        setAllVideoSearchResult([]);
+        setSearchAllVideo('');
+    }
+
+    const handleSearchAllVideoChange = (e) => {
+        e.preventDefault();
+        setSearchAllVideo(e.target.value);
+
+        if (searchAllVideo && !searchAllVideo.trim()) {
+            setSearchAllVideoError(true);
+            setSearchAllVideoHelper('Video Name cannot be only empty spaces');
+        } else {
+            setSearchAllVideoError(false);
+            setSearchAllVideoHelper(null);
+        }
+    }
+
     useEffect(() => {
 
         async function checkAdmin() {
@@ -767,8 +831,29 @@ function Admin() {
                         }
                     </TabPanel>
                     <TabPanel value={tabValue} index={2}>
-                        <List dense={false}>
-                            {videoData.length !== 0 ? videoData.map((video) => {
+                        <Grid
+                            container
+                            spacing={0}
+                            direction="row"
+                            alignItems="center"
+                            justifyContent="center"
+                            sx={{ mt: 1 }}
+                        >
+                            <Grid item>
+                                <form onSubmit={handleSubmitSearchAllVideos}>
+                                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                                        <Typography variant="body1" sx={{ display: "flex", mr: 2, mb: 0.4 }}>
+                                            Search:
+                                        </Typography>
+                                        <TextField required error={searchAllVideoError} helperText={searchAllVideoHelper} id="input-with-sx" value={searchAllVideo} label="Video Name" variant="standard" onChange={handleSearchAllVideoChange} />
+                                        <Button sx={{ marginTop: 1.2, marginLeft: 1 }} variant="contained" type="submit">Submit</Button>
+                                    </Box>
+                                </form>
+                            </Grid>
+                        </Grid>
+                        {loadingSearchAllVideo && <CircularProgress sx={{ m: 2 }} />}
+                        {!loadingSearchAllVideo && <List dense={false}>
+                            {!allVideoSearched && videoData.length !== 0 && videoData.map((video) => {
                                 return (
                                     <ListItem key={video._id}
                                         secondaryAction={
@@ -790,8 +875,35 @@ function Admin() {
                                         />
                                     </ListItem>
                                 );
-                            }) : <div className='no-comment'>No Videos Now</div>}
-                        </List>
+                            })}
+                            {allVideoSearched && allVideoSearchResult.length !== 0 && allVideoSearchResult.map((video) => {
+                                return (
+                                    <ListItem key={video._id}
+                                        secondaryAction={
+                                            <><IconButton sx={{ mr: 1 }} edge="end" aria-label="delete" onClick={() => handleOpenUpdateVideoDialog(video)}>
+                                                <UpdateIcon />
+                                            </IconButton>
+                                                <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteVideoDialog(video)}>
+                                                    <DeleteIcon />
+                                                </IconButton></>
+                                        }>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                <OndemandVideoIcon />
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={<Link className='video-link' to={`/videoPlay/${video._id}`}>{video.videoName}</Link>}
+                                            secondary={video.description}
+                                        />
+                                    </ListItem>
+                                );
+                            })}
+                        </List>}
+                        {allVideoSearched && !loadingSearchAllVideo && videoData.length === 0 && <div className='no-comment'>No Videos Now</div>}
+                        {allVideoSearched && !loadingSearchAllVideo && allVideoSearchResult.length === 0 && <div className='no-comment'>No Videos Found</div>}
+                        {allVideoSearched && <div className='backButton'><Button variant="text" onClick={handleBacktoAllVideos}>Back to All Videos</Button>
+                        </div>}
                     </TabPanel>
                 </Box>
 
@@ -972,7 +1084,7 @@ function Admin() {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleCloseUpdateVideo}>Cancel</Button>
-                        <LoadingButton loading={loadingDelete} onClick={handleUpdateVideo}>Confirm</LoadingButton>
+                        <LoadingButton loading={loadingUpdate} onClick={handleUpdateVideo}>Confirm</LoadingButton>
                     </DialogActions>
                 </Dialog>
             </div >
