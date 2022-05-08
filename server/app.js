@@ -4,7 +4,7 @@ const configRoutes = require('./routes');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
-// const http = require('http').createServer(app);
+
 const server = app.listen(3000, () => {
     console.log("We've now got a server!");
     console.log('Your routes will be running on http://localhost:3000');
@@ -50,12 +50,3 @@ io.on('connection', (socket) => {
 });
 
 configRoutes(app);
-
-// app.listen(3000, () => {
-//     console.log("We've now got a server!");
-//     console.log('Your routes will be running on http://localhost:3000');
-// });
-
-// http.listen(3000, () => {
-//     console.log(`listening on *:${3000}`);
-// });
