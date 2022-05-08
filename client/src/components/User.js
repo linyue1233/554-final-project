@@ -112,7 +112,7 @@ function User() {
                 }
             }
             setVideoSearchResult(result);
-            setSearchedVideosPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1);
+            if(result.length !== 0) setSearchedVideosPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1);
             setVideoSearched(true);
             setLoadingContent(false);
         }
@@ -136,7 +136,7 @@ function User() {
                 }
             }
             setCommentSearchResult(result);
-            setSearchedCommentsPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1)
+            if(result.length !== 0) setSearchedCommentsPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1)
             setCommentSearched(true);
             setLoadingContent(false);
         }
