@@ -31,12 +31,12 @@ const sendPasswordResetEmail = async (toEmail,username) => {
       <h1>Hey ${username}! Your password reset link is here! </h1>
       <hr>
         We received a request from your end for resetting your password.
-            If you did trigger this email, you can go to this <a target="_blank" href="http://localhost:4000/user/forget_password/${toEmail}">link</a> to reset your password with the code: ${code}. 
+            If you did trigger this email, you can go to this <a target="_blank" href="http://localhost:4000/user/resetPassword/${toEmail}">link</a> to reset your password with the code: ${code}. 
             In case this was not done by you, you can safely ignore this email. 
             <br> We wish you a great day!
         <br>
         <br>
-        <p>P.S: This is the link: http://localhost:4000/user/forget_password/${toEmail} - if you're having trouble, just copy-paste it into the URL of your browser.
+        <p>P.S: This is the link: http://localhost:4000/user/resetPassword/${toEmail} - if you're having trouble, just copy-paste it into the URL of your browser.
         Also, this link is meant for your hands only - <strong>DO NOT</strong> share it with anyone.
     </body>`,
     };

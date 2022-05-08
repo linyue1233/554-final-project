@@ -121,7 +121,7 @@ function App() {
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/requestResetPassword" element={<ForgetPassword />} />
-                        <Route path="/resetPassword/:userEmail" element={<ResetPassword />} />
+                        <Route path="/user/resetPassword/:userEmail" element={<ResetPassword />} />
                         <Route
                             path="/videos/getAllVideosByTag/:tag/:type"
                             element={<AllVideo />}
