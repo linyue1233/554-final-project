@@ -12,7 +12,8 @@ import SignupPage from './components/SignupPage';
 import LoginPage from './components/LoginPage';
 import Admin from './components/Admin';
 import AuthService from './service/auth_service';
-
+import ForgetPassword from './components/resetPassword/ForgetPassword';
+import ResetPassword from './components/resetPassword/ResetPassword';
 import SearchVideo from './components/SearchVideo';
 
 async function postAvatar({ image, description }) {
@@ -119,6 +120,8 @@ function App() {
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/login" element={<LoginPage />} />
+                        <Route path="/requestResetPassword" element={<ForgetPassword />} />
+                        <Route path="/resetPassword/:userEmail" element={<ResetPassword />} />
                         <Route
                             path="/videos/getAllVideosByTag/:tag/:type"
                             element={<AllVideo />}

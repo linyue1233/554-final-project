@@ -199,6 +199,30 @@ module.exports = {
         return true;
     },
 
+    async resetPassword(userEmail,newPassword){
+        try{
+            verify.isString(userEmail, 'Email');
+            verify.checkSpace(userEmail, 'Email');
+            // find user by email
+            const userCollection = await users();
+            const user = await userCollection.findOne({ email: userEmail.trim() });
+            if (!user) throw `There is no user it the email of ${userEmail}`;
+            const newHash = await bcrypt.hash(newPassword.trim(), saltRounds);
+            let userUpdatePassword = {
+                password: newHash,
+            };
+            const updateInfo = await userCollection.updateOne(
+                { _id: user._id },
+                { $set: userUpdatePassword }
+            );
+            if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+                throw `Failed to update password`;
+            return true;
+        }catch(error){
+            throw error;
+        }
+    },
+
     // add commentId to user
     async addCommentId(userId, commentId) {
         verify.isString(userId, 'User ID');
