@@ -59,7 +59,7 @@ function User() {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [commentToDelete, setCommentToDelete] = useState(null);
     const [loadingDelete, setLoadingDelete] = useState(false);
-    const [likedVideosCount, setLikedVideosCount] = useState(0);
+    const [likedVideosCount, setLikedVideosCount] = useState(1);
     const [likedVideosPage, setLikedVideosPage] = useState(1);
     const [searchVideo, setSearchVideo] = useState('');
     const [videoSearchResult, setVideoSearchResult] = useState([]);
@@ -254,7 +254,7 @@ function User() {
                 setLoadingContent(true);
                 const { data: likes } = await axios.get(`/users/AllLikedVideos/${id}`);
                 setLikedVideos(likes);
-                setLikedVideosCount((likes.length % 5 === 0) ? likes.length / 5 : parseInt(likes.length / 5) + 1);
+                if(likes.length !== 0) setLikedVideosCount((likes.length % 5 === 0) ? likes.length / 5 : parseInt(likes.length / 5) + 1);
 
                 const { data: comment } = await axios.get(`/comments/user/${id}`);
                 if (comment !== "don't have any comments") {
