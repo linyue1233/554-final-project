@@ -2,6 +2,7 @@ import axios, { Axios } from 'axios';
 import React, { useEffect } from 'react';
 import '../App.css';
 import AuthService from '../service/auth_service';
+import verify from '../verify';
 
 function LoginPage(){
     let email;
@@ -12,6 +13,19 @@ function LoginPage(){
         e.preventDefault();
 
         try {
+
+            //check email
+            if(!email) throw 'You must input a Email';
+            verify.isString(email.value, 'email');
+            verify.checkEmail(email.value);
+
+            //check password
+            if(!password) throw 'You must input a Password';
+            verify.isString(password.value, 'password');
+            verify.checkPassword(password.value);
+            
+            
+
             const {data} = await axios({
                 method: 'POST',
                 url: '/users/login',
@@ -60,7 +74,7 @@ function LoginPage(){
                 <label>
                 Email:
                     
-                    <input class="form-control"
+                    <input className="form-control"
                         ref={(node)=>{
                             email = node;
                         }}
@@ -75,7 +89,7 @@ function LoginPage(){
                 <label>
                 Password:
                     
-                    <input type="password" class="form-control"
+                    <input type="password" className="form-control"
                         ref={(node)=>{
                             password = node;
                         }}

@@ -180,3 +180,14 @@ footer {
     bottom: 0;
     position: absolute;
 }
+
+.nav_head {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.searchVideo {
+    width: auto;
+    min-width: 350px;
+}

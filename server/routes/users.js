@@ -15,6 +15,7 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads' + path.sep});
 const { uploadFile } = require('../config/awsS3');
 const redis = require('../util/redisUtil');
+const { log } = require('console');
 
 async function changeAvatar(filePath) {
     let newFilePath = path.join("uploads",uuid.v4());
@@ -46,9 +47,9 @@ router.post('/avatarImage', upload.single('avatar'), async (req, res) => {
             return res.status(403).json({ status:"403",message:"Please login firstly."})
         }
     }
-    if(!req.session.user){
-        return res.status(403).json({ status:"403",message:"Please login firstly."})
-    }
+    // if(!req.session.user){
+    //     return res.status(403).json({ status:"403",message:"Please login firstly."})
+    // }
     if( req.file===null || req.file === undefined ){
         res.status(400).json({ message: 'Please choose a file to upload.' });
         return;

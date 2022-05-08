@@ -42,21 +42,22 @@ function App() {
         <BrowserRouter>
             <div className="App">
                 <header className="App-header">
-                    <div className="row">
+                    <div className="nav_head">
                         <div className="col-md-1">
                             <NavLink className="navlink" to="/">
                                 Home
                             </NavLink>
                         </div>
-                        <div className="col-md-4 offset-md-3">
+                        <div className='searchVideo'>
                             <SearchVideo />
                         </div>
                         {currentUser && currentUser.isAdmin &&
-                            <div className="col-md-2 offset-md-1">
+                            //col-md-2 offset-md-1
+                            <div className="navBar" style={{"width":"auto"}}>
                                 <NavLink className="navlink" to="/admin">
                                     Admin
                                 </NavLink>
-                                <NavLink to={`/users/${currentUser._id}`}>
+                                <NavLink className="navlink" to={`/users/${currentUser._id}`}>
                                     {currentUser.email}
                                 </NavLink>
                                 <NavLink
@@ -72,8 +73,8 @@ function App() {
                             </div>
                         }
                         {currentUser && !currentUser.isAdmin &&
-                            <div className="col-md-2 offset-md-2">
-                                <NavLink to={`/users/${currentUser._id}`}>
+                            <div className="navBar" style={{"width":"auto"}}>
+                                <NavLink className="navlink" to={`/users/${currentUser._id}`}>
                                     {currentUser.email}
                                 </NavLink>
                                 <NavLink
@@ -89,7 +90,7 @@ function App() {
                             </div>
                         }
                         {!currentUser && (
-                            <div className="col-md-2 offset-md-2">
+                            <div className="navBar" style={{"width":"auto"}}>
                                 <NavLink className="navlink" to="/login">
                                     Login
                                 </NavLink>

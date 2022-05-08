@@ -20,8 +20,8 @@ const navigate = useNavigate();
     return (
         <form id = 'search' onSubmit={handleSubmit}>
             <label>
-                Search
-                <input autoComplete='off' type='text' name='searchTerm' onChange = {handleChange}/>
+                Search &nbsp;
+                <input autoComplete='off' type='text' name='searchTerm' placeholder='Please input video name...' onChange = {handleChange}/>
             </label>
             <button className='button' type='submit'>
                 Confirm
