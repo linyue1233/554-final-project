@@ -361,6 +361,10 @@ function Admin() {
         });
         setUpdateCover(null);
         setUpdatePath(null);
+        setUpdateVideoNameError(false);
+        setUpdateVideoNameHelper(null);
+        setUpdateDescriptionError(false);
+        setUpdateDescriptionHelper(null);
         setOpenUpdateVideoDialog(false);
     }
 
