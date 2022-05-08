@@ -105,8 +105,21 @@ router.delete('/:commentId', async (req, res) => {
         return res.status(403).json({ status:"403",message:"Please login firstly."})
     }
     // delete one comment by commentId
+    try{
+        const user = await userData.getUserByEmail(req.session.user);
+        if(!user.isAdmin) {
+            const comment = await commentData.getCommentByCommentId(req.params.commentId);
+            if(!comment.userId === user.userId){
+                return res.status(500).json({ status:"500", message: "Unauthorized request"});
+            }
+        }
+    }catch(e) {
+        return res.status(500).json({ status:"500", message: e});
+    }
+
     try {
-        const comment = await commentData.deleteOneCommentByCommentId(req.params.commentId);
+        const user = await userData.getUserByEmail(req.session.user);
+        const comment = await commentData.deleteOneCommentByCommentId(req.params.commentId, user);
         res.status(200).json(comment);
     } catch (error) {
         res.status(500).json({ error: error });

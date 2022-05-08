@@ -419,4 +419,68 @@ router.get('/checkAuth', async (req, res) => {
     }
 })
 
+
+router.post("/requestResetPassword", async (req, res) => {
+    let userEmail = xss(req.body.userEmail);
+    if( !userEmail){
+        return res.status(400).json({ status:"400",message:"Please input your email address."}) 
+    }
+    let userExists;
+    try{
+        userExists = await userData.getUserByEmail(userEmail);
+    }catch (error) {
+        return res.status(400).json({ status:"400",message:"Your email address does not exist"}) 
+    }
+    // send email
+    try{
+        let sendSuccess = await emailUtil.sendPasswordResetEmail(userEmail, userExists.username);
+        if( sendSuccess){
+            return res.status(200).json({ status:"200", data:"Your can find your code in your email."})
+        }else{
+            return res.status(400).json({ status:"500",message:"Maybe there is something with your password, plz send message to Admin."}) 
+        }
+    }catch (error) {
+        return res.status(400).json({ status:"500",message:"Maybe there is something with your password, plz send message to Admin."}) 
+    }
+}),
+
+router.post('/checkUserReset', async (req, res)=>{
+    let userEmail = xss(req.body.userEmail).trim();
+    userEmail = userEmail+ "code";
+    // check whether in redis
+    try{
+        let code = await redis.getKey(userEmail);
+        if(code === null){
+            return res.status(401).json({ status:"401",message:"Your token is exipred."})
+        }
+        return res.status(200).json({status:"200",data:"Pass token"})
+    }catch(error){
+        return res.status(403).json({ status:"403",message:"Please login firstly."})
+    }
+}),
+
+router.post('/resetPassword', async(req, res)=>{
+    let code = xss(req.body.code);
+    let userEmail = xss(req.body.userEmail);
+    let newPassword = xss(req.body.newPassword);
+    // check code expire
+    try{
+        let token = await redis.getKey(userEmail+"code");
+        if(token === null){
+            return res.status(401).json({ status:"401",message:"Your token is exipred."})
+        }
+        if( token !== code){
+            return res.status(400).json({ status:"400",message:"Your code is not right, check your email for the right code."})
+        }
+        let resetRes = await userData.resetPassword(userEmail,newPassword);
+        if(resetRes){
+            return res.status(200).json({status:"200",data:"You have reset your password successfully."})
+        }else{
+            return res.status(500).json({status:"500",data:"Something wrong happened. Contact the admin."})
+        }
+    }catch(error){
+        return res.status(500).json({ status:"500",message:error})
+    }
+})
+
 module.exports = router;

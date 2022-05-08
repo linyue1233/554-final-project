@@ -28,6 +28,7 @@ import Pagination from '@mui/material/Pagination';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import AuthService from '../service/auth_service';
+import Divider from '@mui/material/Divider';
 
 function TabPanel(props) {
     const { children, value, index } = props;
@@ -155,7 +156,7 @@ function User () {
             let DeleteResult = await axios.delete(`/comments/${commentToDelete._id}`);
             
             if (DeleteResult.data === 'successfully delete this comment') {
-                let index = comments.findIndex((x) => x.id === commentToDelete.userId);
+                let index = comments.findIndex((x) => x._id === commentToDelete._id);
                 comments.splice(index, 1);
                 setLoadingDelete(false);
                 alert('Succesfully Deleted');
@@ -218,6 +219,7 @@ function User () {
                 const {data: comment} = await axios.get(`/comments/user/${id}`);
                 if(comment !== "don't have any comments"){
                     setComments(comment);
+                    console.log(comments);
                     setCommentsPageCount((comment.length % 5 === 0) ? comment.length / 5 : parseInt(comment.length / 5) + 1)
                 }
                 
@@ -404,26 +406,33 @@ function User () {
                     <List dense={false}>
                         {!commentSearched && !loadingContent && (comments.length !== 0 ? (comments.length < 5 ? comments : comments.slice( (commentsPage - 1) * 5, commentsPage * 5 )).map((comment) => {
                         return (
-                            <ListItem key={comment._id}
-                            secondaryAction={
-                                <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteDialog(comment)}>
+                            <><ListItem key={comment._id}
+                                secondaryAction={<IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteDialog(comment)}>
                                     <DeleteIcon />
-                                </IconButton>
-                            }>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <CommentIcon />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={comment.content}
-                                secondary={comment.date ? `${comment.date.year}/${comment.date.month}/${comment.date.day}` : null}
-                            />
-                            </ListItem>);
+                                </IconButton>}>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <CommentIcon />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={comment.content}
+                                    secondary={<React.Fragment>
+                                        <Typography
+                                            sx={{ display: 'inline' }}
+                                            component="span"
+                                            variant="body2"
+                                            color="text.primary"
+                                        >
+                                            {comment.videoId.videoName}
+                                        </Typography>
+                                        {` — ${comment.date ? `${comment.date.year}/${comment.date.month}/${comment.date.day}` : null}`}
+                                    </React.Fragment>} />
+                            </ListItem><Divider variant="inset" component="li" /></>);
                         }): <div className='no-result'>No Comments Now</div>)}
                         {(commentSearched && !loadingContent) && (commentSearchResult.length !== 0 ? (commentSearchResult.length < 5 ? commentSearchResult : commentSearchResult.slice( (searchedCommentsPage - 1) * 5, searchedCommentsPage * 5 )).map((comment) => {
                         return (
-                            <ListItem key={comment._id}
+                            <><ListItem alignItems="flex-start" key={comment._id}
                             secondaryAction={
                                 <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteDialog(comment)}>
                                     <DeleteIcon />
@@ -436,9 +445,22 @@ function User () {
                             </ListItemAvatar>
                             <ListItemText
                                 primary={comment.content}
-                                secondary={comment.date ? `${comment.date.year}/${comment.date.month}/${comment.date.day}` : null}
+                                secondary={
+                                    <React.Fragment>
+                                        <Typography
+                                        sx={{ display: 'inline' }}
+                                        component="span"
+                                        variant="body2"
+                                        color="text.primary"
+                                        >
+                                        {comment.videoId.videoName}
+                                        </Typography>
+                                        {` — ${comment.date ? `${comment.date.year}/${comment.date.month}/${comment.date.day}` : null}`}
+                                    </React.Fragment>
+                                }
                             />
-                            </ListItem>);
+                            </ListItem><Divider variant="inset" component="li" /></>
+                            );
                         }): <div className='no-result'>No Comments Found</div>)}
                     </List>
                     {commentSearched &&

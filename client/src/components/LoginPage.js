@@ -66,6 +66,12 @@ function LoginPage(){
         
     }, []);
 
+
+    const sendResetRequest = ()=>{
+        window.location.href = "/requestResetPassword";
+        return;
+    }
+
     body = (
         <div className = 'loginForm'>
         <form className='form' id='create_user' onSubmit={handleSubmit}>
@@ -105,6 +111,12 @@ function LoginPage(){
             <button className="btn btn-primary" type='submit'>
                 Comfirm
             </button>
+            
+            <button className="btn btn-secondary" style= {{marginLeft:50}} onClick={sendResetRequest}>
+                Reset Password
+            </button>
+            
+            
         </form>
         </div>
         

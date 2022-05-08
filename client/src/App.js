@@ -12,7 +12,8 @@ import SignupPage from './components/SignupPage';
 import LoginPage from './components/LoginPage';
 import Admin from './components/Admin';
 import AuthService from './service/auth_service';
-
+import ForgetPassword from './components/resetPassword/ForgetPassword';
+import ResetPassword from './components/resetPassword/ResetPassword';
 import SearchVideo from './components/SearchVideo';
 
 async function postAvatar({ image, description }) {
@@ -25,16 +26,16 @@ async function postAvatar({ image, description }) {
 }
 
 function App() {
-    const [currentUser,setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
 
-    useEffect(()=>{
+    useEffect(() => {
         let tempUser = AuthService.getCurrentUser();
         setCurrentUser(tempUser);
-    },[JSON.stringify(currentUser)])
+    }, [JSON.stringify(currentUser)]);
 
-    const onChangeState = ()=>{
+    const onChangeState = () => {
         setCurrentUser(null);
-    }
+    };
 
     // const currentUser = AuthService.getCurrentUser();
 
@@ -105,11 +106,17 @@ function App() {
                     <br />
                     <Routes>
                         <Route index path="/" element={<Home />} />
-                        <Route index path="/videoPlay/:videoId" element={<VideoPlay onChangeState={onChangeState}/>} />
+                        <Route
+                            index
+                            path="/videoPlay/:videoId"
+                            element={<VideoPlay onChangeState={onChangeState} />}
+                        />
                         <Route path="/users/:id" element={<User />} />
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/login" element={<LoginPage />} />
+                        <Route path="/requestResetPassword" element={<ForgetPassword />} />
+                        <Route path="/user/resetPassword/:userEmail" element={<ResetPassword />} />
                         <Route
                             path="/videos/getAllVideosByTag/:tag/:type"
                             element={<AllVideo />}
