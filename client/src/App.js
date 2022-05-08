@@ -55,6 +55,9 @@ function App() {
                         {currentUser && currentUser.isAdmin && (
                             //col-md-2 offset-md-1
                             <div className="navBar" style={{ width: 'auto' }}>
+                                <NavLink className="navlink" to="/chatroom">
+                                    Chatroom
+                                </NavLink>
                                 <NavLink className="navlink" to="/admin">
                                     Admin
                                 </NavLink>
@@ -75,6 +78,9 @@ function App() {
                         )}
                         {currentUser && !currentUser.isAdmin && (
                             <div className="navBar" style={{ width: 'auto' }}>
+                                <NavLink className="navlink" to="/chatroom">
+                                    Chatroom
+                                </NavLink>
                                 <NavLink className="navlink" to={`/users/${currentUser._id}`}>
                                     {currentUser.email}
                                 </NavLink>
