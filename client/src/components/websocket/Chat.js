@@ -53,7 +53,7 @@ function Chat() {
                     var roomSet = new Set(roomArray);
                     roomArray = [];
                     roomSet.forEach(function (value) {
-                        roomArray.push(value);
+                        if (value !== '') roomArray.push(value);
                     });
                     setRoomList(roomArray);
                 }
