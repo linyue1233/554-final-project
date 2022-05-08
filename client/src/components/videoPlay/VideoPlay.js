@@ -220,6 +220,11 @@ function VideoPlay(props) {
                         <ChatRoom videoId={videoId} />
                     </div>
                 )}
+                {!currentUser && (
+                    <div>
+                        <h2>You need to login to comment.</h2>
+                    </div>
+                )}
 
                 {/* comments part */}
                 <div className="comments">

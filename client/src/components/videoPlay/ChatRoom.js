@@ -38,14 +38,16 @@ function ChatRoom(props) {
     };
 
     const onMessageSubmit = (e) => {
+        e.preventDefault();
         let msgEle = document.getElementById('message');
+        if (msgEle.value.length === 0) return;
         console.log([msgEle.name], msgEle.value);
         setState({ ...state, [msgEle.name]: msgEle.value });
         socketRef.current.emit('message', {
             name: state.name,
             message: msgEle.value,
         });
-        e.preventDefault();
+
         setState({ message: '', name: state.name });
         msgEle.value = '';
         msgEle.focus();
@@ -64,55 +66,51 @@ function ChatRoom(props) {
     return (
         <div>
             {state.name && (
-                <div className="card">
-                    <div className="render-chat">
-                        <h1>Chat Room:{room}</h1>
-                        {renderChat()}
+                <div className="card col-6">
+                    <div className="render-chat card-header">
+                        <h2>Chat Room:</h2>
                     </div>
-                    <form onSubmit={onMessageSubmit}>
-                        <h1>Messenger: {name}</h1>
-                        <div>
-                            <input
-                                name="message"
-                                id="message"
-                                variant="outlined"
-                                label="Message"
-                            />
-                        </div>
-                        <button>Send Message</button>
-                    </form>
+                    <br />
+                    <div className="card-body">
+                        {renderChat()}
+                        <form onSubmit={onMessageSubmit}>
+                            {/* <h1>Messenger: {name}</h1> */}
+                            <div className="row">
+                                <div className="col-md-auto">
+                                    <label htmlFor="message">Message:</label>
+                                    <input
+                                        name="message"
+                                        id="message"
+                                        variant="outlined"
+                                        label="Message"
+                                    />
+                                </div>
+                                &nbsp;&nbsp;
+                                <button className="btn btn-primary col-md-auto">
+                                    Send
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
 
             {!state.name && (
-                <form
-                    className="form"
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        setState({ name: name });
-                        userjoin(name, room);
-                        // userName.value = '';
-                    }}
-                >
-                    {/* <div className="form-group">
-                        <label>
-                            User Name:
-                            <br />
-                            <input id="username_input" />
-                            <br />
-                        </label>
-                        <label>
-                            Room:
-                            <br />
-                            <input id="room_input" />
-                        </label>
-                    </div> */}
-                    <br />
-
-                    <br />
-                    <br />
-                    <button type="submit"> Click to join</button>
-                </form>
+                <div>
+                    <h3>Chatting room:</h3>
+                    <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setState({ name: name });
+                            userjoin(name, room);
+                            // userName.value = '';
+                        }}
+                    >
+                        Join
+                    </button>
+                </div>
             )}
         </div>
     );

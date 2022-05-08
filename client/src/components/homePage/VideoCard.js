@@ -18,11 +18,21 @@ function VideoCard(props) {
                         >
                             Play
                         </a>
-                        <div className="offset-md-4 col-md-4">
+                        <div className="offset-md-2 col-md-auto">
                             <p>
-                                <i class="bi bi-heart">&nbsp;{video.likeCount}</i>
+                                <i class="bi bi-heart">
+                                    &nbsp;
+                                    {video.likeCount > 1000
+                                        ? parseInt(video.likeCount / 1000) + 'k+'
+                                        : video.likeCount}
+                                </i>
                                 &nbsp;&nbsp;
-                                <i class="bi bi-eye">&nbsp;{video.viewCount}</i>
+                                <i class="bi bi-eye">
+                                    &nbsp;
+                                    {video.viewCount > 1000
+                                        ? parseInt(video.viewCount / 1000) + 'k+'
+                                        : video.viewCount}
+                                </i>
                             </p>
                         </div>
                     </div>
