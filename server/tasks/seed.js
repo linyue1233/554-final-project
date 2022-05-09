@@ -59,7 +59,7 @@ const main = async () => {
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
             ['action', 'comedy', 'thriller'],
             'rushHour description',
-            'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
+            'https://benchmoon-554.s3.amazonaws.com/1652064253283-WechatIMG19.jpeg'
         );
 
         const titanic = await videos.createVideo(
@@ -67,7 +67,7 @@ const main = async () => {
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
             ['thriller', 'love', 'documentary'],
             'titanic description',
-            'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
+            'https://benchmoon-554.s3.amazonaws.com/1652064253283-WechatIMG19.jpeg'
         );
 
         const greenBook = await videos.createVideo(
@@ -75,7 +75,7 @@ const main = async () => {
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
             ['comedy', 'love', 'documentary'],
             'greenBook description',
-            'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
+            'https://benchmoon-554.s3.amazonaws.com/1652064253283-WechatIMG19.jpeg'
         );
 
         const batman = await videos.createVideo(
@@ -83,7 +83,7 @@ const main = async () => {
             'https://benchmoon-554.s3.amazonaws.com/1649962183358-1649960458200107.mp4',
             ['action', 'thriller', 'love'],
             'batman description',
-            'https://benchmoon-554.s3.amazonaws.com/WechatIMG915.jpeg'
+            'https://benchmoon-554.s3.amazonaws.com/1652064253283-WechatIMG19.jpeg'
         );
     } catch (e) {
         console.log(e);

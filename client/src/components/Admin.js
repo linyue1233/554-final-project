@@ -51,7 +51,6 @@ function TabPanel(props) {
             role="tabpanel"
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
         >
             {value === index && <div>{children}</div>}
         </div>
@@ -641,6 +640,11 @@ function Admin() {
     else if (!loading && !checking) {
         return (
             <div className='admin-tab'>
+                <div> 
+                <h1 className="admin-header">
+                    Admin Home
+                </h1>
+                </div>
                 <Box sx={{ width: '100%' }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={tabValue} onChange={handleChange}>
@@ -734,10 +738,10 @@ function Admin() {
                                                 >
                                                     <AddIcon sx={{ mr: 0.5 }} /> Upload Video
                                                 </Fab>
-                                                <Typography variant="body2" sx={{ marginLeft: 1, display: "inline" }}>
-                                                    {uploadVideo && uploadVideo.name}
-                                                </Typography>
                                             </label>
+                                            <Typography variant="body2" sx={{ marginLeft: 1.5, marginTop: 1, display: "inline" }}>
+                                                {uploadVideo && uploadVideo.name}
+                                            </Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', mt: 2, mb: 2 }}>
                                             <label htmlFor="upload-cover">
@@ -759,11 +763,14 @@ function Admin() {
                                                 >
                                                     <AddIcon sx={{ mr: 0.5 }} /> Upload Cover
                                                 </Fab>
-                                                <Typography variant="body2" sx={{ marginLeft: 1, display: "inline" }}>
-                                                    {uploadCover && uploadCover.name}
-                                                </Typography>
                                             </label>
+                                            <Typography variant="body2" sx={{ marginLeft: 1.5, marginTop: 1, display: "inline" }}>
+                                                {uploadCover && uploadCover.name}
+                                            </Typography>
                                         </Box>
+                                        <Typography variant="body2" sx={{ marginLeft: 1, marginTop: 0.5 }}>
+                                            Recommend 600 x 450
+                                        </Typography>
                                         <LoadingButton sx={{ marginTop: 1, marginLeft: 1, marginBottom: 1 }} variant="contained" type="submit" loading={loadingUpload}>Submit</LoadingButton>
                                     </form>
                                 </Grid>
@@ -783,7 +790,6 @@ function Admin() {
                                         labelId="video-select-label"
                                         id="video-select"
                                         value={searchVideo}
-                                        label="Video"
                                         onChange={handleSearchChange}
                                     >
                                         {videoData ? videoData.map((video) => {
@@ -980,7 +986,6 @@ function Admin() {
                         />
                         <TextField
                             required
-                            autoFocus
                             margin="dense"
                             id="update_videoDescription"
                             label="Description"
@@ -1055,10 +1060,10 @@ function Admin() {
                                 >
                                     <AddIcon sx={{ mr: 0.5 }} /> New Video
                                 </Fab>
-                                <Typography variant="body2" sx={{ marginLeft: 1, display: "inline" }}>
-                                    {updatePath && updatePath.name}
-                                </Typography>
                             </label>
+                            <Typography variant="body2" sx={{ marginLeft: 1.5, marginTop: 1, display: "inline" }}>
+                                {updatePath && updatePath.name}
+                            </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', mt: 2 }}>
                             <label htmlFor="update-cover">
@@ -1080,11 +1085,15 @@ function Admin() {
                                 >
                                     <AddIcon sx={{ mr: 0.5 }} /> New Cover
                                 </Fab>
-                                <Typography variant="body2" sx={{ marginLeft: 1, display: "inline" }}>
-                                    {updateCover && updateCover.name}
-                                </Typography>
                             </label>
+                            <Typography variant="body2" sx={{ marginLeft: 1.5, marginTop: 1, display: "inline" }}>
+                                {updateCover && updateCover.name}
+                            </Typography>
+                            <br />
                         </Box>
+                        <Typography variant="body2" sx={{ marginLeft: 1.5, marginTop: 1 }}>
+                            Recommend 600 x 450
+                        </Typography>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleCloseUpdateVideo}>Cancel</Button>

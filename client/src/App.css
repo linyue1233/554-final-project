@@ -84,7 +84,7 @@ footer {
 
 .user-content {
     color: black;
-    background-color: grey;
+    background-color: white;
 }
 
 .user-avatar {
@@ -190,4 +190,18 @@ footer {
 .searchVideo {
     width: auto;
     min-width: 350px;
+}
+
+.admin-header{
+    font-size: 22px;
+    margin-left: 10px;
+}
+
+.user{
+    background-color: rgb(228, 228, 228);
+}
+
+.user-header{
+    font-size: 22px;
+    margin-left: 10px;
 }

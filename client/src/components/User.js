@@ -38,7 +38,6 @@ function TabPanel(props) {
             role="tabpanel"
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
         >
             {value === index && <div>{children}</div>}
         </div>
@@ -112,7 +111,7 @@ function User() {
                 }
             }
             setVideoSearchResult(result);
-            if(result.length !== 0) setSearchedVideosPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1);
+            if (result.length !== 0) setSearchedVideosPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1);
             setVideoSearched(true);
             setLoadingContent(false);
         }
@@ -136,7 +135,7 @@ function User() {
                 }
             }
             setCommentSearchResult(result);
-            if(result.length !== 0) setSearchedCommentsPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1)
+            if (result.length !== 0) setSearchedCommentsPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1)
             setCommentSearched(true);
             setLoadingContent(false);
         }
@@ -254,7 +253,7 @@ function User() {
                 setLoadingContent(true);
                 const { data: likes } = await axios.get(`/users/AllLikedVideos/${id}`);
                 setLikedVideos(likes);
-                if(likes.length !== 0) setLikedVideosCount((likes.length % 5 === 0) ? likes.length / 5 : parseInt(likes.length / 5) + 1);
+                if (likes.length !== 0) setLikedVideosCount((likes.length % 5 === 0) ? likes.length / 5 : parseInt(likes.length / 5) + 1);
 
                 const { data: comment } = await axios.get(`/comments/user/${id}`);
                 if (comment !== "don't have any comments") {
@@ -282,15 +281,17 @@ function User() {
     } else if (!checking && userData) {
         return (
             <div className='user-content'>
-                <div className='user-avatar'>
-                    <Avatar sx={{ width: 48, height: 48 }} alt={userData.username} src={userData.avatar} />
-                </div>
-                <div className='user-info'>
-                    {userData.username}
-                    <br />
-                    <EmailIcon fontSize='12px' sx={{ marginRight: 0.5 }} />
-                    {userData.email}
-                </div>
+                <div className='user'>
+                    <h1 className='user-header'>User Profile</h1>
+                    <div className='user-avatar'>
+                        <Avatar sx={{ width: 48, height: 48 }} alt={userData.username} src={userData.avatar} />
+                    </div>
+                    <div className='user-info'>
+                        {userData.username}
+                        <br />
+                        <EmailIcon fontSize='12px' sx={{ marginRight: 0.5 }} />
+                        {userData.email}
+                    </div>
                 <br />
                 <br />
                 <br />
@@ -332,15 +333,15 @@ function User() {
                                 {!videoSearched && (loadingContent ? Array.from(new Array(5))
                                     : (likedVideos.length < 5 ? likedVideos : likedVideos.slice((likedVideosPage - 1) * 5, likedVideosPage * 5))).map((video, index) => (
                                         <Grid item key={index}>
-                                            <Box key={index} sx={{ width: 220, marginRight: 2.5, my: 5, marginLeft: 2.5 }}>
+                                            <Box key={index} sx={{ width: 240, marginRight: 2.5, my: 5, marginLeft: 2.5 }}>
                                                 {video ? (
                                                     <Link to={`/videoPlay/${video._id}`}>
                                                         <img
-                                                            style={{ width: 220, height: 145 }}
+                                                            style={{ width: 240, height: 180 }}
                                                             alt={video.videoName}
                                                             src={video.cover} /></Link>
                                                 ) : (
-                                                    <Skeleton variant="rectangular" width={220} height={145} />
+                                                    <Skeleton variant="rectangular" width={240} height={180} />
                                                 )}
                                                 {video ? (
                                                     <Box sx={{ pr: 2 }}>
@@ -361,7 +362,7 @@ function User() {
                                             </Box>
                                         </Grid>
                                     ))}
-                                {!videoSearched && !loadingContent && likedVideos.length === 0 && <div className='no-result'>No Likes, go to add some</div>}
+                                {!videoSearched && !loadingContent && likedVideos.length === 0 && <p className='no-result'>No Likes, go to add some</p>}
                             </Grid>
                             <Grid
                                 container
@@ -373,15 +374,15 @@ function User() {
                                 {videoSearched && (loadingContent ? Array.from(new Array(5))
                                     : (videoSearchResult.length < 5 ? videoSearchResult : videoSearchResult.slice((searchedVideosPage - 1) * 5, searchedVideosPage * 5))).map((video, index) => (
                                         <Grid item key={index}>
-                                            <Box key={index} sx={{ width: 210, marginRight: 2.5, my: 5, marginLeft: 2.5 }}>
+                                            <Box key={index} sx={{ width: 240, marginRight: 2.5, my: 5, marginLeft: 2.5 }}>
                                                 {video ? (
                                                     <Link to={`/videoPlay/${video._id}`}>
                                                         <img
-                                                            style={{ width: 210, height: 145 }}
+                                                            style={{ width: 240, height: 180 }}
                                                             alt={video.videoName}
                                                             src={video.cover} /></Link>
                                                 ) : (
-                                                    <Skeleton variant="rectangular" width={210} height={145} />
+                                                    <Skeleton variant="rectangular" width={240} height={180} />
                                                 )}
                                                 {video ? (
                                                     <Box sx={{ pr: 2 }}>
@@ -402,7 +403,7 @@ function User() {
                                             </Box>
                                         </Grid>
                                     ))}
-                                {videoSearched && !loadingContent && videoSearchResult.length === 0 && <div className='no-result'>No Video Found</div>}
+                                {videoSearched && !loadingContent && videoSearchResult.length === 0 && <p className='no-result'>No Videos Found</p>}
                             </Grid>
                             {videoSearched &&
                                 <div className='backButton'><Button variant="text" onClick={handleBacktoAllVideos}>Back to All Videos</Button>
@@ -469,7 +470,7 @@ function User() {
                                                     {` — ${comment.date ? `${comment.date.year}/${comment.date.month}/${comment.date.day}` : null}`}
                                                 </React.Fragment>} />
                                         </ListItem><Divider variant="inset" component="li" /></>);
-                                }) : <div className='no-result'>No Comments Now</div>)}
+                                }) : <p className='no-result'>No Comments Now</p>)}
                                 {(commentSearched && !loadingContent) && (commentSearchResult.length !== 0 ? (commentSearchResult.length < 5 ? commentSearchResult : commentSearchResult.slice((searchedCommentsPage - 1) * 5, searchedCommentsPage * 5)).map((comment) => {
                                     return (
                                         <><ListItem alignItems="flex-start" key={comment._id}
@@ -501,7 +502,7 @@ function User() {
                                             />
                                         </ListItem><Divider variant="inset" component="li" /></>
                                     );
-                                }) : <div className='no-result'>No Comments Found</div>)}
+                                }) : <p className='no-result'>No Comments Found</p>)}
                             </List>
                             {commentSearched &&
                                 <div className='backButton'><Button variant="text" onClick={handleBacktoAllComments}>Back to All Comments</Button>
@@ -541,6 +542,7 @@ function User() {
                             </LoadingButton>
                         </DialogActions>
                     </Dialog>
+                </div>
                 </div>
             </div>);
     } else if (loading) {

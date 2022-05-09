@@ -24,6 +24,7 @@ function ForgetPassword() {
             return;
         }
         const params = { 'userEmail': userEmail };
+        console.log(userEmail);
         axios.post('/users/requestResetPassword',params).then(res=>{
             alert("Please check your email to reset your password.");
         }).catch(err=>{
