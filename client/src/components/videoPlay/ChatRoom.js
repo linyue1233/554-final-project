@@ -66,50 +66,66 @@ function ChatRoom(props) {
     return (
         <div>
             {state.name && (
-                <div className="card col-6">
-                    <div className="render-chat card-header">
-                        <h2>Chat Room:</h2>
+                <div className="border container">
+                    <div className="render-chat">
+                        <h2 className="border-bottom">Live chat:</h2>
                     </div>
                     <br />
-                    <div className="card-body">
+
+                    <div
+                        className="overflow-auto"
+                        style={{
+                            height: '250px',
+                            width: '100%',
+                            border: '1px solid #ccc',
+                            padding: '10px',
+                        }}
+                    >
                         {renderChat()}
-                        <form onSubmit={onMessageSubmit}>
-                            {/* <h1>Messenger: {name}</h1> */}
-                            <div className="row">
-                                <div className="col-md-auto">
-                                    <label htmlFor="message">Message:</label>
-                                    <input
-                                        name="message"
-                                        id="message"
-                                        variant="outlined"
-                                        label="Message"
-                                    />
-                                </div>
-                                &nbsp;&nbsp;
-                                <button className="btn btn-primary col-md-auto">
-                                    Send
-                                </button>
-                            </div>
-                        </form>
                     </div>
+                    <br />
+                    <form onSubmit={onMessageSubmit}>
+                        <div className="col-md-auto">
+                            <label htmlFor="message">{name}</label>
+                            &nbsp;
+                            <input
+                                style={{ width: '100%' }}
+                                name="message"
+                                id="message"
+                                variant="outlined"
+                                label="Message"
+                                placeholder="Say something..."
+                            />
+                        </div>
+                        <br />
+                        <div className="d-flex flex-row-reverse">
+                            <button className="btn btn-primary  p-2">Send</button>
+                        </div>
+                        <br />
+                    </form>
                 </div>
             )}
 
             {!state.name && (
-                <div>
-                    <h3>Chatting room:</h3>
-                    <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setState({ name: name });
-                            userjoin(name, room);
-                            // userName.value = '';
-                        }}
-                    >
-                        Join
-                    </button>
+                <div className="border">
+                    <div className="container">
+                        <h2 className="border-bottom">Live chat:</h2>
+                        <br />
+                        <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setState({ name: name });
+                                userjoin(name, room);
+                                // userName.value = '';
+                            }}
+                        >
+                            Join
+                        </button>
+                        <br />
+                        <br />
+                    </div>
                 </div>
             )}
         </div>

@@ -2,8 +2,6 @@ import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ButtonGroup, Button, Grid } from '@mui/material';
-import { Link } from 'react-router-dom';
 import OneVideo from './VideoCard';
 
 function Classification(props) {
@@ -48,57 +46,76 @@ function Classification(props) {
     }
 
     return (
-        <div className="container">
+        <div className="container border-bottom">
             <div className="row">
-                <h1 className="title col-md-auto cap-first-letter">{tag}</h1>
-                <ButtonGroup
-                    className="col-md-auto"
-                    variant="text"
-                    aria-label="text button group"
+                <h3 className="title col-md-auto cap-first-letter">{tag}</h3>
+                <div
+                    class="btn-group col-md-auto"
+                    role="group"
+                    aria-label="Basic outlined example"
                 >
-                    <Button
+                    <button
+                        id={`${tag}-2022`}
+                        type="button"
+                        className="btn btn-outline-primary"
                         onClick={() => {
                             setYear(2022);
+                            document.getElementById(`${tag}-2022`).className =
+                                'btn btn-primary';
+                            document.getElementById(`${tag}-2021`).className =
+                                'btn btn-outline-primary';
+                            document.getElementById(`${tag}-2020`).className =
+                                'btn btn-outline-primary';
                         }}
                     >
                         2022
-                    </Button>
-                    <Button
+                    </button>
+                    <button
+                        id={`${tag}-2021`}
+                        type="button"
+                        className="btn btn-outline-primary"
                         onClick={() => {
                             setYear(2021);
+                            document.getElementById(`${tag}-2021`).className =
+                                'btn btn-primary';
+                            document.getElementById(`${tag}-2022`).className =
+                                'btn btn-outline-primary';
+                            document.getElementById(`${tag}-2020`).className =
+                                'btn btn-outline-primary';
                         }}
                     >
                         2021
-                    </Button>
-                    <Button
+                    </button>
+                    <button
+                        id={`${tag}-2020`}
+                        type="button"
+                        className="btn btn-outline-primary"
                         onClick={() => {
                             setYear(2020);
+                            document.getElementById(`${tag}-2020`).className =
+                                'btn btn-primary';
+                            document.getElementById(`${tag}-2021`).className =
+                                'btn btn-outline-primary';
+                            document.getElementById(`${tag}-2022`).className =
+                                'btn btn-outline-primary';
                         }}
                     >
                         2020
-                    </Button>
-                    <Button
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-outline-primary"
                         onClick={() => {
                             window.location.href = `/videos/getAllVideosByTag/${tag}/likeCount`;
                         }}
                     >
                         All
-                    </Button>
-                </ButtonGroup>
+                    </button>
+                </div>
             </div>
             <br />
-            {/* <Grid
-                key="card"
-                container
-                className="allVideo"
-                spacing={0}
-                direction="row"
-                alignItems="center"
-                justifyContent="flex-start"
-            >
-                {videoCard}
-            </Grid> */}
             <div className="row">{videoCard}</div>
+            <br />
         </div>
     );
 }

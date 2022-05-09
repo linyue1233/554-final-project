@@ -11,28 +11,35 @@ function Home() {
             </div>
             <br />
             <br />
-            <div key="action">
-                <Classification tag={'action'} />
-            </div>
-            <br />
-            <br />
-            <div key="love">
-                <Classification tag={'love'} />
-            </div>
-            <br />
-            <br />
-            <div key="thriller">
-                <Classification tag={'thriller'} />
-            </div>
-            <br />
-            <br />
-            <div key="comedy">
-                <Classification tag={'comedy'} />
-            </div>
-            <br />
-            <br />
-            <div key="documentary">
-                <Classification tag={'documentary'} />
+            <div key="classification">
+                {/* show title 'video classification' */}
+                <div key="video-classification">
+                    <h1 className="text-center border-bottom">Video classification</h1>
+                </div>
+                <br />
+                <div key="action">
+                    <Classification tag={'action'} />
+                </div>
+                <br />
+                <br />
+                <div key="love">
+                    <Classification tag={'love'} />
+                </div>
+                <br />
+                <br />
+                <div key="thriller">
+                    <Classification tag={'thriller'} />
+                </div>
+                <br />
+                <br />
+                <div key="comedy">
+                    <Classification tag={'comedy'} />
+                </div>
+                <br />
+                <br />
+                <div key="documentary">
+                    <Classification tag={'documentary'} />
+                </div>
             </div>
         </div>
     );

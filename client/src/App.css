@@ -31,7 +31,7 @@ body {
     background-color: #000000;
 }
 
-.card {
+.videoCard {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin: 0 10px 20px;
 }
@@ -192,16 +192,16 @@ footer {
     min-width: 350px;
 }
 
-.admin-header{
+.admin-header {
     font-size: 22px;
     margin-left: 10px;
 }
 
-.user{
+.user {
     background-color: rgb(228, 228, 228);
 }
 
-.user-header{
+.user-header {
     font-size: 22px;
     margin-left: 10px;
 }

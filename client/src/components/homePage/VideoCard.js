@@ -6,19 +6,19 @@ function VideoCard(props) {
 
     if (video) {
         return (
-            <div className="card col-md-3">
+            <div className="card col-md-3 videoCard">
                 <img src={video.cover} className="card-img-top" alt={video.videoName} />
                 <div className="card-body">
                     <h5 className="card-title">{video.videoName}</h5>
                     <p className="card-text">{video.description}</p>
-                    <div className="row">
+                    <div className="row justify-content-between">
                         <a
                             href={`/videoPlay/${video._id}`}
-                            className="btn btn-primary col-md-4"
+                            className="btn btn-primary col-md-auto"
                         >
                             Play
                         </a>
-                        <div className="offset-md-2 col-md-auto">
+                        <div className="col-md-auto">
                             <p>
                                 <i class="bi bi-heart">
                                     &nbsp;
