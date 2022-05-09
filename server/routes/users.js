@@ -15,7 +15,7 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads' + path.sep});
 const { uploadFile } = require('../config/awsS3');
 const redis = require('../util/redisUtil');
-const { log } = require('console');
+const emailUtil = require('../util/emailUtil');
 
 async function changeAvatar(filePath) {
     let newFilePath = path.join("uploads",uuid.v4());
@@ -437,10 +437,10 @@ router.post("/requestResetPassword", async (req, res) => {
         if( sendSuccess){
             return res.status(200).json({ status:"200", data:"Your can find your code in your email."})
         }else{
-            return res.status(400).json({ status:"500",message:"Maybe there is something with your password, plz send message to Admin."}) 
+            return res.status(400).json({ status:"400",message:"Maybe there is something with your password, plz send message to Admin."}) 
         }
     }catch (error) {
-        return res.status(400).json({ status:"500",message:"Maybe there is something with your password, plz send message to Admin."}) 
+        return res.status(500).json({ status:"500",message:"Maybe there is something with your password, plz send message to Admin."}) 
     }
 }),
 
