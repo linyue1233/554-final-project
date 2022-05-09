@@ -175,7 +175,7 @@ function VideoPlay(props) {
         return (
             <div className="App-body container">
                 <div className="border-bottom" width="100%">
-                    <h1 className="fw-bold" style={{ color: '#6D3BF6' }}>
+                    <h1 className="fw-bold cap-first-letter" style={{ color: '#6D3BF6' }}>
                         {videoInfo.videoName}
                     </h1>
                 </div>
