@@ -48,7 +48,7 @@ function App() {
                             <NavLink className="navlink" to="/">
                                 Home
                             </NavLink>
-                        </div>
+                        </div> &nbsp;
                         <div className="searchVideo">
                             <SearchVideo />
                         </div>

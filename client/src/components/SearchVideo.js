@@ -19,10 +19,10 @@ const navigate = useNavigate();
 
     return (
         <form id = 'search' onSubmit={handleSubmit}>
-            <label>
+            <label style={{height:"34.4px"}}>
                 Search &nbsp;
-                <input autoComplete='off' type='text' name='searchTerm' placeholder='Please input video name...' onChange = {handleChange}/>
-            </label>
+                <input  autoComplete='off' type='text' name='searchTerm' placeholder='Video name' onChange = {handleChange}/>
+            </label> &nbsp;
             <button className='button' type='submit'>
                 Confirm
             </button>
