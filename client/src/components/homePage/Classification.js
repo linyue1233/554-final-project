@@ -48,7 +48,7 @@ function Classification(props) {
     return (
         <div className="container border-bottom">
             <div className="row">
-                <h3 className="title col-md-auto cap-first-letter">{tag}</h3>
+                <h2 className="title col-md-auto cap-first-letter">{tag}</h2>
                 <div
                     class="btn-group col-md-auto"
                     role="group"

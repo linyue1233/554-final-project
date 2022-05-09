@@ -9,7 +9,7 @@ function VideoCard(props) {
             <div className="card col-md-3 videoCard">
                 <img src={video.cover} className="card-img-top" alt={video.videoName} />
                 <div className="card-body">
-                    <h5 className="card-title">{video.videoName}</h5>
+                    <h3 className="card-title">{video.videoName}</h3>
                     <p className="card-text">{video.description}</p>
                     <div className="row justify-content-between">
                         <a
