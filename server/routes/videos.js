@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
+const uuid = require("uuid");
 const path = require('path');
 const fs = require('fs');
+const sharp = require('sharp');
 const videoData = data.videos;
 const userData = data.users;
 const verify = require('../data/verify');
@@ -140,6 +142,12 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+async function changeCover(filePath) {
+    let newFilePath = path.join("uploads",uuid.v4());
+    await sharp(filePath).resize(600, 450).toFile(newFilePath);
+    return newFilePath;
+}
+
 router.post('/videoCover', upload.single('cover'), async (req, res) => {
     if (req.session.user) {
         try {
@@ -160,18 +168,14 @@ router.post('/videoCover', upload.single('cover'), async (req, res) => {
                 .json({ status: '403', message: 'Please login firstly.' });
         }
     }
-    if (!req.session.user) {
-        return res.status(403).json({ status: '403', message: 'Please login firstly.' });
-    }
-
-    try {
-        const user = await userData.getUserByEmail(req.session.user)
-        if (!user.isAdmin) {
-            return res.status(500).json({ status:"500", message: "Unauthorized request"});
-        }
-    } catch (e) {
-        return res.status(500).json({ status:"500", message: e});
-    }
+    // try {
+    //     const user = await userData.getUserByEmail(req.session.user)
+    //     if (!user.isAdmin) {
+    //         return res.status(500).json({ status:"500", message: "Unauthorized request"});
+    //     }
+    // } catch (e) {
+    //     return res.status(500).json({ status:"500", message: e});
+    // }
 
     if (req.file === null || req.file === undefined) {
         res.status(400).json({ message: 'Please choose a file to upload.' });
@@ -187,11 +191,14 @@ router.post('/videoCover', upload.single('cover'), async (req, res) => {
         return;
     }
     // reset filename
+    let oldPath = file.path;
     file.filename = `${Date.now()}-${req.file.originalname}`;
     // resize avatarImage
+    file.path = await changeCover(file.path);
     try {
         const result = await uploadFile(file);
         // delete local record
+        fs.unlinkSync(oldPath);
         fs.unlinkSync(file.path);
         res.send({
             imagePath: 'https://benchmoon-554.s3.amazonaws.com/' + `${result.key}`,
