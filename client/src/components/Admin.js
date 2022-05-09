@@ -640,6 +640,11 @@ function Admin() {
     else if (!loading && !checking) {
         return (
             <div className='admin-tab'>
+                <div> 
+                <h1 className="admin-header">
+                    Admin Home
+                </h1>
+                </div>
                 <Box sx={{ width: '100%' }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={tabValue} onChange={handleChange}>

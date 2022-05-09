@@ -111,7 +111,7 @@ function User() {
                 }
             }
             setVideoSearchResult(result);
-            if(result.length !== 0) setSearchedVideosPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1);
+            if (result.length !== 0) setSearchedVideosPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1);
             setVideoSearched(true);
             setLoadingContent(false);
         }
@@ -135,7 +135,7 @@ function User() {
                 }
             }
             setCommentSearchResult(result);
-            if(result.length !== 0) setSearchedCommentsPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1)
+            if (result.length !== 0) setSearchedCommentsPageCount((result.length % 5 === 0) ? result.length / 5 : parseInt(result.length / 5) + 1)
             setCommentSearched(true);
             setLoadingContent(false);
         }
@@ -253,7 +253,7 @@ function User() {
                 setLoadingContent(true);
                 const { data: likes } = await axios.get(`/users/AllLikedVideos/${id}`);
                 setLikedVideos(likes);
-                if(likes.length !== 0) setLikedVideosCount((likes.length % 5 === 0) ? likes.length / 5 : parseInt(likes.length / 5) + 1);
+                if (likes.length !== 0) setLikedVideosCount((likes.length % 5 === 0) ? likes.length / 5 : parseInt(likes.length / 5) + 1);
 
                 const { data: comment } = await axios.get(`/comments/user/${id}`);
                 if (comment !== "don't have any comments") {
@@ -281,15 +281,17 @@ function User() {
     } else if (!checking && userData) {
         return (
             <div className='user-content'>
-                <div className='user-avatar'>
-                    <Avatar sx={{ width: 48, height: 48 }} alt={userData.username} src={userData.avatar} />
-                </div>
-                <div className='user-info'>
-                    {userData.username}
-                    <br />
-                    <EmailIcon fontSize='12px' sx={{ marginRight: 0.5 }} />
-                    {userData.email}
-                </div>
+                <div className='user'>
+                    <h1 className='user-header'>User Profile</h1>
+                    <div className='user-avatar'>
+                        <Avatar sx={{ width: 48, height: 48 }} alt={userData.username} src={userData.avatar} />
+                    </div>
+                    <div className='user-info'>
+                        {userData.username}
+                        <br />
+                        <EmailIcon fontSize='12px' sx={{ marginRight: 0.5 }} />
+                        {userData.email}
+                    </div>
                 <br />
                 <br />
                 <br />
@@ -540,6 +542,7 @@ function User() {
                             </LoadingButton>
                         </DialogActions>
                     </Dialog>
+                </div>
                 </div>
             </div>);
     } else if (loading) {
