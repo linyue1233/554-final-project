@@ -43,12 +43,13 @@ function App() {
         <BrowserRouter>
             <div className="App">
                 <header className="App-header">
-                    <div className="nav_head">
-                        <div className="col-md-1">
+                    <div className="d-flex justify-content-between">
+                        <div className="col-md-auto">
                             <NavLink className="navlink" to="/">
                                 Home
                             </NavLink>
-                        </div> &nbsp;
+                        </div>{' '}
+                        &nbsp;
                         <div className="searchVideo">
                             <SearchVideo />
                         </div>
@@ -61,7 +62,10 @@ function App() {
                                 <NavLink className="navlink" to="/admin">
                                     Admin
                                 </NavLink>
-                                <NavLink className="navlink" to={`/users/${currentUser._id}`}>
+                                <NavLink
+                                    className="navlink"
+                                    to={`/users/${currentUser._id}`}
+                                >
                                     {currentUser.email}
                                 </NavLink>
                                 <NavLink
@@ -81,7 +85,10 @@ function App() {
                                 <NavLink className="navlink" to="/chatroom">
                                     Chatroom
                                 </NavLink>
-                                <NavLink className="navlink" to={`/users/${currentUser._id}`}>
+                                <NavLink
+                                    className="navlink"
+                                    to={`/users/${currentUser._id}`}
+                                >
                                     {currentUser.email}
                                 </NavLink>
                                 <NavLink
@@ -112,14 +119,27 @@ function App() {
                     <br />
                     <Routes>
                         <Route index path="/" element={<Home />} />
-                        <Route index path="/videoPlay/:videoId" element={<VideoPlay onChangeState={onChangeState} />} />
+                        <Route
+                            index
+                            path="/videoPlay/:videoId"
+                            element={<VideoPlay onChangeState={onChangeState} />}
+                        />
                         <Route path="/users/:id" element={<User />} />
                         <Route path="/admin" element={<Admin />} />
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/login" element={<LoginPage />} />
-                        <Route path="/requestResetPassword" element={<ForgetPassword />} />
-                        <Route path="/user/resetPassword/:userEmail" element={<ResetPassword />} />
-                        <Route path="/videos/getAllVideosByTag/:tag/:type" element={<AllVideo />} />
+                        <Route
+                            path="/requestResetPassword"
+                            element={<ForgetPassword />}
+                        />
+                        <Route
+                            path="/user/resetPassword/:userEmail"
+                            element={<ResetPassword />}
+                        />
+                        <Route
+                            path="/videos/getAllVideosByTag/:tag/:type"
+                            element={<AllVideo />}
+                        />
                         <Route
                             path="/videos/getAllVideosBySearchName/search=:searchTerm"
                             element={<ShowSearchVideo />}

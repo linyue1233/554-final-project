@@ -3,7 +3,6 @@ html {
 }
 
 body {
-    min-height: 100%;
     margin: 0;
     padding: 0;
     position: relative;
@@ -12,11 +11,10 @@ body {
 .App-header {
     background-color: #0071f3;
     height: 64px;
-    width: 100%;
     color: white;
-    text-align: left;
+    /* text-align: left; */
     position: relative;
-    padding: 20px;
+    padding: 15px;
 }
 
 .cap-first-letter:first-letter {
