@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import '../../App.css';
 import AuthService from '../../service/auth_service';
-
+import axios from 'axios';
 function Chat() {
     const [chat, setChat] = useState([]);
     const [room, setRoom] = useState();
@@ -13,6 +13,7 @@ function Chat() {
     const socketRef = useRef();
     const [ifSelectChatroom, setIfSelectChatroom] = useState(true);
     const [currentSelect, setCurrentSelect] = useState(false);
+    const [emptyChatroom, setEmptyChatroom] = useState(false);
     // const ifSelectChatroom = false;
     const user = AuthService.getCurrentUser();
     const [state, setState] = useState({ message: '', name: '' });
@@ -21,43 +22,46 @@ function Chat() {
         //     transports: ['websocket', 'polling'],
         // });
         socketRef.current = io('/');
-        function fetchData() {
-            if (user.username !== 'admin') {
-                //如果不是admin直接链接到chatroom
-                socketRef.current.emit('userJoin', user.username, user.username);
-                setRoom(user.username);
-                setName(user.username);
-                setState({ message: '', name: user.username });
-                let tempList = localStorage.getItem('roomList');
-                if (tempList === null) {
-                    let roomName = user.username;
-                    localStorage.setItem('roomList', roomName);
-                    tempList = localStorage.getItem('roomList');
-                    setRoomList(roomName);
-                } else {
-                    let roomName = user.username;
-                    tempList = tempList + ',' + roomName;
-                    localStorage.removeItem('roomList');
-                    localStorage.setItem('roomList', tempList);
+        async function fetchData() {
+            try{
+                if (user.username !== 'admin') {
+                    //如果不是admin直接链接到chatroom
+                    socketRef.current.emit('userJoin', user.username, user.username);
+                    await axios.post(`/chatroom/${user.username}`);
+                    setRoom(user.username);
+                    setName(user.username);
+                    setState({ message: '', name: user.username });
+                    let tempList = localStorage.getItem('roomList');
+                    if (tempList === null) {
+                        let roomName = user.username;
+                        localStorage.setItem('roomList', roomName);
+                        tempList = localStorage.getItem('roomList');
+                        setRoomList(roomName);
+                    } else {
+                        let roomName = user.username;
+                        tempList = tempList + ',' + roomName;
+                        localStorage.removeItem('roomList');
+                        localStorage.setItem('roomList', tempList);
+                    }
+                } else if (user.username === 'admin') {
+                    //如果是admin并且没有选择chatroom
+                    setCurrentSelect(true);
+                    setName(state.name);
+                    setState({ message: '', name: user.username });
+                    let tempList =await axios.get(`/chatroom`);
+                    console.log(tempList);
+                    if (tempList.data.length === 0) {
+                        setEmptyChatroom(true);
+                        setRoomList([]);
+                    } else {
+                        setEmptyChatroom(false);
+                        setRoomList(tempList.data);
+                    }
                 }
-            } else if (user.username === 'admin') {
-                //如果是admin并且没有选择chatroom
-                setCurrentSelect(true);
-                setName(state.name);
-                setState({ message: '', name: user.username });
-                let tempList = localStorage.getItem('roomList');
-                if (tempList == null || tempList.length === 0) {
-                    setRoomList([]);
-                } else {
-                    let roomArray = tempList.split(',');
-                    var roomSet = new Set(roomArray);
-                    roomArray = [];
-                    roomSet.forEach(function (value) {
-                        if (value !== '') roomArray.push(value);
-                    });
-                    setRoomList(roomArray);
-                }
+            }catch(err){
+                console.log(err);
             }
+
             return () => {
                 socketRef.current.disconnect();
             };
@@ -107,23 +111,26 @@ function Chat() {
         socketRef.current.emit('userJoin', user.username, room);
     };
     const handleDeleteChatRoom = (room) => {
-        let tempList = localStorage.getItem('roomList');
-        let newRoomList = new Set(tempList.split(','));
-        let roomArray = [];
-        newRoomList.forEach(function (value) {
-            if (value !== room && value !== '') roomArray.push(value);
-        });
-        localStorage.removeItem('roomList');
-        setRoomList(roomArray);
-        let curList = '';
-        for (let i of roomArray) curList = curList + i + ',';
-        localStorage.setItem('roomList', curList);
+        axios.delete(`/chatroom/${room}`);
+        let tempList = roomList;
+        let newList =[]
+        for (let i = 0; i < tempList.length; i++) {
+            if (tempList[i] !== room) {
+                newList.push(tempList[i]);
+            }
+        }
+        setRoomList(newList);
         navigate('/');
     };
     return currentSelect ? (
         ifSelectChatroom ? (
             <div>
-                <ul>
+                {emptyChatroom ? (
+                    <div>
+                        <h1>No chatroom yet</h1>
+                        </div>
+                        ) : (
+                <ul>{}
                     {roomList &&
                         roomList.map((room) => (
                             <li key={room}>
@@ -131,6 +138,7 @@ function Chat() {
                             </li>
                         ))}
                 </ul>
+                )}
             </div>
         ) : (
             <div>

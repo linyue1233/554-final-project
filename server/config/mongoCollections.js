@@ -20,4 +20,5 @@ module.exports = {
     users: getCollectionFn('users'),
     videos: getCollectionFn('videos'),
     comments: getCollectionFn('comments'),
+    chatroom: getCollectionFn('chatroom'),
 };

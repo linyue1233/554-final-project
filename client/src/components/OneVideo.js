@@ -68,13 +68,6 @@ function OneVideo(props) {
                             >
                                 {videoTitle}
                             </Typography>
-                            {/* <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                    component="p"
-                                >
-                                    Description: {videoDescription}
-                                </Typography> */}
                             <Typography variant="body2" color="textSecondary" component="p">
                                 <FavoriteIcon fontSize="small" />
                                 {likeCount}
