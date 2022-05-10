@@ -9,6 +9,7 @@ function ChatRoom(props) {
     const [chat, setChat] = useState([]);
     const [room, setRoom] = useState(props.videoId);
     const [name, setName] = useState(currentUser.username);
+    console.log(currentUser);
 
     const socketRef = useRef();
 
@@ -66,30 +67,28 @@ function ChatRoom(props) {
     return (
         <div>
             {state.name && (
-                <div className="border container">
+                <div className="container">
                     <div className="render-chat">
-                        <h2 className="border-bottom">Live chat:</h2>
+                        <h2>Live chat:</h2>
                     </div>
-                    <br />
-
                     <div
                         className="overflow-auto"
                         style={{
-                            height: '250px',
+                            height: '350px',
                             width: '100%',
                             border: '1px solid #ccc',
                             padding: '10px',
+                            'margin-bottom': '10px',
                         }}
                     >
                         {renderChat()}
                     </div>
-                    <br />
                     <form onSubmit={onMessageSubmit}>
-                        <div className="col-md-auto">
+                        <div className="col-md-auto border-top">
                             <label htmlFor="message">{name}</label>
                             &nbsp;
                             <input
-                                style={{ width: '100%' }}
+                                style={{ width: '100%', marginBottom: '10px' }}
                                 name="message"
                                 id="message"
                                 variant="outlined"
@@ -97,7 +96,6 @@ function ChatRoom(props) {
                                 placeholder="Say something..."
                             />
                         </div>
-                        <br />
                         <div className="d-flex flex-row-reverse">
                             <button className="btn btn-primary  p-2">Send</button>
                         </div>
@@ -107,25 +105,23 @@ function ChatRoom(props) {
             )}
 
             {!state.name && (
-                <div className="border">
-                    <div className="container">
-                        <h2 className="border-bottom">Live chat:</h2>
-                        <br />
-                        <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setState({ name: name });
-                                userjoin(name, room);
-                                // userName.value = '';
-                            }}
-                        >
-                            Join
-                        </button>
-                        <br />
-                        <br />
-                    </div>
+                <div className="container">
+                    <h2 className="border-bottom">Live chat:</h2>
+                    <br />
+                    <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setState({ name: name });
+                            userjoin(name, room);
+                            // userName.value = '';
+                        }}
+                    >
+                        Join
+                    </button>
+                    <br />
+                    <br />
                 </div>
             )}
         </div>

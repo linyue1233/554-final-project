@@ -173,97 +173,109 @@ function VideoPlay(props) {
         );
     } else if (videoInfo) {
         return (
-            <div className="App-body container">
-                <div className="border-bottom" width="100%">
-                    <h1 className="fw-bold cap-first-letter" style={{ color: '#6D3BF6' }}>
+            <div className="App-body container row">
+                <div
+                    className="border-bottom col-md-12"
+                    width="100%"
+                    style={{ 'margin-bottom': '20px' }}
+                >
+                    <p
+                        className="fw-bold cap-first-letter h1"
+                        style={{ color: '#6D3BF6' }}
+                    >
                         {videoInfo.videoName}
-                    </h1>
+                        &nbsp;&nbsp;
+                        <small className="fw-light h5">
+                            <i class="bi bi-calendar-event">
+                                &nbsp;
+                                {videoInfo.uploadDate.year}-{videoInfo.uploadDate.month}-
+                                {videoInfo.uploadDate.day}
+                            </i>
+                        </small>
+                    </p>
                 </div>
-                <br></br>
-                <div className="row">
-                    <div className="video-player col-md-9" key={videoInfo.videoName}>
+                <div className="col-md-9">
+                    <div className="video-player" key={videoInfo.videoName}>
                         <label for="myVideo"></label>
                         <video id="myVideo" width="1024px" height="480px" controls>
                             <source src={videoInfo.videoPath} type="video/mp4"></source>
                         </video>
                     </div>
-                    {/* chatroom box */}
-                    {currentUser && (
-                        <div className="col-md-3" width="100%" height="480px">
-                            <ChatRoom videoId={videoId} />
+                    <Box mt={2} sx={{ textAlign: 'center' }}>
+                        <div
+                            className="comments-title"
+                            style={{ color: 'green', display: 'inline-block' }}
+                        >
+                            <i class="bi bi-eye">&nbsp;{videoInfo.viewCount}</i>
                         </div>
-                    )}
-                    {!currentUser && (
-                        <div className="row col-md-3 border" width="100%" height="480px">
-                            <h2>You need to login to join the live chat.</h2>
+                        <div
+                            className="comments-title"
+                            style={{ color: 'green', display: 'inline-block' }}
+                        >
+                            <i class="bi bi-heart">&nbsp;{likeCount}</i>
                         </div>
-                    )}
+                        {currentUser && Boolean(isLikeBtn) ? (
+                            <button className="comment-form-button" onClick={removeLike}>
+                                unLike
+                            </button>
+                        ) : (
+                            <button className="comment-form-button" onClick={addLike}>
+                                Like
+                            </button>
+                        )}
+                    </Box>
+                    <div className="card">
+                        <div className="card-header h1" style={{ color: '#6D3BF6' }}>
+                            Description
+                        </div>
+                        <div className="card-body">
+                            <p className="card-text">{videoInfo.description}</p>
+                        </div>
+                    </div>
+                    {/* comments part */}
+                    <div className="comments">
+                        <div className="border-bottom">
+                            <h3 className="comments-title" style={{ color: '#6D3BF6' }}>
+                                Comments
+                            </h3>
+                        </div>
+                        {videoComments.length > 0 ? (
+                            <div className="comments-container">
+                                {videoComments &&
+                                    videoComments.map((comment) => (
+                                        <Comment key={comment.id} comment={comment}>
+                                            comment.content
+                                        </Comment>
+                                    ))}
+                            </div>
+                        ) : (
+                            <div style={{ fontSize: '40px' }}>
+                                There are no comments for this video, you can write now.
+                            </div>
+                        )}
+                        <div
+                            className="comment-form-title border-top"
+                            style={{ color: 'black' }}
+                        >
+                            Write comment
+                        </div>
+                        <CommentForm
+                            submitLable="Write"
+                            handleSubmit={addComment}
+                        ></CommentForm>
+                    </div>
                 </div>
-                <Box mt={2} sx={{ textAlign: 'center' }}>
-                    <div
-                        className="comments-title"
-                        style={{ color: 'green', display: 'inline-block' }}
-                    >
-                        <i class="bi bi-eye">&nbsp;{videoInfo.viewCount}</i>
+                {/* chatroom box */}
+                {currentUser && (
+                    <div className="col-md-3 border" width="100%" height="480px">
+                        <ChatRoom videoId={videoId} />
                     </div>
-                    <div
-                        className="comments-title"
-                        style={{ color: 'green', display: 'inline-block' }}
-                    >
-                        <i class="bi bi-heart">&nbsp;{likeCount}</i>
+                )}
+                {!currentUser && (
+                    <div className="col-md-3 border" width="100%" height="480px">
+                        <h2>You need to login to join the live chat.</h2>
                     </div>
-                    {currentUser && Boolean(isLikeBtn) ? (
-                        <button className="comment-form-button" onClick={removeLike}>
-                            unLike
-                        </button>
-                    ) : (
-                        <button className="comment-form-button" onClick={addLike}>
-                            Like
-                        </button>
-                    )}
-                </Box>
-                <div className="card col-md-9">
-                    <div className="card-header h1" style={{ color: '#6D3BF6' }}>
-                        Description
-                    </div>
-                    <div className="card-body">
-                        <p className="card-text">{videoInfo.description}</p>
-                    </div>
-                </div>
-
-                {/* comments part */}
-                <div className="comments col-md-9">
-                    <div className="border-bottom">
-                        <h3 className="comments-title" style={{ color: '#6D3BF6' }}>
-                            Comments
-                        </h3>
-                    </div>
-
-                    {videoComments.length > 0 ? (
-                        <div className="comments-container">
-                            {videoComments &&
-                                videoComments.map((comment) => (
-                                    <Comment key={comment.id} comment={comment}>
-                                        comment.content
-                                    </Comment>
-                                ))}
-                        </div>
-                    ) : (
-                        <div style={{ fontSize: '40px' }}>
-                            There are no comments for this video, you can write now.
-                        </div>
-                    )}
-                    <div
-                        className="comment-form-title border-top"
-                        style={{ color: 'black' }}
-                    >
-                        Write comment
-                    </div>
-                    <CommentForm
-                        submitLable="Write"
-                        handleSubmit={addComment}
-                    ></CommentForm>
-                </div>
+                )}
             </div>
         );
     }
