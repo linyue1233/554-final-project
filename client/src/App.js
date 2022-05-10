@@ -151,7 +151,7 @@ function App() {
                 <br />
                 <div>
                     <footer>
-                        <p className="text-center">Designed by Group 3</p>
+                        <p className="footer-text">Designed by Group 3</p>
                     </footer>
                 </div>
                 <br />

@@ -1,29 +1,29 @@
 .video-player {
-    display: flex;
+    display        : flex;
     justify-content: center;
 }
 
 .video-body {
-    height: 100%;
-    width: 100%;
+    height          : 100%;
+    width           : 100%;
     background-color: #c2d7ee;
 }
 
 .user-content {
-    color: black;
+    color           : black;
     background-color: grey;
 }
 
 .user-avatar {
-    margin-top: 10px;
+    margin-top : 10px;
     margin-left: 10px;
-    float: left;
+    float      : left;
 }
 
 .user-info {
-    font-size: 16px;
-    margin-top: 10px;
-    float: left;
+    font-size  : 16px;
+    margin-top : 10px;
+    float      : left;
     margin-left: 15px;
 }
 
@@ -33,7 +33,7 @@
 
 .admin-tab {
     background-color: white;
-    min-height: 170px;
+    min-height      : 170px;
 }
 
 .no-comment {
@@ -42,7 +42,7 @@
 
 .video-link {
     text-decoration: none !important;
-    color: black;
+    color          : black;
 }
 
 .video-link:hover {
@@ -55,11 +55,11 @@
 
 .view-all-likes-link {
     text-decoration: none !important;
-    color: black;
-    width: 10px;
-    margin-top: 80px;
-    margin-left: 30px;
-    font-size: 20px;
+    color          : black;
+    width          : 10px;
+    margin-top     : 80px;
+    margin-left    : 30px;
+    font-size      : 20px;
 }
 
 .comments {
@@ -67,9 +67,9 @@
 }
 
 .comments-title {
-    font-size: 30px;
+    font-size    : 30px;
     margin-bottom: 20px;
-    width: 10em;
+    width        : 10em;
 }
 
 .comments-container {
@@ -77,35 +77,35 @@
 }
 
 .comment-form-title {
-    color: #ffffff;
+    color    : #ffffff;
     font-size: 22px;
 }
 
 .comment-form-textarea {
-    width: 80%;
-    height: 80px;
+    width        : 80%;
+    height       : 80px;
     margin-bottom: 8px;
-    margin-top: 8px;
-    border: 1px solid rgb(107, 114, 12);
+    margin-top   : 8px;
+    border       : 1px solid rgb(107, 114, 12);
 }
 
 .comment-form-button {
-    font-size: 16px;
-    padding: 8px 16px;
-    background: rgb(109, 59, 246);
+    font-size    : 16px;
+    padding      : 8px 16px;
+    background   : rgb(109, 59, 246);
     border-radius: 8px;
-    color: white;
+    color        : white;
 }
 
 .comment-form-button:hover:enabled {
-    cursor: pointer;
-    color: #ffffff;
+    cursor       : pointer;
+    color        : #ffffff;
     /* background: rgb(37, 99, 235); */
 }
 
 .comment-form-button:disabled {
-    color: #ffffff;
-    opacity: 0.7;
+    color     : #ffffff;
+    opacity   : 0.7;
     background: rgb(240, 59, 246);
     /* cursor : default; */
 }
@@ -115,7 +115,7 @@
 }
 
 .comment {
-    display: flex;
+    display      : flex;
     margin-bottom: 28px;
 }
 
@@ -132,27 +132,27 @@
 }
 
 .comment-content {
-    color: #ffffff;
+    color  : #ffffff;
     display: flex;
 }
 
 .comment-author {
     margin-right: 8px;
-    font-size: 20px;
-    color: #0073eb
+    font-size   : 20px;
+    color       : #0073eb
 }
 
 .comment-text {
-    color: #ffffff;
+    color    : #ffffff;
     font-size: 18px;
-    color: #0073eb
+    color    : #0073eb
 }
 
 .comment-actions {
-    display: flex;
-    font-size: 12px;
-    color: rgb(51, 51, 51);
-    cursor: pointer;
+    display   : flex;
+    font-size : 12px;
+    color     : rgb(51, 51, 51);
+    cursor    : pointer;
     margin-top: 8px;
 }
 
@@ -168,3 +168,15 @@
     margin-top: 20px;
 }
 
+.chatRoom-user {
+    width : 100%;
+    height: 480px
+}
+
+.charRoom-Box {
+    height : 350px;
+    width  : 100%;
+    border : 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px
+}

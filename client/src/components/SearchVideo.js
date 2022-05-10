@@ -22,7 +22,7 @@ function SearchVideo() {
             <form id="search" onSubmit={handleSubmit}>
                 <div className="input-group mb-4" style={{ height: '34.4px' }}>
                     <input
-                        id="search"
+                        id="searchVideo"
                         className="form-control"
                         autoComplete="off"
                         type="text"

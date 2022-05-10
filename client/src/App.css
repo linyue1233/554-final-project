@@ -89,6 +89,11 @@ footer {
     background-color: #0071f3;
 }
 
+.footer-text{
+    text-align: center;
+    color:#00060c
+}
+
 .user-content {
     color: black;
     background-color: white;
