@@ -64,7 +64,7 @@ function VideoPlay(props) {
         const params = { videoId: videoId };
         axios
             .post(`/videos/addViewCount`, params)
-            .then((res) => {})
+            .then((res) => { })
             .catch((err) => {
                 alert('Some thing wrong, we will return homePage.');
                 window.location.href = 'http://localhost:4000/';
@@ -195,10 +195,12 @@ function VideoPlay(props) {
                 </div>
                 <div className="col-md-9">
                     <div className="video-player" key={videoInfo.videoName}>
-                        <label for="myVideo"></label>
-                        <video id="myVideo" width="1024px" height="480px" controls>
-                            <source src={videoInfo.videoPath} type="video/mp4"></source>
-                        </video>
+                        <label>
+                            <video width="1024" height="480" controls>
+                                <source src={videoInfo.videoPath} type="video/mp4"></source>
+                                This is video.
+                            </video>
+                        </label>
                     </div>
                     <Box mt={2} sx={{ textAlign: 'center' }}>
                         <div
@@ -234,9 +236,9 @@ function VideoPlay(props) {
                     {/* comments part */}
                     <div className="comments">
                         <div className="border-bottom">
-                            <h3 className="comments-title" style={{ color: '#6D3BF6' }}>
+                            <h1 className="comments-title" style={{ color: '#6D3BF6' }}>
                                 Comments
-                            </h3>
+                            </h1>
                         </div>
                         {videoComments.length > 0 ? (
                             <div className="comments-container">
@@ -266,13 +268,18 @@ function VideoPlay(props) {
                 </div>
                 {/* chatroom box */}
                 {currentUser && (
-                    <div className="col-md-3 border" width="100%" height="480px">
-                        <ChatRoom videoId={videoId} />
+                    <div className="col-md-3 border">
+                        <div style={{ width: '100%', height: '480px' }}>
+                            <ChatRoom videoId={videoId} />
+                        </div>
+
                     </div>
                 )}
                 {!currentUser && (
-                    <div className="col-md-3 border" width="100%" height="480px">
-                        <h2>You need to login to join the live chat.</h2>
+                    <div className="col-md-3 border" >
+                        <div style={{ width: '100%', height: '480px' }}>
+                            <h2>You need to login to join the live chat.</h2>
+                        </div>
                     </div>
                 )}
             </div>

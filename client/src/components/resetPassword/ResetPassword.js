@@ -81,19 +81,19 @@ function ResetPassword() {
                         <h1>Forget Password</h1>
                         <p>Reset your password</p>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <lable id="newPassword">NewPassword:</lable>
+                        <label for="newPassword">NewPassword:</label>
                         &nbsp;&nbsp;
-                        <input type="password" for="newPassword" placeholder="input password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required></input>
+                        <input id="newPassword" type="password" placeholder="input password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required></input>
                         <br></br>
                         <div className="repeatedLable">
-                            <lable id="repeatPassword" >RepeatPassword:</lable> &nbsp;&nbsp;
-                            <input type="password" for="repeatPassword" placeholder="repeat password" value={repeatedPassword} onChange={(e) => setRepeatedPassword(e.target.value)} required></input>
+                            <label for="repeatPassword" >RepeatPassword:</label> &nbsp;&nbsp;
+                            <input type="password" id="repeatPassword" placeholder="repeat password" value={repeatedPassword} onChange={(e) => setRepeatedPassword(e.target.value)} required></input>
                             <br></br>
                         </div>
                         <div className="repeatedLable">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <lable id="code" >Code:</lable> &nbsp;&nbsp;
-                            <input type="text" for="code" placeholder="input your code" value={code} onChange={(e) => setCode(e.target.value)} required></input>
+                            <label for="code">Code:</label> &nbsp;&nbsp;
+                            <input type="text" id="code" placeholder="input your code" value={code} onChange={(e) => setCode(e.target.value)} required></input>
                             <br></br>
                         </div>
                         <button type="submit" className="btn btn-primary resetButton" >Submit</button>

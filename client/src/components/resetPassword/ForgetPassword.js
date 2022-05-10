@@ -24,7 +24,6 @@ function ForgetPassword() {
             return;
         }
         const params = { 'userEmail': userEmail };
-        console.log(userEmail);
         axios.post('/users/requestResetPassword',params).then(res=>{
             alert("Please check your email to reset your password.");
         }).catch(err=>{
@@ -39,8 +38,8 @@ function ForgetPassword() {
                 <form onSubmit={onSubmit}>
                     <h1>Forget Password</h1>
                     <p>Input your email to reset your password</p>
-                    <lable id="sendEmail">Email:</lable> &nbsp;&nbsp;
-                    <input type="text" for="sendEmail" placeholder="Your email" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} required></input>
+                    <label for="sendEmail">Email:</label> &nbsp; &nbsp; 
+                    <input id ="sendEmail" type="text" placeholder="Your email" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} required></input>
                     <br></br>
                     <button type="submit" className="btn btn-primary resetButton" >Send</button>
                 </form>

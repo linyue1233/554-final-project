@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import '../../App.css';
+import '../../css/VideoPlayer.css';
 import AuthService from '../../service/auth_service';
 
 function ChatRoom(props) {

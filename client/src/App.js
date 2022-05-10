@@ -149,9 +149,9 @@ function App() {
                 </div>
                 <br />
                 <br />
-                <div className="con">
+                <div>
                     <footer>
-                        <p className="text-center text-white">Designed by Group 3</p>
+                        <p className="footer-text">Designed by Group 3</p>
                     </footer>
                 </div>
                 <br />
