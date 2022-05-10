@@ -173,10 +173,9 @@ function VideoPlay(props) {
         );
     } else if (videoInfo) {
         return (
-            <div className="App-body container row">
+            <div className="App-body container row ">
                 <div
                     className="border-bottom col-md-12"
-                    width="100%"
                     style={{ 'margin-bottom': '20px' }}
                 >
                     <p
