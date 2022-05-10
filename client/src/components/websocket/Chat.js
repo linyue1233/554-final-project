@@ -76,11 +76,6 @@ function Chat() {
         socketRef?.current?.on('userJoin', function (data) {
             setChat([...chat, { name: 'ChatBot', message: `${data} has joined the chat` }]);
         });
-        // // userDelete
-        // socketRef?.current?.on('userDelete', function (data) {
-        //     console.log(1111111);
-        //     setChat([...chat, { name: 'ChatBot', message: `${data} has deleted the chat` }]);
-        // });
     }, [socketRef.current]);
     const onMessageSubmit = (e) => {
         let msgEle = document.getElementById('message');
@@ -121,8 +116,11 @@ function Chat() {
                 newList.push(tempList[i]);
             }
         }
-        socketRef?.current?.on('userDelete', function (data) {
-            setChat([...chat, { name: 'ChatBot', message: `${data} has joined the chat` }]);
+        let message = state.name + " has quitted the chatroom";
+        socketRef.current.emit('messageClient', {
+            name: "ChatBot",
+            message: message,
+            room: room,
         });
         setRoomList(newList);
         navigate('/');
