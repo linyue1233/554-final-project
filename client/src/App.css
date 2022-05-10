@@ -1,10 +1,12 @@
 html {
     height: 100%;
+    width: 100%;
 }
 
 body {
     margin: 0;
     padding: 0;
+    width: 100%;
     position: relative;
 }
 
@@ -12,9 +14,10 @@ body {
     background-color: #0071f3;
     height: 64px;
     color: white;
-    /* text-align: left; */
+    text-align: left;
     position: relative;
     padding: 15px;
+    width: 100%;
 }
 
 .cap-first-letter:first-letter {
@@ -42,6 +45,7 @@ div {
 .App-body {
     height: 100%;
     width: 100%;
+    min-width: 100%;
     background-color: #ffffff;
 }
 
