@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { List, ListItemButton,ListItemText } from '@mui/material';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import '../../App.css';
@@ -14,13 +16,9 @@ function Chat() {
     const [ifSelectChatroom, setIfSelectChatroom] = useState(true);
     const [currentSelect, setCurrentSelect] = useState(false);
     const [emptyChatroom, setEmptyChatroom] = useState(false);
-    // const ifSelectChatroom = false;
     const user = AuthService.getCurrentUser();
     const [state, setState] = useState({ message: '', name: '' });
     useEffect(() => {
-        // socketRef.current = io('http://localhost:3001', {
-        //     transports: ['websocket', 'polling'],
-        // });
         socketRef.current = io('/');
         async function fetchData() {
             try{
@@ -49,7 +47,6 @@ function Chat() {
                     setName(state.name);
                     setState({ message: '', name: user.username });
                     let tempList =await axios.get(`/chatroom`);
-                    console.log(tempList);
                     if (tempList.data.length === 0) {
                         setEmptyChatroom(true);
                         setRoomList([]);
@@ -67,7 +64,7 @@ function Chat() {
             };
         }
         fetchData();
-    }, [currentSelect, ifSelectChatroom]);
+    }, [currentSelect, ifSelectChatroom,state.name,user.username]);
 
     useEffect(() => {
         socketRef?.current?.on('messageClient', ({ name, message, timestamp }) => {
@@ -76,9 +73,14 @@ function Chat() {
                 return exist ? preVal : [...preVal, { name, message, timestamp }];
             });
         });
-        socketRef.current.on('userJoin', function (data) {
+        socketRef?.current?.on('userJoin', function (data) {
             setChat([...chat, { name: 'ChatBot', message: `${data} has joined the chat` }]);
         });
+        // // userDelete
+        // socketRef?.current?.on('userDelete', function (data) {
+        //     console.log(1111111);
+        //     setChat([...chat, { name: 'ChatBot', message: `${data} has deleted the chat` }]);
+        // });
     }, [socketRef.current]);
     const onMessageSubmit = (e) => {
         let msgEle = document.getElementById('message');
@@ -97,9 +99,9 @@ function Chat() {
     const renderChat = () => {
         return chat.map(({ name, message }, index) => (
             <div key={index}>
-                <h3>
+                <h2>
                     {name}: <span>{message}</span>
-                </h3>
+                </h2>
             </div>
         ));
     };
@@ -119,6 +121,9 @@ function Chat() {
                 newList.push(tempList[i]);
             }
         }
+        socketRef?.current?.on('userDelete', function (data) {
+            setChat([...chat, { name: 'ChatBot', message: `${data} has joined the chat` }]);
+        });
         setRoomList(newList);
         navigate('/');
     };
@@ -128,43 +133,61 @@ function Chat() {
                 {emptyChatroom ? (
                     <div>
                         <h1>No chatroom yet</h1>
-                        </div>
-                        ) : (
-                <ul>{}
-                    {roomList &&
-                        roomList.map((room) => (
-                            <li key={room}>
-                                <button onClick={() => handleSelectChatroom(room)}>{room}</button>
-                            </li>
-                        ))}
-                </ul>
+                    </div>) : (
+                    <div>
+                        <h1>Chatroom List</h1>
+                        <List>
+                            {roomList &&roomList.map((room) => (
+                                <ListItemButton onClick={() => handleSelectChatroom(room)}>
+                                    <SupportAgentIcon />
+                                    <ListItemText primary={room} />
+                                </ListItemButton>))}
+                        </List>
+                    </div>
                 )}
             </div>
         ) : (
             <div>
                 {state.name && (
                     <div className="card">
-                        <div className="render-chat">
+                        <div
+                        className="overflow-auto"
+                        style={{
+                            height: '350px',
+                            width: '100%',
+                            border: '1px solid #ccc',
+                            padding: '10px',
+                            'margin-bottom': '10px',
+                        }}>
                             <h1>Chat Room:{room}</h1>
                             {renderChat()}
                         </div>
 
                         <form onSubmit={onMessageSubmit}>
                             <h1>Messenger: {name}</h1>
-                            <div>
+                            <div className="col-md-auto border-top">
                                 <label for="message"></label>
-                                <input name="message" id="message" variant="outlined" label="Message" />
+                                <input 
+                                    style={{ width: '100%', marginBottom: '10px' }}
+                                    name="message"
+                                    id="message"
+                                    variant="outlined"
+                                    label="Message"
+                                    placeholder="Say something..." />
+                            {/* </div>
+                            <div className="d-flex flex-row-reverse"> */}
+                                <button className="btn btn-primary  p-2">Send Message</button>
                             </div>
-                            <button>Send Message</button>
                         </form>
                         <button
+                            className="btn btn-primary  p-2"
                             onClick={() => {
-                                setIfSelectChatroom(true);
-                            }}
-                        >
+                                handleDeleteChatRoom(room);
+                            }}>
                             select room
                         </button>
                     </div>
+                    
                 )}
             </div>
         )
@@ -172,19 +195,38 @@ function Chat() {
         <div>
             {state.name && (
                 <div className="card">
-                    <div className="render-chat">
+                    <div
+                        className="overflow-auto"
+                        style={{
+                            height: '350px',
+                            width: '100%',
+                            border: '1px solid #ccc',
+                            padding: '10px',
+                            'margin-bottom': '10px',
+                        }}
+                    >
                         <h1>Chat Room:{room}</h1>
                         {renderChat()}
                     </div>
                     <form onSubmit={onMessageSubmit}>
                         <h1>Messenger: {name}</h1>
-                        <div>
+                        <div className="col-md-auto border-top">
                             <label for="message"></label>
-                            <input name="message" id="message" variant="outlined" label="Message" />
+                            <input 
+                                style={{ width: '100%', marginBottom: '10px' }}
+                                name="message"
+                                id="message"
+                                variant="outlined"
+                                label="Message"
+                                placeholder="Say something..." />
+                        {/* </div>
+                        <div className="d-flex flex-row-reverse"> */}
+                            <button className="btn btn-primary  p-2">Send Message</button>
                         </div>
-                        <button>Send Message</button>
+                        
                     </form>
                     <button
+                        className="btn btn-primary  p-2"
                         onClick={() => {
                             handleDeleteChatRoom(room);
                         }}

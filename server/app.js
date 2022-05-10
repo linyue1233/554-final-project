@@ -53,8 +53,10 @@ io.on('connection', (socket) => {
     socket.on('messageClient', ({ name, message, room }) => {
         io.in(room).emit('messageClient', { name, message, timestamp: new Date().valueOf() });
     });
-
-    socket.on('disconnect', () => {
+    socket.on('userDelete', (name, room) => {
+        io.in(room).emit('userDelete',name);
+    })
+    socket.on('disconnect', (name,room) => {
         console.log('Disconnect Fired');
     });
 });
