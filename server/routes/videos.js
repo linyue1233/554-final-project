@@ -14,6 +14,110 @@ const upload = multer({ dest: 'uploads' + path.sep });
 const { uploadFile } = require('../config/awsS3');
 const redis = require('../util/redisUtil');
 
+router.post('/addViewCount', async (req, res) => {
+    // check user and update time
+    if (req.session.user) {
+        try {
+            let ans = await redis.getKey(req.session.user);
+            if (ans !== null) {
+                // update redis session
+                let userKey = req.session.user;
+                redis.setExpire(userKey, userKey, 60 * 30);
+            }
+        } catch (error) {
+            return res.status(403).json({ status: 403, message: error });
+        }
+    }
+    let videoId = xss(req.body.videoId);
+    videoId = videoId.trim();
+    try {
+        let videoInfo = await videoData.increaseViewCount(videoId);
+        return res.status(200).json({ status: 200, data: videoInfo });
+    } catch (error) {
+        return res.status(400).json({ status: 500, message: error });
+    }
+});
+
+
+// user add like for the video
+router.post('/addLikeForVideo', async (req, res) => {
+    // check user
+    if (req.session.user) {
+        try {
+            let ans = await redis.getKey(req.session.user);
+            if (ans === null) {
+                // delete session
+                req.session.destroy();
+                return res
+                    .status(401)
+                    .json({ status: 401, message: 'Your status is expired.' });
+            } else {
+                let userKey = req.session.user;
+                redis.setExpire(userKey, userKey, 60 * 30);
+            }
+        } catch (error) {
+            return res
+                .status(403)
+                .json({ status: 403, message: 'Please login firstly.' });
+        }
+    }
+    if (!req.session.user) {
+        return res.status(403).json({ status: '403', message: 'Please login firstly.' });
+    }
+    let userEmail = req.session.user;
+    let videoId = xss(req.body.videoId);
+    try {
+        let userInfo = await userData.getUserByEmail(userEmail);
+        let updateUser = await userData.addLikeId(userInfo._id, videoId);
+        let videoInfo = await videoData.increaseLikeCount(videoId);
+        return res
+            .status(200)
+            .json({ status: 200, data: { user: updateUser, video: videoInfo } });
+    } catch (error) {
+        return res.status(400).json({ status: 400, message: error });
+    }
+});
+
+// user remove like for the video
+router.post('/removeLikeForVideo', async (req, res) => {
+    // check user
+    if (req.session.user) {
+        try {
+            let ans = await redis.getKey(req.session.user);
+            if (ans === null) {
+                // delete session
+                req.session.destroy();
+                return res
+                    .status(401)
+                    .json({ status: 401, message: 'Your status is expired.' });
+            } else {
+                let userKey = req.session.user;
+                redis.setExpire(userKey, userKey, 60 * 30);
+            }
+        } catch (error) {
+            return res
+                .status(403)
+                .json({ status: 403, message: 'Please login firstly.' });
+        }
+    }
+    if (!req.session.user) {
+        return res.status(403).json({ status: '403', message: 'Please login firstly.' });
+    }
+    let userEmail = req.session.user;
+    let videoId = xss(req.body.videoId);
+    try {
+        let userInfo = await userData.getUserByEmail(userEmail);
+        let updateUser = await userData.removeLikeId(userInfo._id, videoId);
+        let videoInfo = await videoData.decreaseLikeCount(videoId);
+        return res
+            .status(200)
+            .json({ status: 200, data: { user: updateUser, video: videoInfo } });
+    } catch (error) {
+        return res.status(400).json({ status: 400, message: error });
+    }
+});
+
+
 router.get('/', async (req, res) => {
     if (req.session.user) {
         try {
@@ -75,8 +179,8 @@ router.get('/get4VideosByTagAndYear/:tag/:year', async (req, res) => {
                 .json({ status: '403', message: 'Please login firstly.' });
         }
     }
-    const tag = req.params.tag;
-    const year = req.params.year;
+    const tag = xss(req.params.tag);
+    const year = xss(req.params.year);
     try {
         verify.isString(tag);
         verify.isString(year);
@@ -105,7 +209,7 @@ router.get('/get4VideosByTag/:tag', async (req, res) => {
                 .json({ status: '403', message: 'Please login firstly.' });
         }
     }
-    const tag = req.params.tag;
+    const tag = xss(req.params.tag);
     try {
         verify.isString(tag);
         verify.checkTag(tag);
@@ -135,7 +239,7 @@ router.get('/:id', async (req, res) => {
     try {
         verify.isString(req.params.id, 'Video Id');
         verify.checkSpace(req.params.id, 'Video Id');
-        let video = await videoData.getVideoById(req.params.id);
+        let video = await videoData.getVideoById(xss(req.params.id));
         res.status(200).json(video);
     } catch (e) {
         res.status(500).json({ message: e });
@@ -312,11 +416,11 @@ router.post('/create', async (req, res) => {
         verify.isString(videoInfo.cover, 'Video Cover');
         verify.isString(videoInfo.description, 'Video Description');
         let video = await videoData.createVideo(
-            videoInfo.name,
-            videoInfo.path,
-            videoInfo.tags,
-            videoInfo.description,
-            videoInfo.cover
+            xss(videoInfo.name),
+            xss(videoInfo.path),
+            xss(videoInfo.tags),
+            xss(videoInfo.description),
+            xss(videoInfo.cover)
         );
         res.status(200).json(video);
     } catch (e) {
@@ -362,7 +466,7 @@ router.patch('/update/:videoId', async (req, res) => {
     try {
         verify.isString(req.params.videoId, 'Video Id');
         verify.checkSpace(req.params.videoId, 'Video Id');
-        let video = await videoData.getVideoById(req.params.videoId);
+        let video = await videoData.getVideoById(xss(req.params.videoId));
         verify.isString(updatedInfo.name, 'Video Name');
         verify.isString(updatedInfo.description, 'Video Description');
         if(updatedInfo.cover) verify.checkAvatarSuffix(updatedInfo.cover);
@@ -374,20 +478,20 @@ router.patch('/update/:videoId', async (req, res) => {
 
     try {
         if(updatedInfo.path){
-            let pathResult = await videoData.updateVideoPath (req.params.videoId, updatedInfo.path);
+            let pathResult = await videoData.updateVideoPath (xss(req.params.videoId), xss(updatedInfo.path));
             console.log(pathResult);
         } 
         
         if(updatedInfo.cover) {
-            let coverResult = await videoData.updateVideoCover (req.params.videoId, updatedInfo.cover);
+            let coverResult = await videoData.updateVideoCover (xss(req.params.videoId), xss(updatedInfo.cover));
             console.log(coverResult);
         }
         
         let video = await videoData.updateVideo(
-            req.params.videoId,
-            updatedInfo.name,
-            updatedInfo.description,
-            updatedInfo.tags
+            xss(req.params.videoId),
+            xss(updatedInfo.name),
+            xss(updatedInfo.description),
+            xss(updatedInfo.tags)
         );
         res.status(200).json(video);
     } catch (e) {
@@ -431,8 +535,8 @@ router.delete('/delete/:videoId', async (req, res) => {
     try {
         verify.isString(req.params.videoId, 'Video Id');
         verify.checkSpace(req.params.videoId, 'Video Id');
-        const user = await userData.getUserByEmail(req.session.user);
-        const deleteResult = await videoData.removeVideo(req.params.videoId, user);
+        const user = await userData.getUserByEmail(xss(req.session.user));
+        const deleteResult = await videoData.removeVideo(xss(req.params.videoId), user);
         res.status(200).json(deleteResult);
     } catch (error) {
         res.status(500).json({ message: error });
@@ -443,7 +547,7 @@ router.post('/:searchTerm', async (req, res) => {
     let searchBody = req.body;
 
     try {
-        let searchTerm = searchBody.searchTerm;
+        let searchTerm = xss(searchBody.searchTerm);
         verify.isString(searchTerm.trim(), 'searchTerm');
         const searchResult = await videoData.searchVideosByName(searchTerm);
         res.status(200).json(searchResult);
@@ -473,8 +577,8 @@ router.get('/getAllVideosByTag/:tag/:type', async (req, res) => {
         verify.checkTag(req.params.tag);
         verify.checkSpace(req.params.tag);
         const videos = await videoData.getAllVideosByOneTagAndByOneFunc(
-            req.params.tag,
-            req.params.type
+            xss(req.params.tag),
+            xss(req.params.type)
         );
         res.status(200).json(videos);
     } catch (e) {
@@ -482,106 +586,7 @@ router.get('/getAllVideosByTag/:tag/:type', async (req, res) => {
     }
 });
 
-// user add like for the video
-router.post('/addLikeForVideo', async (req, res) => {
-    // check user
-    if (req.session.user) {
-        try {
-            let ans = await redis.getKey(req.session.user);
-            if (ans === null) {
-                // delete session
-                req.session.destroy();
-                return res
-                    .status(401)
-                    .json({ status: 401, message: 'Your status is expired.' });
-            } else {
-                let userKey = req.session.user;
-                redis.setExpire(userKey, userKey, 60 * 30);
-            }
-        } catch (error) {
-            return res
-                .status(403)
-                .json({ status: 403, message: 'Please login firstly.' });
-        }
-    }
-    if (!req.session.user) {
-        return res.status(403).json({ status: '403', message: 'Please login firstly.' });
-    }
-    let userEmail = req.session.user;
-    let videoId = req.body.videoId;
-    try {
-        let userInfo = await userData.getUserByEmail(userEmail);
-        let updateUser = await userData.addLikeId(userInfo._id, videoId);
-        let videoInfo = await videoData.increaseLikeCount(videoId);
-        return res
-            .status(200)
-            .json({ status: 200, data: { user: updateUser, video: videoInfo } });
-    } catch (error) {
-        return res.status(400).json({ status: 400, message: error });
-    }
-});
 
-// user remove like for the video
-router.post('/removeLikeForVideo', async (req, res) => {
-    // check user
-    if (req.session.user) {
-        try {
-            let ans = await redis.getKey(req.session.user);
-            if (ans === null) {
-                // delete session
-                req.session.destroy();
-                return res
-                    .status(401)
-                    .json({ status: 401, message: 'Your status is expired.' });
-            } else {
-                let userKey = req.session.user;
-                redis.setExpire(userKey, userKey, 60 * 30);
-            }
-        } catch (error) {
-            return res
-                .status(403)
-                .json({ status: 403, message: 'Please login firstly.' });
-        }
-    }
-    if (!req.session.user) {
-        return res.status(403).json({ status: '403', message: 'Please login firstly.' });
-    }
-    let userEmail = req.session.user;
-    let videoId = req.body.videoId;
-    try {
-        let userInfo = await userData.getUserByEmail(userEmail);
-        let updateUser = await userData.removeLikeId(userInfo._id, videoId);
-        let videoInfo = await videoData.decreaseLikeCount(videoId);
-        return res
-            .status(200)
-            .json({ status: 200, data: { user: updateUser, video: videoInfo } });
-    } catch (error) {
-        return res.status(400).json({ status: 400, message: error });
-    }
-});
 
-router.post('/addViewCount', async (req, res) => {
-    // check user and update time
-    if (req.session.user) {
-        try {
-            let ans = await redis.getKey(req.session.user);
-            if (ans !== null) {
-                // update redis session
-                let userKey = req.session.user;
-                redis.setExpire(userKey, userKey, 60 * 30);
-            }
-        } catch (error) {
-            return res.status(403).json({ status: 403, message: error });
-        }
-    }
-    let videoId = req.body.videoId;
-    videoId = videoId.trim();
-    try {
-        let videoInfo = await videoData.increaseViewCount(videoId);
-        return res.status(200).json({ status: 200, data: videoInfo });
-    } catch (error) {
-        return res.status(400).json({ status: 500, message: error });
-    }
-});
 
 module.exports = router;

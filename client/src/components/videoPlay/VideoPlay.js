@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import '../../css/VideoPlayer.css';
-import { Box } from '@mui/material';
+import { Box, Rating } from '@mui/material';
 import Comment from './Comment';
 import axios from 'axios';
 import CommentForm from './CommentForm';
@@ -15,14 +15,15 @@ function VideoPlay(props) {
     const [videoInfo, setVideoInfo] = useState(undefined);
     const [videoComments, setComments] = useState([]);
     const [isLikeBtn, setIsLikeBtn] = useState(false);
-    const [likeCount, setLikeCount] = useState(0);
+    const [likeCount, setLikeCount] = useState(null);
+    // const [allUser, setAllUser] = useState(null);
+    const [rating, setRating] = useState(null);
     const currentUser = AuthService.getCurrentUser();
 
     async function fetchData(videoId) {
         try {
             const result = await axios.get(`/videos/${videoId}`);
             const { data } = result;
-
             if (data === null) {
                 setNotFound(true);
                 alert('Your path is error, we will return homPage');
@@ -33,6 +34,10 @@ function VideoPlay(props) {
             setLikeCount(data.likeCount);
             setLoading(true);
             setNotFound(false);
+
+            let results = await axios.get(`/users/all`);
+            let len = results.data.length;
+            setRating((data.likeCount / len * 100).toFixed(2) + '%');
         } catch (e) {
             setNotFound(true);
             alert('Your path is error, we will return homPage');
@@ -60,16 +65,10 @@ function VideoPlay(props) {
     }
 
     async function addViewCount(videoId) {
-        console.log(videoId);
-        const params = { videoId: videoId };
-        axios
-            .post(`/videos/addViewCount`, params)
-            .then((res) => { })
-            .catch((err) => {
-                alert('Some thing wrong, we will return homePage.');
-                window.location.href = 'http://localhost:4000/';
-                return;
-            });
+        const params = { "videoId": videoId };
+        axios.post(`/videos/addViewCount`, params).then(res => {
+        }).catch(err => {
+        })
     }
 
     async function likeBtnStatus() {
@@ -86,6 +85,7 @@ function VideoPlay(props) {
             console.log(e);
         }
     }
+
 
     useEffect(() => {
         Boolean(currentUser) && likeBtnStatus();
@@ -124,7 +124,6 @@ function VideoPlay(props) {
             alert('You need to login.');
             props.onChangeState();
             AuthService.logout();
-            // window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
             return;
         }
         const params = { videoId: videoId };
@@ -138,7 +137,6 @@ function VideoPlay(props) {
                 alert('You are expoired, login again plz.');
                 AuthService.logout();
                 props.onChangeState();
-                // window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
             });
     };
 
@@ -147,7 +145,6 @@ function VideoPlay(props) {
             alert('You need to login.');
             props.onChangeState();
             AuthService.logout();
-            // window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
             return;
         }
         const params = { videoId: videoId };
@@ -161,7 +158,6 @@ function VideoPlay(props) {
                 AuthService.logout();
                 alert('You are expoired, login again plz.');
                 props.onChangeState();
-                // window.location.href = `http://localhost:4000/videoPlay/${videoId}`;
             });
     };
 
@@ -203,6 +199,14 @@ function VideoPlay(props) {
                         </label>
                     </div>
                     <Box mt={2} sx={{ textAlign: 'center' }}>
+                        <div
+                            className="comments-title"
+                            style={{ color: 'green', display: 'inline-block' }}
+                        >
+                            {Boolean(rating) && <div>
+                                <Rating style={{ color: `green` }} name="no-value" defaultValue={1} max={1} />{rating}
+                            </div>}
+                        </div>
                         <div
                             className="comments-title"
                             style={{ color: 'green', display: 'inline-block' }}

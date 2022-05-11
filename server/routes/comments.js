@@ -26,7 +26,7 @@ router.get('/:commentId', async (req, res) => {
         }
     }
     try {
-        const comment = await commentData.getCommentByCommentId(req.params.commentId);
+        const comment = await commentData.getCommentByCommentId(xss(req.params.commentId));
         res.status(200).json(comment);
     } catch (error) {
         res.status(500).json({ error: error });
@@ -48,7 +48,7 @@ router.get('/user/:userId', async (req, res) => {
         }
     }
     try {
-        const comments = await commentData.getAllCommentsByUserId(req.params.userId);
+        const comments = await commentData.getAllCommentsByUserId(xss(req.params.userId));
         res.status(200).json(comments);
     } catch (error) {
         res.status(500).json({ error: error });
@@ -70,7 +70,7 @@ router.get('/video/:videoId', async (req, res) => {
         }
     }
     try {
-        const comments = await commentData.getAllCommentsByVideoId(req.params.videoId);
+        const comments = await commentData.getAllCommentsByVideoId(xss(req.params.videoId));
         if(comments.length === 0){
             res.status(200).json({status:200, data:comments});
             return;
@@ -108,7 +108,7 @@ router.delete('/:commentId', async (req, res) => {
     try{
         const user = await userData.getUserByEmail(req.session.user);
         if(!user.isAdmin) {
-            const comment = await commentData.getCommentByCommentId(req.params.commentId);
+            const comment = await commentData.getCommentByCommentId(xss(req.params.commentId));
             if(!comment.userId === user.userId){
                 return res.status(500).json({ status:"500", message: "Unauthorized request"});
             }
@@ -119,7 +119,7 @@ router.delete('/:commentId', async (req, res) => {
 
     try {
         const user = await userData.getUserByEmail(req.session.user);
-        const comment = await commentData.deleteOneCommentByCommentId(req.params.commentId, user);
+        const comment = await commentData.deleteOneCommentByCommentId(xss(req.params.commentId), user);
         res.status(200).json(comment);
     } catch (error) {
         res.status(500).json({ error: error });
@@ -152,7 +152,7 @@ router.post('/', async (req, res) => {
         const userInfo =await userData.getUserByEmail(req.session.user);
         // console.log(req.body.content);
         // console.log(userInfo)
-        const comment = await commentData.createComment(xss(req.body.content), userInfo._id, userInfo.username,req.body.videoId);
+        const comment = await commentData.createComment(xss(req.body.content), userInfo._id, userInfo.username,xss(req.body.videoId));
         comment.avatar = userInfo.avatar;
         res.status(200).json({status:200,data:comment});
     } catch (error) {

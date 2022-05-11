@@ -10,7 +10,6 @@ function ChatRoom(props) {
     const [chat, setChat] = useState([]);
     const [room, setRoom] = useState(props.videoId);
     const [name, setName] = useState(currentUser.username);
-    console.log(currentUser);
 
     const socketRef = useRef();
 

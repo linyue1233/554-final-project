@@ -173,7 +173,7 @@ router.post('/login', async (req, res) => {
 });
 // get user by ID
 router.get('/:userId([0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12})', async (req, res) => {
-    let userId = req.params.userId.trim();
+    let userId = xss(req.params.userId.trim());
     //check format
     try {
         verify.isString(userId, 'User ID');
@@ -192,7 +192,7 @@ router.get('/:userId([0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0
 });
 // remove user by ID
 router.delete('/delete/:userId', async (req, res) => {
-    let userId = req.params.userId.trim();
+    let userId = xss(req.params.userId.trim());
     // check format
     try {
         verify.isString(userId, 'User ID');
@@ -273,8 +273,8 @@ router.put('/:userId', async (req, res) => {
 });
 // add likeId to user
 router.put('/like/:userId', async (req, res) => {
-    let userId = req.params.userId.trim();
-    let likeId = req.body.likeId.trim();
+    let userId = xss(req.params.userId.trim());
+    let likeId = xss(req.body.likeId.trim());
     // check format
     try {
         verify.isString(userId, 'User ID');
@@ -296,8 +296,8 @@ router.put('/like/:userId', async (req, res) => {
 });
 // remove likeId from user
 router.put('/unlike/:userId', async (req, res) => {
-    let userId = req.params.userId.trim();
-    let likeId = req.body.likeId.trim();
+    let userId = xss(req.params.userId.trim());
+    let likeId = xss(req.body.likeId.trim());
     // check format
     try {
         verify.isString(userId, 'User ID');
@@ -319,8 +319,8 @@ router.put('/unlike/:userId', async (req, res) => {
 });
 // add commentId to user
 router.put('/addComment/:userId', async (req, res) => {
-    let userId = req.params.userId.trim();
-    let commentId = req.body.commentId.trim();
+    let userId = xss(req.params.userId.trim());
+    let commentId = xss(req.body.commentId.trim());
     // check format
     try {
         verify.isString(userId, 'User ID');
@@ -341,8 +341,8 @@ router.put('/addComment/:userId', async (req, res) => {
 });
 // remove commentId from user
 router.put('/removeComment/:userId', async (req, res) => {
-    let userId = req.params.userId.trim();
-    let commentId = req.body.commentId.trim();
+    let userId = xss(req.params.userId.trim());
+    let commentId = xss(req.body.commentId.trim());
     // check format
     try {
         verify.isString(userId, 'User ID');
@@ -363,7 +363,7 @@ router.put('/removeComment/:userId', async (req, res) => {
 });
 
 router.get('/AllLikedVideos/:userId', async (req, res) => {
-    let userId = req.params.userId.trim();
+    let userId = xss(req.params.userId.trim());
 
     // check format
     try {
