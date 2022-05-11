@@ -1,8 +1,8 @@
-import axios, { Axios } from 'axios';
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import '../App.css';
-import { Grid, Box, Pagination } from '@mui/material';
+import { Grid, Pagination } from '@mui/material';
 import OneVideo from './OneVideo';
 function ShowSearchVideo() {
     const { searchTerm } = useParams();
@@ -36,7 +36,6 @@ function ShowSearchVideo() {
                         searchTerm: searchTerm,
                     },
                 });
-                console.log(data);
                 if (data.length === 0) {
                     setErrorInfo('no video');
                     setError(true);
@@ -49,7 +48,6 @@ function ShowSearchVideo() {
                     setError(false);
                 }
             } catch (e) {
-                console.log(e);
                 setErrorInfo(e);
                 setError(true);
             }
