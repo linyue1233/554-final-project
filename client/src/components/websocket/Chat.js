@@ -60,6 +60,12 @@ function Chat() {
             }
 
             return () => {
+                axios.delete(`/chatroom/${room}`);
+                let message = state.name + " has quitted the chatroom";
+                socketRef.current.emit('messageClient', {
+                name: "ChatBot",
+                message: message,
+                room: room,});
                 socketRef.current.disconnect();
             };
         }
@@ -105,7 +111,7 @@ function Chat() {
         setChat([]);
         setName(user.username);
         setIfSelectChatroom(false);
-        socketRef.current.emit('userJoin', user.username, room);
+        socketRef.current.emit('userJoin', user.username, room);;
     };
     const handleDeleteChatRoom = (room) => {
         axios.delete(`/chatroom/${room}`);
@@ -125,6 +131,10 @@ function Chat() {
         setRoomList(newList);
         navigate('/');
     };
+    const handleSelectRooms=() => {
+        setIfSelectChatroom(true);
+
+    }
     return currentSelect ? (
         ifSelectChatroom ? (
             <div>
@@ -180,7 +190,7 @@ function Chat() {
                         <button
                             className="btn btn-primary  p-2"
                             onClick={() => {
-                                handleDeleteChatRoom(room);
+                                handleSelectRooms();
                             }}>
                             select room
                         </button>
