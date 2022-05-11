@@ -10,16 +10,26 @@ function SearchVideo() {
     const handleChange = (e) => {
         setSearchTerm(e.target.value);
     };
+    // if(searchTerm===''){
 
+    // }
     const handleSubmit = async (e) => {
         // e.preventDefault();
-        navigate(`/videos/getAllVideosBySearchName/search=${searchTerm}`);
-        // documesnt.getElementById('search').value = '';
+        console.log(searchTerm);
+        if(searchTerm===''){
+            window.location.href= '/';
+            setSearchTerm('');
+            
+            return;
+        }else{
+            window.location.href= `/videos/getAllVideosBySearchName/${searchTerm}`;
+            setSearchTerm('');
+            return;
+        }
     };
 
     return (
         <div className="align-center">
-            <form id="search" onSubmit={handleSubmit}>
                 <div className="input-group mb-4" style={{ height: '34.4px' }}>
                     <input
                         id="searchVideo"
@@ -36,11 +46,11 @@ function SearchVideo() {
                         className="btn btn-secondary"
                         type="submit"
                         id="button-addon2"
+                        onClick={handleSubmit}
                     >
                         Search
                     </button>
                 </div>
-            </form>
         </div>
     );
 }

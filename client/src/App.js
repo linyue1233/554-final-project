@@ -141,7 +141,7 @@ function App() {
                             element={<AllVideo />}
                         />
                         <Route
-                            path="/videos/getAllVideosBySearchName/search=:searchTerm"
+                            path="/videos/getAllVideosBySearchName/:searchTerm"
                             element={<ShowSearchVideo />}
                         />
                         <Route path="/chatroom" element={<ChatroomClient />} />

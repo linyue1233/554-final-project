@@ -144,13 +144,11 @@ function Chat() {
                     </div>) : (
                     <div>
                         <h1>Chatroom List</h1>
-                        <List>
+                        <ul className="list-group">
                             {roomList &&roomList.map((room) => (
-                                <ListItemButton onClick={() => handleSelectChatroom(room)}>
-                                    <SupportAgentIcon />
-                                    <ListItemText primary={room} />
-                                </ListItemButton>))}
-                        </List>
+                                <li className="list-group-item"><button className="btn btn-primary"onClick={() =>handleSelectChatroom(room)}>{room}</button></li>
+                                ))}
+                        </ul>
                     </div>
                 )}
             </div>
@@ -179,11 +177,7 @@ function Chat() {
                                     style={{ width: '100%', marginBottom: '10px' }}
                                     name="message"
                                     id="message"
-                                    variant="outlined"
-                                    label="Message"
                                     placeholder="Say something..." />
-                            {/* </div>
-                            <div className="d-flex flex-row-reverse"> */}
                                 <button className="btn btn-primary  p-2">Send Message</button>
                             </div>
                         </form>
@@ -224,8 +218,6 @@ function Chat() {
                                 style={{ width: '100%', marginBottom: '10px' }}
                                 name="message"
                                 id="message"
-                                variant="outlined"
-                                label="Message"
                                 placeholder="Say something..." />
                         {/* </div>
                         <div className="d-flex flex-row-reverse"> */}

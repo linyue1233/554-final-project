@@ -28,9 +28,10 @@ function ShowSearchVideo() {
     useEffect(() => {
         async function fetchData() {
             try {
+                
                 let { data } = await axios({
                     method: 'POST',
-                    url: '/videos/search=' + searchTerm,
+                    url: '/videos/' + searchTerm,
                     data: {
                         searchTerm: searchTerm,
                     },
