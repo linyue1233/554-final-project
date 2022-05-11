@@ -8,7 +8,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 const useStyles = makeStyles({
     card: {
-        maxWidth: 270,
+        maxWidth: 300,
         height: 'auto',
         marginLeft: '1%',
         marginRight: '0%',
@@ -25,8 +25,8 @@ const useStyles = makeStyles({
         flexDirection: 'row',
     },
     media: {
-        height: '360px',
-        width: '270px',
+        height: '400',
+        width: '300',
     },
     button: {
         color: '#1e8678',
