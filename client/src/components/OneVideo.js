@@ -17,7 +17,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 const useStyles = makeStyles({
     card: {
-        maxWidth: '300px',
         height: 'auto',
         marginLeft: '1%',
         marginRight: '0%',
@@ -34,8 +33,8 @@ const useStyles = makeStyles({
         flexDirection: 'row',
     },
     media: {
-        height: '225px',
-        width: '300px',
+        height: '330px',
+        width: '440px',
     },
     button: {
         color: '#1e8678',
@@ -56,61 +55,63 @@ function OneVideo(props) {
     const videoId = props.video._id;
     const buildCard = () => {
         return (
-            <Card
-                className={classes.card}
-                variant="outlined"
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    flexDirection: 'column',
-                }}
-            >
-                <CardMedia
-                    className={classes.media}
-                    component="img"
-                    image={videoCover}
-                    title={videoTitle}
-                />
-                <CardContent>
-                    <Typography
-                        className={classes.titleHead + ' text-truncate'}
-                        gutterBottom
-                        variant="h1"
-                        title={`${videoTitle}`}
-                        sx={{
-                            fontSize: '1.5rem',
-                            fontWeight: 'bold',
-                        }}
-                    >
-                        {videoTitle}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        <FavoriteIcon fontSize="small" />
-                        {likeCount}
-                    </Typography>
-                    <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                        gutterBottom
-                    >
-                        <VisibilityIcon fontSize="small" />
-                        {viewCount}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        <DateRangeIcon fontSize="small" /> {month}/{day}/{year}
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button
-                        size="small"
-                        href={`/videoPlay/${videoId}`}
-                        variant="contained"
-                    >
-                        Play
-                    </Button>
-                </CardActions>
-            </Card>
+            <Grid item>
+                <Card
+                    className={classes.card}
+                    variant="outlined"
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        flexDirection: 'column',
+                    }}
+                >
+                    <CardMedia
+                        className={classes.media}
+                        component="img"
+                        image={videoCover}
+                        title={videoTitle}
+                    />
+                    <CardContent>
+                        <Typography
+                            className={classes.titleHead + ' text-truncate'}
+                            gutterBottom
+                            variant="h1"
+                            title={`${videoTitle}`}
+                            sx={{
+                                fontSize: '1.5rem',
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            {videoTitle}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            <FavoriteIcon fontSize="small" />
+                            {likeCount}
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                            gutterBottom
+                        >
+                            <VisibilityIcon fontSize="small" />
+                            {viewCount}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            <DateRangeIcon fontSize="small" /> {month}/{day}/{year}
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Button
+                            size="small"
+                            href={`/videoPlay/${videoId}`}
+                            variant="contained"
+                        >
+                            Play
+                        </Button>
+                    </CardActions>
+                </Card>
+            </Grid>
         );
     };
     return buildCard();

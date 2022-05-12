@@ -16,10 +16,10 @@ function AllVideo() {
     useEffect(() => {
         async function fetchData() {
             const data = await axios.get(`/videos/getAllVideosByTag/${tag}/${type}`);
-            setVideoData(group(data.data, 4));
-            setCurData(group(data.data, 4)[0]);
+            setVideoData(group(data.data, 20));
+            setCurData(group(data.data, 20)[0]);
             let pageNum =
-                data.data.length % 4 === 0 ? parseInt(data.data.length / 4) : parseInt(data.data.length / 4) + 1;
+                data.data.length % 20 === 0 ? parseInt(data.data.length / 20) : parseInt(data.data.length / 20) + 1;
             setTotalPage(pageNum);
             setPage(1);
         }
@@ -99,10 +99,11 @@ function AllVideo() {
                 key="card"
                 container
                 className="allVideo"
-                spacing={0}
+                spacing={2}
                 direction="row"
-                alignItems="center"
-                justifyContent="center"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                columnSpacing={{ xs: 3, sm: 10, md: 5 }}
             >
                 {curData &&
                     curData.map((video) => {
