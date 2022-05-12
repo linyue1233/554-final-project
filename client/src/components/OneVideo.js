@@ -17,7 +17,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 const useStyles = makeStyles({
     card: {
-        maxWidth: '240px',
+        maxWidth: '300px',
         height: 'auto',
         marginLeft: '1%',
         marginRight: '0%',
@@ -34,8 +34,8 @@ const useStyles = makeStyles({
         flexDirection: 'row',
     },
     media: {
-        height: '180px',
-        width: '240px',
+        height: '225px',
+        width: '300px',
     },
     button: {
         color: '#1e8678',
@@ -73,9 +73,10 @@ function OneVideo(props) {
                 />
                 <CardContent>
                     <Typography
-                        className={classes.titleHead}
+                        className={classes.titleHead + ' text-truncate'}
                         gutterBottom
                         variant="h1"
+                        title={`${videoTitle}`}
                         sx={{
                             fontSize: '1.5rem',
                             fontWeight: 'bold',

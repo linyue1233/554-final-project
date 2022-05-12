@@ -57,7 +57,7 @@ function App() {
                             //col-md-2 offset-md-1
                             <div className="navBar" style={{ width: 'auto' }}>
                                 <NavLink className="navlink" to="/chatroom">
-                                    Chatroom
+                                    Contact us
                                 </NavLink>
                                 <NavLink className="navlink" to="/admin">
                                     Admin
@@ -83,7 +83,7 @@ function App() {
                         {currentUser && !currentUser.isAdmin && (
                             <div className="navBar" style={{ width: 'auto' }}>
                                 <NavLink className="navlink" to="/chatroom">
-                                    Chatroom
+                                    Contact us
                                 </NavLink>
                                 <NavLink
                                     className="navlink"

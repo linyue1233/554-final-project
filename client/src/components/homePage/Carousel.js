@@ -59,7 +59,7 @@ function Carousel() {
                                 </a>
                                 <div className="carousel-caption d-none d-md-block black-color">
                                     <h1>{video.videoName}</h1>
-                                    <p>{video.description}</p>
+                                    {/* <p>{video.description}</p> */}
                                 </div>
                             </div>
                         );

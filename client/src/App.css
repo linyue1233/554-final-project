@@ -37,7 +37,8 @@ body {
 
 .videoCard {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    margin: 0 10px 20px;
+    margin: 0 0 20px;
+    padding: 5px;
 }
 
 div {
@@ -89,9 +90,9 @@ footer {
     background-color: #0071f3;
 }
 
-.footer-text{
+.footer-text {
     text-align: center;
-    color:#00060c
+    color: #00060c;
 }
 
 .user-content {

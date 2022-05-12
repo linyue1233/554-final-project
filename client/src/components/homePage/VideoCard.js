@@ -9,8 +9,12 @@ function VideoCard(props) {
             <div className="card col-md-3 videoCard">
                 <img src={video.cover} className="card-img-top" alt={video.videoName} />
                 <div className="card-body">
-                    <h3 className="card-title">{video.videoName}</h3>
-                    <p className="card-text">{video.description}</p>
+                    <h3 className="card-title text-truncate" title={`${video.videoName}`}>
+                        {video.videoName}
+                    </h3>
+                    <p className="card-text text-truncate" title={`${video.description}`}>
+                        {video.description}
+                    </p>
                     <div className="row justify-content-between">
                         <a
                             href={`/videoPlay/${video._id}`}
