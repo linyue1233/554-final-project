@@ -27,6 +27,7 @@ function ForgetPassword() {
         axios.post('/users/requestResetPassword',params).then(res=>{
             alert("Please check your email to reset your password.");
         }).catch(err=>{
+            alert("Your email may doesnt exist. Please try again.");
             console.log(err.message);
         })
         setUserEmail("");
