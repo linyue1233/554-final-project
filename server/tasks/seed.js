@@ -176,6 +176,13 @@ const main = async () => {
             videoInfo[2]._id
         );
 
+        const johnComment4 = await comments.createComment(
+            "I like this kind of Bruce very much!",
+            userInfo[0]._id,
+            userInfo[0].username,
+            videoInfo[3]._id
+        );
+
         const aliceComment1 = await comments.createComment(
             'hahahhahaha',
             userInfo[1]._id,
@@ -187,6 +194,83 @@ const main = async () => {
             userInfo[1]._id,
             userInfo[1].username,
             videoInfo[0]._id
+        );
+
+        const tonyComment1 = await comments.createComment(
+            'What a nice video I have ever seen!',
+            userInfo[2]._id,
+            userInfo[2].username,
+            videoInfo[0]._id
+        );
+
+        const tonyComment2 = await comments.createComment(
+            "I do not like it.",
+            userInfo[2]._id,
+            userInfo[2].username,
+            videoInfo[3]._id
+        );
+
+        const tonyComment3 = await comments.createComment(
+            "This batman is my favourite",
+            userInfo[2]._id,
+            userInfo[2].username,
+            videoInfo[3]._id
+        );
+
+        const tonyComment4 = await comments.createComment(
+            "This video is so exciting, I love superheroes",
+            userInfo[2]._id,
+            userInfo[2].username,
+            videoInfo[4]._id
+        );
+
+        const jonyComment1 = await comments.createComment(
+            "Jackie Chan! Jackie Chan!",
+            userInfo[3]._id,
+            userInfo[3].username,
+            videoInfo[0]._id
+        );
+
+        const jonyComment2 = await comments.createComment(
+            "Good story, Good love, poor life",
+            userInfo[3]._id,
+            userInfo[3].username,
+            videoInfo[1]._id
+        );
+
+        const jonyComment3 = await comments.createComment(
+            "After watching this video, I would like to drive a car along the coastline.",
+            userInfo[3]._id,
+            userInfo[3].username,
+            videoInfo[2]._id
+        );
+
+        const jonyComment4 = await comments.createComment(
+            "A new movie and an excellent start to the Batman series from Nola.",
+            userInfo[3]._id,
+            userInfo[3].username,
+            videoInfo[3]._id
+        );
+
+        const jonyComment5 = await comments.createComment(
+            "Captain America: The Winter Solider, directed by the best two directors that MCU has on the team, in the Russo Brothers, crafted this well directed, brisk paced spy/action film, that has a lot to be praised for. The Russo Brothers took the MCU style, and completely flipped it into their own, which completely works, while becoming a model film for the MCU. They incorporated this darker and gritter tone, that essentially grounded the film well, while inevitably throwing in some well timed humor. Even though this new approach to the MCU was a breath of fresh air, the Russo Brothers set themselves up for some nitpicks, by transforming some things that were already set and stone, for the most part.",
+            userInfo[3]._id,
+            userInfo[3].username,
+            videoInfo[4]._id
+        );
+
+        const jonyComment6 = await comments.createComment(
+            "Extraction stars Chris Hemsworth and was produced by the Russo brothers. It was directed by Sam Hargrave in his directorial debut. He has previously made a career as a stuntman, most notably as a stunt coordinator in several Marvel movies. And that definitely shows in the film. This film contains some of the nicest action set pieces seen in years.",
+            userInfo[3]._id,
+            userInfo[3].username,
+            videoInfo[5]._id
+        );
+
+        const jonyComment7 = await comments.createComment(
+            "If you are looking for flashy, loud and generally speaking fast paced action Science Fiction: This is not the one you are looking for (no pun intended). But if you like slow, lingering and long shots, a movie that takes time to breathe and gives an epic scale to it's framing and cinematography, you could do a lot worse.I'm being a bit modest concerning the movie of course, because we're talking about a very well written script, that has a few surprises along the way and warrants more than one viewing and things to discover on those repeat viewings. It is really well acted and it has a story that is gripping as well as interesting from start to finish. The title alone suggests something, even if you haven't seen the trailer (which I didn't) - so you are in a way more prepared than our characters. But at the same time on their level ... So many Questions and not all get answered (at least not while watching it for the first time)",
+            userInfo[3]._id,
+            userInfo[3].username,
+            videoInfo[6]._id  
         );
     } catch (e) {
         console.log(e);
