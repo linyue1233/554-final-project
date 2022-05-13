@@ -146,6 +146,12 @@ function Chat() {
         setRoomList(newList);
         if( newList.length===0)
         setEmptyChatroom(true)
+        let message ="Admin has quitted the chatroom";
+        socketRef.current.emit('messageClient', {
+            name: "ChatBot",
+            message: message,
+            room: room,
+        });
     }
     return currentSelect ? (
         ifSelectChatroom ? (
