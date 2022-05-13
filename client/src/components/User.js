@@ -162,7 +162,6 @@ function User() {
     }
 
     const handleDeleteComment = async () => {
-        console.log(commentToDelete);
 
         try {
             setLoadingDelete(true);
@@ -233,7 +232,6 @@ function User() {
             try {
                 setLoading(true);
                 const { data } = await axios.get(`/users/${id}`);
-                console.log(data);
                 setUserData(data);
                 setLoading(false);
             } catch (e) {
@@ -258,7 +256,6 @@ function User() {
                 const { data: comment } = await axios.get(`/comments/user/${id}`);
                 if (comment !== "don't have any comments") {
                     setComments(comment);
-                    console.log(comments);
                     setCommentsPageCount((comment.length % 5 === 0) ? comment.length / 5 : parseInt(comment.length / 5) + 1)
                 }
 
@@ -345,9 +342,9 @@ function User() {
                                                 )}
                                                 {video ? (
                                                     <Box sx={{ pr: 2 }}>
-                                                        <Link className='video-link' to={`/videoPlay/${video._id}`}>{video.videoName}</Link>
+                                                        <Link className='video-link' title={video.videoName} to={`/videoPlay/${video._id}`}>{video.videoName.length > 15 ? `${video.videoName.slice(0, 15)}...`: video.videoName}</Link>
                                                         <Typography display="block" variant="caption" color="text.secondary">
-                                                            {video.description}
+                                                            {video.description.length > 30 ? `${video.description.slice(0, 30)} ....` : video.description}
                                                         </Typography>
                                                         <Typography variant="caption" color="text.secondary">
                                                             {`${video.viewCount} views • ${video.uploadDate.year}/${video.uploadDate.month}/${video.uploadDate.day}`}
@@ -386,9 +383,9 @@ function User() {
                                                 )}
                                                 {video ? (
                                                     <Box sx={{ pr: 2 }}>
-                                                        <Link className='video-link' to={`/videoPlay/${video._id}`}>{video.videoName}</Link>
+                                                        <Link className='video-link' title={video.videoName} to={`/videoPlay/${video._id}`}>{video.videoName.length > 15 ? `${video.videoName.slice(0, 15)}...`: video.videoName}</Link>
                                                         <Typography display="block" variant="caption" color="text.secondary">
-                                                            {video.description}
+                                                            {video.description.length > 30 ? `${video.description.slice(0, 30)} ....` : video.description}
                                                         </Typography>
                                                         <Typography variant="caption" color="text.secondary">
                                                             {`${video.viewCount} views • ${video.uploadDate.year}/${video.uploadDate.month}/${video.uploadDate.day}`}

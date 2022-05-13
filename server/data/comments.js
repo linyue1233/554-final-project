@@ -129,7 +129,7 @@ module.exports = {
         if (!commentId) throw 'please input a comment id';
         if (!user) throw 'please input a user';
         if(!user.isAdmin) {
-            const comment = await this.getCommentByCommentId(req.params.commentId);
+            const comment = await this.getCommentByCommentId(commentId);
             if(!comment.userId === user.userId){
                 throw 'Unauthorized Request';
             }

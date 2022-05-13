@@ -15,7 +15,6 @@ function SignupPage() {
     const handlefile = async (e) => {
         try {
             const formData = new FormData();
-            //console.log(e.target.files[0]);
             formData.append('avatar', e.target.files[0]);
             newAvatar = await axios.post('/users/avatarImage', formData);
 
@@ -27,7 +26,6 @@ function SignupPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //console.log(newAvatar);
 
         try {
             //check username
@@ -72,7 +70,6 @@ function SignupPage() {
             let currentUser = AuthService.getCurrentUser();
             let authStatus = await AuthService.checkAuth();
             if (authStatus) {
-                console.log('Already logged in');
                 window.location.href = '/';
             } else if (!authStatus && currentUser) {
                 window.location.reload();

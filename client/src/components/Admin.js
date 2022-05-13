@@ -144,7 +144,6 @@ function Admin() {
         try {
             setLoadingSearch(true);
             const { data } = await axios.get(`/comments/video/${searchVideo}`);
-            console.log(data.data);
             setComments(data.data);
             setLoadingSearch(false);
         } catch (e) {
@@ -162,7 +161,6 @@ function Admin() {
     }
 
     const handleDeleteComment = async () => {
-        console.log(commentToDelete);
 
         try {
             setLoadingDelete(true);
@@ -177,7 +175,6 @@ function Admin() {
             }
         } catch (error) {
             setLoadingDelete(false);
-            console.log(error.response);
             if (error.response.status === 401 || error.response.status === 403) {
                 auth_service.logout();
                 alert('Session Expired');
@@ -206,8 +203,6 @@ function Admin() {
             let newVideoInfo = await axios.post('/videos/uploadVideo', videoFormData);
 
             let newVideoPath = newVideoInfo.data.videoPath;
-
-            console.log(newVideoPath);
 
             const coverFormData = new FormData();
 
@@ -243,11 +238,7 @@ function Admin() {
                 path: newVideoPath
             }
 
-            console.log(newVideo);
-
             const { data } = await axios.post('/videos/create', newVideo);
-
-            console.log(data);
 
             setLoadingUpload(false);
 
@@ -282,13 +273,11 @@ function Admin() {
 
     const handleVideo = (e) => {
         e.preventDefault();
-        console.log(e.target.files[0]);
         setUploadVideo(e.target.files[0]);
     }
 
     const handleCover = (e) => {
         e.preventDefault();
-        console.log(e.target.files[0]);
         setUploadCover(e.target.files[0]);
     }
 
@@ -402,13 +391,11 @@ function Admin() {
 
     const handleUpdateCover = (e) => {
         e.preventDefault();
-        console.log(e.target.files[0]);
         setUpdateCover(e.target.files[0]);
     }
 
     const handleUpdatePath = (e) => {
         e.preventDefault();
-        console.log(e.target.files[0]);
         setUpdatePath(e.target.files[0]);
     }
 
@@ -451,7 +438,6 @@ function Admin() {
                 videoFormData.append("video", updatePath);
                 let newVideoInfo = await axios.post('/videos/uploadVideo', videoFormData);
                 let newVideoPath = newVideoInfo.data.videoPath;
-                console.log(newVideoPath);
                 newVideo.path = newVideoPath;
             }
 
@@ -463,11 +449,7 @@ function Admin() {
                 newVideo.cover = newCoverPath;
             }
 
-            console.log(newVideo);
-
             const { data } = await axios.patch(`/videos/update/${videoToUpdate._id}`, newVideo);
-
-            console.log(data);
 
             setLoadingUpdate(false);
 
@@ -514,7 +496,6 @@ function Admin() {
     }
 
     const handleDeleteVideo = async () => {
-        console.log(videoToDelete);
 
         try {
             setLoadingDelete(true);
@@ -529,7 +510,6 @@ function Admin() {
             }
         } catch (error) {
             setLoadingDelete(false);
-            console.log(error.response);
             if (error.response.status === 401 || error.response.status === 403) {
                 auth_service.logout();
                 alert('Session Expired');
@@ -621,7 +601,6 @@ function Admin() {
             try {
                 setLoading(true);
                 const { data } = await axios.get('/videos');
-                console.log(data);
                 setVideoData(data);
                 setLoading(false);
             } catch (e) {
@@ -881,7 +860,7 @@ function Admin() {
                                         </ListItemAvatar>
                                         <ListItemText
                                             primary={<Link className='video-link' to={`/videoPlay/${video._id}`}>{video.videoName}</Link>}
-                                            secondary={video.description}
+                                            secondary={video.description.length > 30 ? `${video.description.slice(0, 30)} ....` : video.description}
                                         />
                                     </ListItem>
                                 );
@@ -904,7 +883,7 @@ function Admin() {
                                         </ListItemAvatar>
                                         <ListItemText
                                             primary={<Link className='video-link' to={`/videoPlay/${video._id}`}>{video.videoName}</Link>}
-                                            secondary={video.description}
+                                            secondary={video.description.length > 30 ? `${video.description.slice(0, 30)} ....` : video.description}
                                         />
                                     </ListItem>
                                 );

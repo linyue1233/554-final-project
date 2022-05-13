@@ -418,7 +418,7 @@ router.post('/create', async (req, res) => {
         let video = await videoData.createVideo(
             xss(videoInfo.name),
             xss(videoInfo.path),
-            xss(videoInfo.tags),
+            videoInfo.tags,
             xss(videoInfo.description),
             xss(videoInfo.cover)
         );
@@ -491,7 +491,7 @@ router.patch('/update/:videoId', async (req, res) => {
             xss(req.params.videoId),
             xss(updatedInfo.name),
             xss(updatedInfo.description),
-            xss(updatedInfo.tags)
+            updatedInfo.tags
         );
         res.status(200).json(video);
     } catch (e) {

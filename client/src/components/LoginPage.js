@@ -34,7 +34,6 @@ function LoginPage() {
 
             if (data.authenticated) {
                 const { data: user } = await axios.get('/users/currentUser');
-                console.log(user);
                 AuthService.setCurrentUser(user);
             }
             window.location.href = '/';
@@ -48,7 +47,6 @@ function LoginPage() {
             let currentUser = AuthService.getCurrentUser();
             let authStatus = await AuthService.checkAuth();
             if (authStatus) {
-                console.log('Already logged in');
                 window.location.href = '/';
             } else if (!authStatus && currentUser) {
                 window.location.reload();
