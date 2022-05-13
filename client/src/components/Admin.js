@@ -478,7 +478,27 @@ function Admin() {
     }
 
     const handleUpdateVideoData = (newVideo) => {
-        let copy = videoData
+        if(allVideoSearched) {
+            let copy = allVideoSearchResult;
+            for (let video of copy) {
+                if (video._id === videoToUpdate._id) {
+                    video.videoName = newVideo.name;
+                    video.description = newVideo.description;
+                    video.Tags = newVideo.tags;
+                    if (newVideo.path) {
+                        video.path = newVideo.path;
+                    }
+                    if (newVideo.cover) {
+                        video.cover = newVideo.cover;
+                    }
+                }
+            }
+
+            setAllVideoSearchResult(copy);
+        }
+            
+        let copy = videoData;
+        
         for (let video of copy) {
             if (video._id === videoToUpdate._id) {
                 video.videoName = newVideo.name;
@@ -492,6 +512,7 @@ function Admin() {
                 }
             }
         }
+        
         setVideoData(copy);
     }
 
@@ -504,6 +525,10 @@ function Admin() {
             if (DeleteResult.data === 'video has been successfully deleted') {
                 let index = videoData.findIndex((x) => x._id === videoToDelete._id);
                 videoData.splice(index, 1);
+                if(allVideoSearched) {
+                    let index = allVideoSearchResult.findIndex((x) => x._id === videoToDelete._id);
+                    allVideoSearchResult.splice(index, 1);
+                }
                 setLoadingDelete(false);
                 alert('Succesfully Deleted');
                 handleCloseDeleteVideoDialog();

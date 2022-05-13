@@ -106,7 +106,7 @@ function User() {
             setLoadingContent(true);
             let result = [];
             for (let video of likedVideos) {
-                if (video.videoName.indexOf(searchVideo) !== -1) {
+                if (video.videoName.toLowerCase().indexOf(searchVideo.toLowerCase()) !== -1) {
                     result.push(video);
                 }
             }
