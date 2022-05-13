@@ -130,7 +130,7 @@ function User() {
             setLoadingContent(true);
             let result = [];
             for (let comment of comments) {
-                if (comment.content.indexOf(searchComment) !== -1) {
+                if (comment.content.toLowerCase().indexOf(searchComment.toLowerCase()) !== -1) {
                     result.push(comment);
                 }
             }
