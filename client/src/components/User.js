@@ -170,6 +170,10 @@ function User() {
             if (DeleteResult.data === 'successfully delete this comment') {
                 let index = comments.findIndex((x) => x._id === commentToDelete._id);
                 comments.splice(index, 1);
+                if(commentSearched) {
+                    let index = commentSearchResult.findIndex((x) => x._id === commentToDelete._id);
+                    commentSearchResult.splice(index, 1);
+                }
                 setLoadingDelete(false);
                 alert('Succesfully Deleted');
                 handleCloseDeleteDialog();
