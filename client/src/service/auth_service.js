@@ -14,7 +14,6 @@ class AuthService {
   }
 
   async logout() {
-    await axios.delete(`/chatroom/${AuthService.getCurrent·User().username}`);
     localStorage.removeItem("user");
 
     try {

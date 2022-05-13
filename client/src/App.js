@@ -45,10 +45,7 @@ function App() {
                 <header className="App-header">
                     <div className="d-flex justify-content-between">
                         <div className="col-md-auto">
-                            <NavLink className="navlink" to="/" onClick={() =>{
-                                if (currentUser && !currentUser.isAdmin)
-                                    axios.delete(`/chatroom/${AuthService.getCurrentUser().username}`);
-                            }}>
+                            <NavLink className="navlink" to="/" >
                                 Home
                             </NavLink>
                         </div>{' '}
@@ -91,9 +88,6 @@ function App() {
                                 <NavLink
                                     className="navlink"
                                     to={`/users/${currentUser._id}`}
-                                    onClick={() =>{
-                                        axios.delete(`/chatroom/${AuthService.getCurrentUser().username}`);
-                                    }}
                                 >
                                     {currentUser.email}
                                 </NavLink>

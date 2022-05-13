@@ -57,18 +57,19 @@ function Chat() {
                 console.log(err);
             }
 
-            return () => {
-                axios.delete(`/chatroom/${room}`);
-                let message = state.name + " has quitted the chatroom";
-                socketRef.current.emit('messageClient', {
-                name: "ChatBot",
-                message: message,
-                room: room,});
-                socketRef.current.disconnect();
-            };
         }
         fetchData();
-    }, [currentSelect, ifSelectChatroom,state.name,user.username]);
+        // return () => {
+        //     console.log(9999999)
+        //     socketRef.current.disconnect();
+        //     axios.delete(`/chatroom/${room}`);
+        //     let message = state.name + " has quitted the chatroom";
+        //     socketRef.current.emit('messageClient', {
+        //     name: "ChatBot",
+        //     message: message,
+        //     room: room,});
+        // };
+    }, [currentSelect, ifSelectChatroom,state.name,user.username,room]);
 
     useEffect(() => {
         socketRef?.current?.on('messageClient', ({ name, message, timestamp }) => {
@@ -133,6 +134,19 @@ function Chat() {
         setIfSelectChatroom(true);
 
     }
+    const handleDeleteChatroom=(room)=>{
+        axios.delete(`/chatroom/${room}`);
+                let tempList = roomList;
+        let newList =[]
+        for (let i = 0; i < tempList.length; i++) {
+            if (tempList[i] !== room) {
+                newList.push(tempList[i]);
+            }
+        }
+        setRoomList(newList);
+        if( newList.length===0)
+        setEmptyChatroom(true)
+    }
     return currentSelect ? (
         ifSelectChatroom ? (
             <div>
@@ -144,7 +158,9 @@ function Chat() {
                         <h1>Chatroom List</h1>
                         <ul className="list-group">
                             {roomList &&roomList.map((room) => (
-                                <li className="list-group-item"><button className="btn btn-primary"onClick={() =>handleSelectChatroom(room)}>{room}</button></li>
+                                <li className="list-group-item"><button className="btn btn-primary"onClick={() =>handleSelectChatroom(room)}>{room}</button>
+                                <button className="btn btn-primary"onClick={() =>handleDeleteChatroom(room)}>Delete</button>
+                                </li>
                                 ))}
                         </ul>
                     </div>
