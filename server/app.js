@@ -28,7 +28,7 @@ app.use(express.json());
 
 // socket
 io.on('connection', (socket) => {
-    console.log('new client connected', socket.id);
+    // console.log('new client connected', socket.id);
 
     let oroom;
 
@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('message', ({ name, message }) => {
-        console.log(name, message, socket.id);
+        // console.log(name, message, socket.id);
         io.to(oroom).emit('message', { name, message });
     });
 
@@ -51,13 +51,17 @@ io.on('connection', (socket) => {
     });
 
     socket.on('messageClient', ({ name, message, room }) => {
-        io.in(room).emit('messageClient', { name, message, timestamp: new Date().valueOf() });
+        io.in(room).emit('messageClient', {
+            name,
+            message,
+            timestamp: new Date().valueOf(),
+        });
     });
     socket.on('userDelete', (name, room) => {
-        io.in(room).emit('userDelete',name);
-    })
-    socket.on('disconnect', (name,room) => {
-        console.log('Disconnect Fired');
+        io.in(room).emit('userDelete', name);
+    });
+    socket.on('disconnect', (name, room) => {
+        // console.log('Disconnect Fired');
     });
 });
 
