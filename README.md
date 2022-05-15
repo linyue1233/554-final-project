@@ -3,6 +3,8 @@
 
 # PS
 In the dev brach, our auto emailAddress prefix is AWS address which we have published, and in main branch, it is localhost address and the port is 4000.
+
+If you use windows and throw errors when run, you can use npm run dev.
 # Background
 Nowadays, there are many video websites that users can use, but the websites currently used have many functions, which make the website bloated. Therefore, the video website we developed is to allow users to see the videos they want directly according to the classification or search, and they can also interact in the chat room in real time.
 
@@ -37,5 +39,5 @@ As the admin, you can upload the video and edit the information of video. And if
 
 
 # Contributors
-Chen Chen, Feiyu Chen, Jiakang Liang, Yue Lin, Oukan Xu
+Cheng Chen, Feiyu Chen, Jiakang Liang, Yue Lin, Oukan Xu
 We wish you can enjor our project.
