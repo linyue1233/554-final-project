@@ -25,7 +25,11 @@ async function changeAvatar(filePath) {
 
 router.get("/logout",async(req,res) => {
     let userEmail = req.session.user;
+    if(!userEmail){
+        return;
+    }
     req.session.destroy();
+    console.log(userEmail);
     redis.setExpire(userEmail,userEmail,1);
     res.redirect("/");
     return;
